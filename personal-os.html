@@ -1,0 +1,1142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Personal OS">
+<meta name="theme-color" content="#F7F6F2">
+<title>Personal OS</title>
+<style>
+:root {
+  --bg:#F7F6F2;--surface:#FFFFFF;--surface2:#F0EFE9;
+  --border:rgba(0,0,0,0.08);--border-md:rgba(0,0,0,0.14);
+  --text:#18181A;--text2:#5A5955;--text3:#9B9990;
+  --accent:#2563EB;--accent-bg:#EFF6FF;
+  --green:#16A34A;--green-bg:#F0FDF4;
+  --amber:#B45309;--amber-bg:#FFFBEB;
+  --purple:#7C3AED;--purple-bg:#F5F3FF;
+  --teal:#0F766E;--teal-bg:#F0FDFA;
+  --red:#DC2626;--red-bg:#FEF2F2;
+  --gold:#92400E;--gold-bg:#FEF3C7;--goldb:#D97706;
+  --r:12px;--rs:8px;
+}
+@media(prefers-color-scheme:dark){
+  :root{
+    --bg:#111113;--surface:#1C1C1F;--surface2:#27272A;
+    --border:rgba(255,255,255,0.07);--border-md:rgba(255,255,255,0.14);
+    --text:#F4F4F5;--text2:#A1A1AA;--text3:#71717A;
+    --accent:#3B82F6;--accent-bg:#1E3A5F;
+    --green:#22C55E;--green-bg:#14532D;
+    --amber:#F59E0B;--amber-bg:#451A03;
+    --purple:#A78BFA;--purple-bg:#2E1065;
+    --teal:#2DD4BF;--teal-bg:#042F2E;
+    --red:#F87171;--red-bg:#450A0A;
+    --gold:#FCD34D;--gold-bg:#3B2100;--goldb:#F59E0B;
+  }
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+html,body{height:100%;overscroll-behavior:none;}
+body{background:var(--bg);color:var(--text);font-family:-apple-system,'SF Pro Text',system-ui,sans-serif;font-size:15px;line-height:1.5;padding-bottom:env(safe-area-inset-bottom);}
+button,input,select,textarea{font-family:inherit;font-size:14px;color:var(--text);}
+
+.app{max-width:480px;margin:0 auto;padding-bottom:80px;}
+.page{display:none;padding:16px 14px 12px;}
+.page.active{display:block;}
+
+/* TOAST */
+#toast{position:fixed;top:20px;left:50%;transform:translateX(-50%) translateY(-80px);background:var(--text);color:var(--bg);font-size:13px;font-weight:600;padding:10px 20px;border-radius:30px;z-index:999;transition:transform 0.3s ease;pointer-events:none;white-space:nowrap;}
+#toast.show{transform:translateX(-50%) translateY(0);}
+
+/* SYNC STATUS */
+#sync-bar{position:fixed;top:0;left:0;right:0;height:2px;background:var(--accent);transform:scaleX(0);transform-origin:left;transition:transform 0.3s ease;z-index:998;}
+#sync-bar.syncing{transform:scaleX(0.7);transition:transform 1.5s ease;}
+#sync-bar.done{transform:scaleX(1);transition:transform 0.2s ease;}
+
+/* NAV */
+.nav-wrap{position:fixed;bottom:0;left:0;right:0;z-index:100;display:flex;justify-content:center;}
+.nav-inner{width:100%;max-width:480px;background:var(--surface);border-top:0.5px solid var(--border-md);display:flex;padding-bottom:env(safe-area-inset-bottom);}
+.nb{flex:1;display:flex;flex-direction:column;align-items:center;padding:9px 2px 8px;cursor:pointer;color:var(--text3);font-size:10px;font-weight:600;gap:2px;border:none;background:none;}
+.nb.active{color:var(--accent);}
+.ni{font-size:22px;line-height:1;}
+
+/* CARDS */
+.card{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--r);padding:14px;margin-bottom:10px;}
+.ctitle{font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.6px;margin-bottom:10px;}
+
+/* STATS */
+.sg2{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;}
+.sg3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:10px;}
+.sc{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--rs);padding:12px 10px;}
+.sl{font-size:10px;color:var(--text3);font-weight:700;text-transform:uppercase;letter-spacing:0.4px;margin-bottom:2px;}
+.sv{font-size:22px;font-weight:700;letter-spacing:-0.5px;line-height:1.1;}
+.ss{font-size:11px;color:var(--text3);margin-top:1px;}
+
+/* PAGE HEADER */
+.ph{font-size:21px;font-weight:700;letter-spacing:-0.4px;margin-bottom:2px;}
+.ps{font-size:12px;color:var(--text3);margin-bottom:16px;}
+
+/* INPUTS */
+.fl{font-size:11px;font-weight:700;color:var(--text2);margin-bottom:3px;display:block;}
+input[type=text],input[type=number],input[type=time],input[type=date],select,textarea{
+  width:100%;padding:9px 11px;background:var(--surface2);border:0.5px solid var(--border-md);
+  border-radius:var(--rs);color:var(--text);font-size:14px;outline:none;-webkit-appearance:none;appearance:none;
+}
+select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%239B9990' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;padding-right:28px;}
+input:focus,select:focus,textarea:focus{border-color:var(--accent);outline:none;}
+textarea{resize:vertical;min-height:60px;}
+.row{display:flex;gap:7px;align-items:flex-end;}
+.row>*{flex:1;}.row>.btn{flex:0 0 auto;}
+
+/* BUTTONS */
+.btn{padding:9px 14px;border-radius:var(--rs);border:0.5px solid var(--border-md);background:var(--surface);color:var(--text);font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap;transition:opacity 0.15s;}
+.btn:active{opacity:0.6;}
+.bp{background:var(--accent);color:#fff;border-color:var(--accent);}
+.bsm{padding:7px 11px;font-size:12px;}
+.bblock{width:100%;margin-top:8px;}
+
+/* BADGES */
+.badge{display:inline-flex;align-items:center;font-size:11px;font-weight:700;padding:2px 7px;border-radius:20px;}
+.bg_{background:var(--green-bg);color:var(--green);}
+.ba_{background:var(--amber-bg);color:var(--amber);}
+.bb_{background:var(--accent-bg);color:var(--accent);}
+.br_{background:var(--red-bg);color:var(--red);}
+.bgold_{background:var(--gold-bg);color:var(--goldb);}
+
+/* LOG LIST */
+.llist{display:flex;flex-direction:column;gap:6px;margin-top:8px;}
+.li{background:var(--surface2);border-radius:var(--rs);padding:9px 11px;border-left:3px solid var(--accent);}
+.lh{display:flex;justify-content:space-between;align-items:center;gap:6px;}
+.lt{font-size:13px;font-weight:600;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.ld{font-size:11px;color:var(--text3);flex-shrink:0;}
+.lb{font-size:12px;color:var(--text2);margin-top:2px;}
+
+/* HABITS */
+.hi{display:flex;align-items:center;gap:9px;padding:10px 0;border-bottom:0.5px solid var(--border);}
+.hi:last-child{border-bottom:none;}
+.htap{width:36px;height:36px;border-radius:50%;border:2px solid var(--border-md);background:var(--surface2);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;font-size:17px;transition:all 0.15s;}
+.htap.done{background:var(--green);border-color:var(--green);font-size:0;}
+.htap.done::after{content:'✓';color:#fff;font-weight:800;font-size:17px;}
+.hinfo{flex:1;min-width:0;}
+.hn{font-size:14px;font-weight:500;}
+.hst{font-size:11px;color:var(--text3);}
+.hdots{display:flex;gap:3px;flex-shrink:0;}
+.hd{width:8px;height:8px;border-radius:50%;background:var(--surface2);border:1px solid var(--border-md);}
+.hd.on{background:var(--green);border-color:var(--green);}
+
+/* PRAYER */
+.pg{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;}
+.pc{background:var(--surface2);border-radius:var(--rs);padding:10px 4px;text-align:center;cursor:pointer;border:1.5px solid transparent;transition:all 0.15s;}
+.pc.done{background:var(--gold-bg);border-color:var(--goldb);}
+.pck{font-size:20px;margin-bottom:2px;}
+.pn{font-size:10px;font-weight:700;color:var(--text2);}
+
+/* JUZ GRID */
+.jgrid{display:grid;grid-template-columns:repeat(6,1fr);gap:5px;}
+.jc{aspect-ratio:1;border-radius:6px;background:var(--surface2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--text3);cursor:pointer;transition:all 0.15s;}
+.jc.done{background:var(--goldb);border-color:var(--goldb);color:#fff;}
+.jc:active{opacity:0.6;}
+
+/* PBAR */
+.pbw{background:var(--surface2);border-radius:10px;height:5px;overflow:hidden;margin-top:5px;}
+.pb{height:100%;border-radius:10px;transition:width 0.4s;}
+
+/* MILESTONE */
+.msi{display:flex;align-items:flex-start;gap:9px;padding:9px 0;border-bottom:0.5px solid var(--border);}
+.msi:last-child{border-bottom:none;}
+.msc{width:22px;height:22px;border-radius:50%;border:1.5px solid var(--border-md);cursor:pointer;flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;}
+.msc.done{background:var(--green);border-color:var(--green);color:#fff;}
+.msb{flex:1;min-width:0;}
+.mst{font-size:13px;font-weight:500;}
+.msn{font-size:11px;color:var(--text3);}
+.msi.msdone .mst{text-decoration:line-through;color:var(--text3);}
+.del{font-size:22px;color:var(--text3);cursor:pointer;padding:0 2px;line-height:1;flex-shrink:0;}
+
+/* CHESS RESULT */
+.rbrow{display:flex;gap:6px;margin-bottom:10px;}
+.rb{flex:1;padding:11px 4px;border-radius:var(--rs);border:1.5px solid var(--border-md);background:var(--surface2);color:var(--text2);font-weight:700;font-size:14px;cursor:pointer;text-align:center;transition:all 0.15s;}
+.rw{background:var(--green-bg);border-color:var(--green);color:var(--green);}
+.rd{background:var(--amber-bg);border-color:var(--amber);color:var(--amber);}
+.rl{background:var(--red-bg);border-color:var(--red);color:var(--red);}
+
+/* EDIT PANEL */
+.etog{font-size:12px;color:var(--accent);cursor:pointer;font-weight:700;}
+.epanel{display:none;background:var(--surface2);border-radius:var(--rs);padding:12px;margin-top:8px;border:0.5px solid var(--border-md);}
+.epanel.open{display:block;}
+
+/* TODAY HEADER */
+.tbar{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px;}
+.tgreet{font-size:20px;font-weight:700;letter-spacing:-0.3px;}
+.tdate{font-size:12px;color:var(--text3);margin-top:1px;}
+.pbadge{background:var(--gold-bg);color:var(--goldb);font-size:13px;font-weight:700;padding:5px 12px;border-radius:20px;}
+
+/* OFFLINE BANNER */
+#offline-banner{display:none;background:var(--amber-bg);color:var(--amber);text-align:center;font-size:12px;font-weight:700;padding:6px;position:fixed;top:0;left:0;right:0;z-index:997;}
+body.offline #offline-banner{display:block;}
+body.offline .page{padding-top:32px;}
+</style>
+</head>
+<body>
+<div id="sync-bar"></div>
+<div id="toast"></div>
+<div id="offline-banner">⚡ Offline — changes will sync when connected</div>
+
+<div class="app">
+
+<!-- TODAY -->
+<div id="page-today" class="page active">
+  <div class="tbar">
+    <div>
+      <div class="tgreet">Assalamu Alaikum 🌙</div>
+      <div class="tdate" id="t-date"></div>
+    </div>
+    <div class="pbadge" id="prayer-badge">0/5 🕌</div>
+  </div>
+
+  <div class="card">
+    <div class="ctitle">🕌 Salah today</div>
+    <div class="pg" id="prayer-grid"></div>
+  </div>
+
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+      <div class="ctitle" style="margin-bottom:0;">📖 Quran today</div>
+      <span class="badge bgold_" id="q-today-badge">0 pages</span>
+    </div>
+    <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text3);margin-bottom:3px;"><span>Juz progress</span><span id="q-juz-lbl">0/30</span></div>
+    <div class="pbw"><div class="pb" id="q-today-bar" style="width:0%;background:var(--goldb);"></div></div>
+    <div class="row" style="margin-top:10px;">
+      <div><label class="fl">Pages read</label><input type="number" id="q-pages-t" placeholder="0" min="1"></div>
+      <div><label class="fl">Surah / Juz</label><input type="text" id="q-ref-t" placeholder="e.g. Al-Baqarah"></div>
+      <button class="btn bp bsm" onclick="logQuranToday()">Log</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+      <div class="ctitle" style="margin-bottom:0;">Daily habits</div>
+      <span class="etog" onclick="toggleEp('ep-habits')">+ Edit</span>
+    </div>
+    <div id="today-habits"><div style="color:var(--text3);font-size:13px;padding:12px 0;text-align:center;">Loading...</div></div>
+    <div class="epanel" id="ep-habits">
+      <div style="font-size:12px;color:var(--text3);margin-bottom:8px;">Add or remove habits</div>
+      <div id="habit-manage"></div>
+      <div class="row" style="margin-top:8px;">
+        <input type="text" id="nh-name" placeholder="Habit name" style="flex:2;">
+        <input type="text" id="nh-icon" placeholder="🔥" style="flex:0 0 46px;">
+        <button class="btn bp bsm" onclick="addHabit()">Add</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="ctitle">Check-in</div>
+    <div class="sg3" style="margin-bottom:10px;">
+      <div class="sc" style="text-align:center;padding:8px;">
+        <div class="sl">Mood</div>
+        <select id="ci-mood" style="background:transparent;border:none;font-size:20px;font-weight:700;text-align:center;padding:0;width:100%;">
+          <option value="">—</option><option value="5">😄</option><option value="4">🙂</option>
+          <option value="3">😐</option><option value="2">😔</option><option value="1">😞</option>
+        </select>
+      </div>
+      <div class="sc" style="text-align:center;padding:8px;">
+        <div class="sl">Energy</div>
+        <select id="ci-energy" style="background:transparent;border:none;font-size:20px;font-weight:700;text-align:center;padding:0;width:100%;">
+          <option value="">—</option><option value="5">⚡</option><option value="4">🔋</option>
+          <option value="3">🔌</option><option value="2">😴</option><option value="1">💤</option>
+        </select>
+      </div>
+      <div class="sc" style="text-align:center;padding:8px;">
+        <div class="sl">Sleep by</div>
+        <input type="time" id="ci-sleep" value="23:00" style="background:transparent;border:none;font-size:12px;font-weight:700;text-align:center;padding:2px 0;width:100%;">
+      </div>
+    </div>
+    <input type="text" id="ci-note" placeholder="One sentence about today..." style="margin-bottom:8px;">
+    <button class="btn bp bsm bblock" onclick="saveCheckin()">Save check-in</button>
+  </div>
+</div>
+
+<!-- LEARN -->
+<div id="page-learn" class="page">
+  <div class="ph">Learning</div>
+  <div class="ps">German · IELTS · AWS · Engineering</div>
+
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+      <div class="ctitle" style="margin-bottom:0;">🇩🇪 German</div>
+      <select id="german-level" onchange="saveGermanLevel()" style="font-size:15px;font-weight:700;background:transparent;border:none;color:var(--purple);padding:0;width:auto;">
+        <option>A0</option><option>A1</option><option>A2</option><option>B1</option><option>B2</option>
+      </select>
+    </div>
+    <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text3);margin-bottom:3px;"><span>Progress</span><span>Target: B1</span></div>
+    <div class="pbw"><div class="pb" id="german-bar" style="width:0%;background:var(--purple);"></div></div>
+    <div class="row" style="margin-top:10px;">
+      <div><label class="fl">Minutes</label><input type="number" id="g-mins" placeholder="30" min="1"></div>
+      <div><label class="fl">Activity</label>
+        <select id="g-act"><option>Vocabulary</option><option>DW Nicos Weg</option><option>Speaking</option><option>Grammar</option><option>Listening</option><option>Reading</option></select>
+      </div>
+      <button class="btn bp bsm" onclick="logGerman()">Log</button>
+    </div>
+    <div class="llist" id="g-log"></div>
+  </div>
+
+  <div class="card">
+    <div class="ctitle">📝 IELTS</div>
+    <div class="sg2" style="margin-bottom:10px;">
+      <div class="sc"><div class="sl">Sessions</div><div class="sv" id="ielts-cnt">0</div><div class="ss">target: 7.5 band</div></div>
+      <div class="sc"><div class="sl">Exam date</div><div style="font-size:13px;font-weight:600;margin-top:3px;" id="ielts-date-show">Not set</div><input type="date" id="ielts-date" onchange="saveIeltsDate()" style="margin-top:4px;font-size:11px;padding:4px 6px;"></div>
+    </div>
+    <div class="row">
+      <div><label class="fl">Skill</label>
+        <select id="ielts-skill"><option>Writing Task 1</option><option>Writing Task 2</option><option>Reading</option><option>Listening</option><option>Speaking</option><option>Mock test</option></select>
+      </div>
+      <div><label class="fl">Score</label><input type="number" id="ielts-score" placeholder="6.5" step="0.5" min="0" max="9"></div>
+      <button class="btn bp bsm" onclick="logIelts()">Log</button>
+    </div>
+    <div class="llist" id="ielts-log"></div>
+  </div>
+
+  <div class="card">
+    <div class="ctitle">☁️ AWS Cert</div>
+    <div class="sg2" style="margin-bottom:10px;">
+      <div class="sc"><div class="sl">Status</div><div style="font-size:13px;font-weight:600;margin-top:3px;" id="aws-status">Not scheduled</div></div>
+      <div class="sc"><div class="sl">Exam date</div><input type="date" id="aws-date" onchange="saveAwsDate()" style="margin-top:4px;font-size:11px;padding:4px 6px;"></div>
+    </div>
+    <div class="row">
+      <div><label class="fl">Study type</label>
+        <select id="aws-type"><option>Practice exam</option><option>Video review</option><option>Concept study</option><option>Flashcards</option></select>
+      </div>
+      <div><label class="fl">Minutes</label><input type="number" id="aws-mins" placeholder="30" min="1"></div>
+      <button class="btn bp bsm" onclick="logAws()">Log</button>
+    </div>
+    <div class="llist" id="aws-log"></div>
+  </div>
+
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+      <div class="ctitle" style="margin-bottom:0;">💻 Engineering</div>
+      <span class="etog" onclick="toggleEp('ep-proj')">+ Project</span>
+    </div>
+    <div id="proj-list"></div>
+    <div class="epanel" id="ep-proj">
+      <div class="row">
+        <input type="text" id="np-name" placeholder="Project name" style="flex:2;">
+        <select id="np-status" style="flex:1;"><option value="planning">Planning</option><option value="building">Building</option><option value="shipped">Shipped</option></select>
+        <button class="btn bp bsm" onclick="addProject()">Add</button>
+      </div>
+    </div>
+    <div class="row" style="margin-top:10px;">
+      <div><label class="fl">Activity</label>
+        <select id="eng-type"><option>Feature built</option><option>Bug fixed</option><option>Learning new tech</option><option>Architecture</option><option>Code review</option><option>Deployment</option></select>
+      </div>
+      <div><label class="fl">Note</label><input type="text" id="eng-note" placeholder="What did you build?"></div>
+      <button class="btn bp bsm" onclick="logEng()">Log</button>
+    </div>
+    <div class="llist" id="eng-log"></div>
+  </div>
+</div>
+
+<!-- CHESS -->
+<div id="page-chess" class="page">
+  <div class="ph">Chess ♟</div>
+  <div class="ps">Rating · games · study</div>
+
+  <div class="sg2">
+    <div class="sc"><div class="sl">Current rating</div><div class="sv" id="chess-r-big">—</div><div class="ss" id="chess-delta"></div></div>
+    <div class="sc"><div class="sl">Win rate</div><div class="sv" id="chess-wr">—</div><div class="ss" id="chess-g-sub">0 games</div></div>
+  </div>
+  <div class="sg3">
+    <div class="sc"><div class="sl">Wins</div><div class="sv" id="c-wins">0</div></div>
+    <div class="sc"><div class="sl">Draws</div><div class="sv" id="c-draws">0</div></div>
+    <div class="sc"><div class="sl">Losses</div><div class="sv" id="c-losses">0</div></div>
+  </div>
+
+  <div class="card">
+    <div class="ctitle">Update rating</div>
+    <div class="row">
+      <div><label class="fl">Platform</label>
+        <select id="c-platform"><option>Chess.com</option><option>Lichess</option><option>FIDE OTB</option></select>
+      </div>
+      <div><label class="fl">Time control</label>
+        <select id="c-tc"><option>Rapid</option><option>Blitz</option><option>Bullet</option><option>Classical</option><option>Puzzles</option></select>
+      </div>
+    </div>
+    <div class="row" style="margin-top:8px;">
+      <div><label class="fl">New rating</label><input type="number" id="c-rating-in" placeholder="1200"></div>
+      <button class="btn bp bsm" onclick="updateRating()">Update</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="ctitle">Log a game</div>
+    <div class="rbrow">
+      <div class="rb" id="rb-win" onclick="selResult('win')">Win</div>
+      <div class="rb" id="rb-draw" onclick="selResult('draw')">Draw</div>
+      <div class="rb" id="rb-loss" onclick="selResult('loss')">Loss</div>
+    </div>
+    <input type="text" id="c-opening" placeholder="Opening (e.g. Sicilian)" style="margin-bottom:8px;">
+    <textarea id="c-mistake" placeholder="Key mistake or lesson from this game..."></textarea>
+    <button class="btn bp bsm bblock" style="margin-top:8px;" onclick="logGame()">Save game</button>
+  </div>
+
+  <div class="card">
+    <div class="ctitle">Study session</div>
+    <div class="row">
+      <div><label class="fl">Type</label>
+        <select id="c-study-type"><option>Puzzles / tactics</option><option>Opening prep</option><option>Endgame study</option><option>Game analysis</option><option>Video lesson</option><option>Book study</option></select>
+      </div>
+      <div><label class="fl">Minutes</label><input type="number" id="c-study-mins" placeholder="20"></div>
+      <button class="btn bp bsm" onclick="logChessStudy()">Log</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="ctitle">Rating history</div>
+    <div id="chess-hist"><span style="color:var(--text3);font-size:13px;">No ratings yet.</span></div>
+  </div>
+
+  <div class="card">
+    <div class="ctitle">Recent games</div>
+    <div class="llist" id="chess-game-log"></div>
+  </div>
+
+  <div class="card" style="background:var(--surface2);">
+    <div class="ctitle">Kaizen improvement plan</div>
+    <div style="font-size:13px;color:var(--text2);line-height:1.9;">
+      <b>Daily (15–20 min):</b> 10 puzzles · review 1 game · 1 focus per week<br>
+      <b>Weekly:</b> Opening prep · endgame technique · annotated GM game
+      <div style="margin-top:10px;padding:9px 12px;background:var(--gold-bg);border-radius:var(--rs);color:var(--goldb);font-size:12px;font-weight:700;">Shoshin order: Tactics first → Endgames → Openings</div>
+    </div>
+  </div>
+</div>
+
+<!-- AUSTRIA -->
+<div id="page-austria" class="page">
+  <div class="ph">Austria 🇦🇹</div>
+  <div class="ps">Migration track · career · milestones</div>
+
+  <div class="sg2">
+    <div class="sc"><div class="sl">Days to Jan 2027</div><div class="sv" id="at-days">—</div></div>
+    <div class="sc"><div class="sl">Milestones done</div><div class="sv" id="ms-done">0</div><div class="ss" id="ms-total">of 0</div></div>
+  </div>
+
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+      <div class="ctitle" style="margin-bottom:0;">Milestones</div>
+      <span class="etog" onclick="toggleEp('ep-ms')">+ Add</span>
+    </div>
+    <div id="ms-list"></div>
+    <div class="epanel" id="ep-ms">
+      <div class="row">
+        <input type="text" id="nm-text" placeholder="Milestone..." style="flex:2;">
+        <input type="text" id="nm-note" placeholder="Note" style="flex:1.5;">
+        <button class="btn bp bsm" onclick="addMs()">Add</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="ctitle">Career log</div>
+    <div class="row">
+      <div><label class="fl">Type</label>
+        <select id="career-type"><option>Achievement</option><option>Job application</option><option>Interview</option><option>Skill learned</option><option>Certification</option><option>Networking</option></select>
+      </div>
+      <div><label class="fl">Note</label><input type="text" id="career-note" placeholder="What happened?"></div>
+      <button class="btn bp bsm" onclick="logCareer()">Log</button>
+    </div>
+    <div class="llist" id="career-log"></div>
+  </div>
+
+  <div class="card" style="background:var(--surface2);">
+    <div class="ctitle">Red-White-Red card checklist</div>
+    <div style="font-size:13px;color:var(--text2);line-height:2.2;">
+      <div>✅ 5+ years SWE experience <span class="badge bg_">You qualify</span></div>
+      <div>⏳ German B1 certificate <span class="badge ba_">In progress</span></div>
+      <div>⏳ IELTS / English proof</div>
+      <div>⏳ Job offer from Austrian employer</div>
+      <div>⏳ Points score ≥ 55</div>
+    </div>
+  </div>
+</div>
+
+<!-- QURAN -->
+<div id="page-quran" class="page">
+  <div class="ph">Quran 📖</div>
+  <div class="ps">Reading journey · juz tracker · prayers</div>
+
+  <div class="sg2">
+    <div class="sc"><div class="sl">Juz completed</div><div class="sv" id="juz-done-n">0</div><div class="ss">of 30 juz</div></div>
+    <div class="sc"><div class="sl">Pages read</div><div class="sv" id="total-pages">0</div><div class="ss">of 604</div></div>
+  </div>
+
+  <div class="card">
+    <div class="ctitle">Juz tracker — tap to mark complete</div>
+    <div class="jgrid" id="juz-grid"></div>
+    <div style="display:flex;gap:14px;margin-top:10px;font-size:11px;color:var(--text3);">
+      <span>◻ Not started</span><span style="color:var(--goldb);">◼ Completed</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="ctitle">Log reading session</div>
+    <div class="row">
+      <div><label class="fl">Pages</label><input type="number" id="q-pages-f" placeholder="5" min="1"></div>
+      <div><label class="fl">Surah / Juz</label><input type="text" id="q-ref-f" placeholder="Juz 1, Al-Fatiha"></div>
+      <button class="btn bp bsm" onclick="logQuranFull()">Log</button>
+    </div>
+    <textarea id="q-note-f" placeholder="Reflection or ayah that moved you..." style="margin-top:8px;"></textarea>
+    <div class="llist" id="q-full-log"></div>
+  </div>
+
+  <div class="card">
+    <div class="ctitle">🕌 Prayer — last 7 days</div>
+    <div id="prayer-hist"></div>
+  </div>
+</div>
+
+<!-- JOURNAL -->
+<div id="page-journal" class="page">
+  <div class="ph">Journal</div>
+  <div class="ps">Reflect · plan · grow</div>
+
+  <div class="card">
+    <div class="ctitle" style="margin-bottom:14px;">Daily 3-sentence entry</div>
+    <div style="margin-bottom:10px;">
+      <div style="font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px;">What felt meaningful yesterday?</div>
+      <textarea id="j1" placeholder="One thing that gave me a sense of progress..."></textarea>
+    </div>
+    <div style="margin-bottom:10px;">
+      <div style="font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px;">What am I avoiding?</div>
+      <textarea id="j2" placeholder="The task or decision I keep pushing back..."></textarea>
+    </div>
+    <div style="margin-bottom:10px;">
+      <div style="font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px;">One small next action</div>
+      <textarea id="j3" placeholder="The smallest thing I can do today..."></textarea>
+    </div>
+    <div style="margin-bottom:12px;">
+      <div style="font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px;">Kaizen question (optional)</div>
+      <input type="text" id="j4" placeholder="What 1% improvement can I make today?">
+    </div>
+    <button class="btn bp bblock" onclick="saveJournal()" id="j-btn">Save entry</button>
+  </div>
+
+  <div style="font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.5px;margin:14px 0 8px;">Past entries</div>
+  <div class="llist" id="journal-list" style="max-height:600px;overflow-y:auto;"></div>
+</div>
+
+</div><!-- /app -->
+
+<div class="nav-wrap">
+  <div class="nav-inner">
+    <button class="nb active" onclick="goPage('today',this)"><span class="ni">🌙</span><span>Today</span></button>
+    <button class="nb" onclick="goPage('learn',this)"><span class="ni">📚</span><span>Learn</span></button>
+    <button class="nb" onclick="goPage('chess',this)"><span class="ni">♟</span><span>Chess</span></button>
+    <button class="nb" onclick="goPage('austria',this)"><span class="ni">🇦🇹</span><span>Austria</span></button>
+    <button class="nb" onclick="goPage('quran',this)"><span class="ni">📖</span><span>Quran</span></button>
+    <button class="nb" onclick="goPage('journal',this)"><span class="ni">✍️</span><span>Journal</span></button>
+  </div>
+</div>
+
+<script>
+// ── SUPABASE CONFIG ──────────────────────────────────────────────
+const SB_URL = 'https://jtxgrpwfvuqyynzjgdsj.supabase.co';
+const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp0eGdycHdmdnVxeXluempnZHNqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODM1OTI1OTEsImV4cCI6MjA5OTE2ODU5MX0.XCf3wsv98xqiZcdb1GAyX0s-qP7_BFkOpgXI8s6npWo';
+const USER_ID = 'main'; // single user
+
+// ── LOCAL CACHE (offline-first) ───────────────────────────────────
+const LC = {
+  get:(k,fb)=>{try{const v=localStorage.getItem('pos_'+k);return v!=null?JSON.parse(v):fb;}catch(e){return fb;}},
+  set:(k,v)=>{try{localStorage.setItem('pos_'+k,JSON.stringify(v));}catch(e){}}
+};
+
+// ── SYNC ENGINE ──────────────────────────────────────────────────
+const syncBar = document.getElementById('sync-bar');
+
+async function dbGet(key, fallback) {
+  // Always return local cache instantly
+  const local = LC.get(key, fallback);
+  // Try to fetch fresh from Supabase in background
+  if(navigator.onLine) {
+    try {
+      const r = await fetch(`${SB_URL}/rest/v1/personal_os?user_id=eq.${USER_ID}&key=eq.${key}&select=value`, {
+        headers:{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY}
+      });
+      if(r.ok){
+        const d = await r.json();
+        if(d&&d.length>0){
+          const v = d[0].value;
+          LC.set(key, v);
+          return v;
+        }
+      }
+    } catch(e){}
+  }
+  return local;
+}
+
+async function dbSet(key, value) {
+  LC.set(key, value); // save locally immediately
+  if(!navigator.onLine) {
+    queueSync(key, value);
+    return;
+  }
+  syncBar.className='syncing';
+  try {
+    await fetch(`${SB_URL}/rest/v1/personal_os`, {
+      method:'POST',
+      headers:{
+        'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,
+        'Content-Type':'application/json','Prefer':'resolution=merge-duplicates'
+      },
+      body: JSON.stringify({user_id:USER_ID, key, value, updated_at:new Date().toISOString()})
+    });
+    syncBar.className='done';
+    setTimeout(()=>syncBar.className='',600);
+  } catch(e){
+    syncBar.className='';
+    queueSync(key, value);
+  }
+}
+
+// Offline queue
+let syncQueue = {};
+function queueSync(key, value){ syncQueue[key]=value; }
+
+window.addEventListener('online', async ()=>{
+  document.body.classList.remove('offline');
+  for(const [k,v] of Object.entries(syncQueue)){
+    await dbSet(k,v);
+  }
+  syncQueue={};
+  toast('Synced ✓');
+  renders[currentPage]();
+});
+window.addEventListener('offline',()=>document.body.classList.add('offline'));
+if(!navigator.onLine) document.body.classList.add('offline');
+
+// ── DEFAULTS ─────────────────────────────────────────────────────
+const DEF_HABITS = [
+  {id:'fajr',   name:'Wake for Fajr',      icon:'🌅'},
+  {id:'german', name:'German (30 min)',     icon:'🇩🇪'},
+  {id:'walk',   name:'Evening walk',        icon:'🚶'},
+  {id:'jrnl',   name:'Morning journal',     icon:'✍️'},
+  {id:'nophone',name:'No phone on waking',  icon:'📵'},
+  {id:'aws',    name:'AWS study (30 min)',   icon:'☁️'},
+  {id:'chess',  name:'Chess puzzles (15 min)',icon:'♟'},
+  {id:'quran',  name:'Quran reading',       icon:'📖'},
+  {id:'sleep',  name:'Sleep before 11 PM',  icon:'😴'},
+];
+
+const DEF_MS = [
+  {id:'aws-book', text:'Book AWS exam',              note:'Do this TODAY', done:false},
+  {id:'ielts-bk', text:'Book IELTS exam',            note:'3–4 months out', done:false},
+  {id:'ger-a1',   text:'Reach German A1',            note:'~3 months', done:false},
+  {id:'aws-pass', text:'Pass AWS SAA',               note:'Phase 1', done:false},
+  {id:'ielts-75', text:'IELTS 7.5+',                note:'Phase 2', done:false},
+  {id:'ger-a2',   text:'Reach German A2',            note:'~7 months', done:false},
+  {id:'github3',  text:'3 GitHub projects live',     note:'incl. iOS app', done:false},
+  {id:'ger-b1',   text:'German B1 certificate',      note:'Required for visa', done:false},
+  {id:'apply-at', text:'First Austrian applications',note:'Phase 3', done:false},
+];
+
+const PRAYERS = ['Fajr','Dhuhr','Asr','Maghrib','Isha'];
+const today = ()=>new Date().toISOString().slice(0,10);
+const fmt = d=>{try{return new Date(d).toLocaleDateString('en-GB',{day:'numeric',month:'short'});}catch(e){return d;}};
+let selRes = null;
+let currentPage = 'today';
+
+// ── TOAST ────────────────────────────────────────────────────────
+let toastTimer;
+function toast(msg){
+  const el=document.getElementById('toast');
+  el.textContent=msg; el.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>el.classList.remove('show'),2000);
+}
+
+// ── NAV ──────────────────────────────────────────────────────────
+function goPage(page,btn){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nb').forEach(b=>b.classList.remove('active'));
+  document.getElementById('page-'+page).classList.add('active');
+  btn.classList.add('active');
+  window.scrollTo(0,0);
+  currentPage=page;
+  renders[page]();
+}
+
+function toggleEp(id){
+  const el=document.getElementById(id);
+  el.classList.toggle('open');
+  if(id==='ep-habits') renderHabitManage();
+}
+
+// ── TODAY ─────────────────────────────────────────────────────────
+async function renderToday(){
+  document.getElementById('t-date').textContent=new Date().toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long'});
+  await renderPrayers();
+  await renderTodayHabits();
+  await renderQuranBar();
+  const ci=(await dbGet('checkins',{}))[today()]||{};
+  if(ci.mood) document.getElementById('ci-mood').value=ci.mood;
+  if(ci.energy) document.getElementById('ci-energy').value=ci.energy;
+  if(ci.sleep) document.getElementById('ci-sleep').value=ci.sleep;
+  if(ci.note) document.getElementById('ci-note').value=ci.note;
+}
+
+async function renderPrayers(){
+  const pData=await dbGet('prayers',{});
+  const tp=pData[today()]||{};
+  const done=PRAYERS.filter(p=>tp[p]).length;
+  document.getElementById('prayer-badge').textContent=done+'/5 🕌';
+  document.getElementById('prayer-grid').innerHTML=PRAYERS.map(p=>`
+    <div class="pc ${tp[p]?'done':''}" onclick="togglePrayer('${p}')">
+      <div class="pck">${tp[p]?'✅':'🕌'}</div>
+      <div class="pn">${p}</div>
+    </div>`).join('');
+}
+
+async function togglePrayer(name){
+  const pData=await dbGet('prayers',{});
+  if(!pData[today()]) pData[today()]={};
+  pData[today()][name]=!pData[today()][name];
+  await dbSet('prayers',pData);
+  await renderPrayers();
+}
+
+async function renderTodayHabits(){
+  const habits=await dbGet('habits',DEF_HABITS);
+  const hData=await dbGet('hdata',{});
+  const todayH=hData[today()]||{};
+  const el=document.getElementById('today-habits');
+  if(!habits.length){el.innerHTML='<div style="color:var(--text3);font-size:13px;padding:8px 0;">No habits. Tap + Edit to add.</div>';return;}
+  const days=[];
+  for(let i=6;i>=0;i--){const d=new Date();d.setDate(d.getDate()-i);days.push(d.toISOString().slice(0,10));}
+  el.innerHTML=habits.map(h=>{
+    const done=!!todayH[h.id];
+    const streak=calcStreak(h.id,hData);
+    const dots=days.map(d=>`<div class="hd ${(hData[d]&&hData[d][h.id])?'on':''}"></div>`).join('');
+    return `<div class="hi">
+      <div class="htap ${done?'done':''}" onclick="toggleHabit('${h.id}')">${done?'':h.icon||'•'}</div>
+      <div class="hinfo">
+        <div class="hn">${h.name}</div>
+        <div class="hst">${streak>0?'🔥 '+streak+' day streak':'start today'}</div>
+      </div>
+      <div class="hdots">${dots}</div>
+    </div>`;
+  }).join('');
+}
+
+async function toggleHabit(hid){
+  const hData=await dbGet('hdata',{});
+  if(!hData[today()]) hData[today()]={};
+  hData[today()][hid]=!hData[today()][hid];
+  await dbSet('hdata',hData);
+  await renderTodayHabits();
+}
+
+function calcStreak(hid,data){
+  let s=0;
+  for(let i=0;i<90;i++){
+    const d=new Date();d.setDate(d.getDate()-i);
+    const k=d.toISOString().slice(0,10);
+    if(data[k]&&data[k][hid]) s++;
+    else if(i>0) break;
+  }
+  return s;
+}
+
+async function renderHabitManage(){
+  const habits=await dbGet('habits',DEF_HABITS);
+  document.getElementById('habit-manage').innerHTML=habits.map((h,i)=>`
+    <div style="display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:0.5px solid var(--border);">
+      <span style="font-size:18px;">${h.icon||'•'}</span>
+      <span style="flex:1;font-size:13px;">${h.name}</span>
+      <span onclick="removeHabit(${i})" style="color:var(--red);cursor:pointer;font-size:22px;padding:0 4px;line-height:1;">×</span>
+    </div>`).join('');
+}
+
+async function addHabit(){
+  const name=document.getElementById('nh-name').value.trim();
+  const icon=document.getElementById('nh-icon').value.trim()||'✅';
+  if(!name) return;
+  const habits=await dbGet('habits',DEF_HABITS);
+  habits.push({id:'h-'+Date.now(),name,icon});
+  await dbSet('habits',habits);
+  document.getElementById('nh-name').value='';
+  document.getElementById('nh-icon').value='';
+  await renderHabitManage();
+  await renderTodayHabits();
+  toast('Habit added ✓');
+}
+
+async function removeHabit(i){
+  const habits=await dbGet('habits',DEF_HABITS);
+  habits.splice(i,1);
+  await dbSet('habits',habits);
+  await renderHabitManage();
+  await renderTodayHabits();
+  toast('Habit removed');
+}
+
+async function renderQuranBar(){
+  const logs=await dbGet('qlog',[]);
+  const juzDone=await dbGet('juz-done',[]);
+  const todayPages=logs.filter(l=>l.date===today()).reduce((s,l)=>s+(l.pages||0),0);
+  document.getElementById('q-today-badge').textContent=todayPages?todayPages+' pages today':'Not yet today';
+  document.getElementById('q-today-bar').style.width=Math.min((juzDone.length/30)*100,100)+'%';
+  document.getElementById('q-juz-lbl').textContent=juzDone.length+'/30';
+}
+
+async function logQuranToday(){
+  const pages=parseInt(document.getElementById('q-pages-t').value)||0;
+  const ref=document.getElementById('q-ref-t').value.trim();
+  if(!pages) return;
+  const logs=await dbGet('qlog',[]);
+  logs.unshift({date:today(),pages,ref,note:''});
+  await dbSet('qlog',logs.slice(0,1000));
+  document.getElementById('q-pages-t').value='';
+  document.getElementById('q-ref-t').value='';
+  await renderQuranBar();
+  toast('Quran logged ✓');
+}
+
+async function saveCheckin(){
+  const ci={
+    mood:document.getElementById('ci-mood').value,
+    energy:document.getElementById('ci-energy').value,
+    sleep:document.getElementById('ci-sleep').value,
+    note:document.getElementById('ci-note').value
+  };
+  const cis=await dbGet('checkins',{});
+  cis[today()]=ci;
+  await dbSet('checkins',cis);
+  toast('Check-in saved ✓');
+}
+
+// ── LEARN ─────────────────────────────────────────────────────────
+async function renderLearn(){
+  const gl=await dbGet('german-level','A0');
+  document.getElementById('german-level').value=gl;
+  updateGermanBar(gl);
+  const iLogs=await dbGet('ielts-log',[]);
+  document.getElementById('ielts-cnt').textContent=iLogs.length;
+  const awsDate=await dbGet('aws-date','');
+  if(awsDate){document.getElementById('aws-date').value=awsDate;document.getElementById('aws-status').textContent='Booked: '+fmt(awsDate);document.getElementById('aws-status').style.color='var(--green)';}
+  const iDate=await dbGet('ielts-date','');
+  if(iDate){document.getElementById('ielts-date').value=iDate;document.getElementById('ielts-date-show').textContent=fmt(iDate);}
+  renderLL('g-log',await dbGet('german-log',[]),l=>`${l.act} · ${l.mins} min`,'var(--purple)');
+  renderLL('ielts-log',iLogs,l=>`${l.skill}${l.score?' · '+l.score:''}`,'var(--accent)');
+  renderLL('aws-log',await dbGet('aws-log',[]),l=>`${l.type} · ${l.mins} min`,'var(--teal)');
+  renderLL('eng-log',await dbGet('eng-log',[]),l=>`${l.type}${l.note?' — '+l.note:''}`,'var(--green)');
+  await renderProjects();
+}
+
+function updateGermanBar(gl){
+  const lvls=['A0','A1','A2','B1','B2'];
+  const pct=Math.round((Math.max(0,lvls.indexOf(gl||'A0'))/3)*100);
+  const bar=document.getElementById('german-bar');
+  if(bar) bar.style.width=pct+'%';
+}
+
+async function saveGermanLevel(){const v=document.getElementById('german-level').value;await dbSet('german-level',v);updateGermanBar(v);toast('Level updated ✓');}
+async function saveAwsDate(){const v=document.getElementById('aws-date').value;await dbSet('aws-date',v);if(v){document.getElementById('aws-status').textContent='Booked: '+fmt(v);document.getElementById('aws-status').style.color='var(--green)';toast('AWS exam booked ✓');}}
+async function saveIeltsDate(){const v=document.getElementById('ielts-date').value;await dbSet('ielts-date',v);if(v){document.getElementById('ielts-date-show').textContent=fmt(v);toast('IELTS date saved ✓');}}
+
+async function logGerman(){
+  const mins=parseInt(document.getElementById('g-mins').value)||0;
+  const act=document.getElementById('g-act').value;
+  if(!mins) return;
+  const logs=await dbGet('german-log',[]); logs.unshift({date:today(),mins,act});
+  await dbSet('german-log',logs.slice(0,300));
+  document.getElementById('g-mins').value='';
+  renderLL('g-log',logs,l=>`${l.act} · ${l.mins} min`,'var(--purple)');
+  toast('German session logged ✓');
+}
+
+async function logIelts(){
+  const skill=document.getElementById('ielts-skill').value;
+  const score=document.getElementById('ielts-score').value;
+  const logs=await dbGet('ielts-log',[]); logs.unshift({date:today(),skill,score:score||null});
+  await dbSet('ielts-log',logs.slice(0,300));
+  document.getElementById('ielts-score').value='';
+  document.getElementById('ielts-cnt').textContent=logs.length;
+  renderLL('ielts-log',logs,l=>`${l.skill}${l.score?' · '+l.score:''}`,'var(--accent)');
+  toast('IELTS session logged ✓');
+}
+
+async function logAws(){
+  const type=document.getElementById('aws-type').value;
+  const mins=parseInt(document.getElementById('aws-mins').value)||0;
+  if(!mins) return;
+  const logs=await dbGet('aws-log',[]); logs.unshift({date:today(),type,mins});
+  await dbSet('aws-log',logs.slice(0,300));
+  document.getElementById('aws-mins').value='';
+  renderLL('aws-log',logs,l=>`${l.type} · ${l.mins} min`,'var(--teal)');
+  toast('AWS study logged ✓');
+}
+
+async function logEng(){
+  const type=document.getElementById('eng-type').value;
+  const note=document.getElementById('eng-note').value.trim();
+  if(!note) return;
+  const logs=await dbGet('eng-log',[]); logs.unshift({date:today(),type,note});
+  await dbSet('eng-log',logs.slice(0,300));
+  document.getElementById('eng-note').value='';
+  renderLL('eng-log',logs,l=>`${l.type}${l.note?' — '+l.note:''}`,'var(--green)');
+  toast('Activity logged ✓');
+}
+
+async function renderProjects(){
+  const projects=await dbGet('projects',[]);
+  const el=document.getElementById('proj-list');
+  const sc={planning:'bb_',building:'ba_',shipped:'bg_'};
+  if(!projects.length){el.innerHTML='<div style="font-size:13px;color:var(--text3);margin-bottom:6px;">No projects yet.</div>';return;}
+  el.innerHTML=projects.map((p,i)=>`
+    <div class="msi">
+      <span style="font-size:18px;">📁</span>
+      <div class="msb"><div class="mst">${p.name}</div></div>
+      <span class="badge ${sc[p.status]||'bb_'}">${p.status}</span>
+      <span class="del" onclick="removeProject(${i})">×</span>
+    </div>`).join('');
+}
+
+async function addProject(){
+  const name=document.getElementById('np-name').value.trim();
+  const status=document.getElementById('np-status').value;
+  if(!name) return;
+  const p=await dbGet('projects',[]); p.push({name,status,date:today()});
+  await dbSet('projects',p);
+  document.getElementById('np-name').value='';
+  await renderProjects();
+  toast('Project added ✓');
+}
+
+async function removeProject(i){
+  const p=await dbGet('projects',[]); p.splice(i,1);
+  await dbSet('projects',p); await renderProjects();
+  toast('Project removed');
+}
+
+// ── CHESS ─────────────────────────────────────────────────────────
+function selResult(r){
+  selRes=r;
+  document.getElementById('rb-win').className='rb'+(r==='win'?' rw':'');
+  document.getElementById('rb-draw').className='rb'+(r==='draw'?' rd':'');
+  document.getElementById('rb-loss').className='rb'+(r==='loss'?' rl':'');
+}
+
+async function updateRating(){
+  const rating=parseInt(document.getElementById('c-rating-in').value)||0;
+  if(!rating) return;
+  const platform=document.getElementById('c-platform').value;
+  const tc=document.getElementById('c-tc').value;
+  const hist=await dbGet('chess-ratings',[]);
+  if(!hist.length) await dbSet('chess-start',rating);
+  hist.push({date:today(),rating,platform,tc});
+  await dbSet('chess-ratings',hist.slice(0,500));
+  document.getElementById('c-rating-in').value='';
+  await renderChess();
+  toast('Rating updated ✓');
+}
+
+async function logGame(){
+  if(!selRes){toast('Select win / draw / loss first');return;}
+  const opening=document.getElementById('c-opening').value.trim();
+  const mistake=document.getElementById('c-mistake').value.trim();
+  const games=await dbGet('chess-games',[]); games.unshift({date:today(),result:selRes,opening,mistake});
+  await dbSet('chess-games',games.slice(0,500));
+  document.getElementById('c-opening').value='';
+  document.getElementById('c-mistake').value='';
+  selResult(null); selRes=null;
+  await renderChess();
+  toast('Game saved ✓');
+}
+
+async function logChessStudy(){
+  const type=document.getElementById('c-study-type').value;
+  const mins=parseInt(document.getElementById('c-study-mins').value)||0;
+  if(!mins) return;
+  const s=await dbGet('chess-study',[]); s.unshift({date:today(),type,mins});
+  await dbSet('chess-study',s.slice(0,300));
+  document.getElementById('c-study-mins').value='';
+  toast('Study session logged ✓');
+}
+
+async function renderChess(){
+  const hist=await dbGet('chess-ratings',[]);
+  const games=await dbGet('chess-games',[]);
+  const start=await dbGet('chess-start',null);
+  const current=hist.length?hist[hist.length-1].rating:null;
+  document.getElementById('chess-r-big').textContent=current||'—';
+  if(current&&start){
+    const d=current-start;
+    document.getElementById('chess-delta').textContent=(d>=0?'+':'')+d+' from start';
+    document.getElementById('chess-delta').style.color=d>=0?'var(--green)':'var(--red)';
+  }
+  const wins=games.filter(g=>g.result==='win').length;
+  const draws=games.filter(g=>g.result==='draw').length;
+  const losses=games.filter(g=>g.result==='loss').length;
+  document.getElementById('c-wins').textContent=wins;
+  document.getElementById('c-draws').textContent=draws;
+  document.getElementById('c-losses').textContent=losses;
+  document.getElementById('chess-g-sub').textContent=games.length+' games';
+  document.getElementById('chess-wr').textContent=games.length?Math.round(wins/games.length*100)+'%':'—';
+  const rh=document.getElementById('chess-hist');
+  if(!hist.length){rh.innerHTML='<span style="color:var(--text3);font-size:13px;">No ratings yet.</span>';return;}
+  rh.innerHTML=hist.slice(-8).reverse().map(h=>`
+    <div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:0.5px solid var(--border);font-size:13px;">
+      <span style="font-weight:700;">${h.rating} <span style="color:var(--text3);font-weight:400;">· ${h.tc} · ${h.platform}</span></span>
+      <span style="color:var(--text3);">${fmt(h.date)}</span>
+    </div>`).join('');
+  document.getElementById('chess-game-log').innerHTML=games.slice(0,10).map(g=>{
+    const c=g.result==='win'?'var(--green)':g.result==='loss'?'var(--red)':'var(--amber)';
+    return `<div class="li" style="border-color:${c};">
+      <div class="lh"><span class="lt">${g.result.toUpperCase()}${g.opening?' — '+g.opening:''}</span><span class="ld">${fmt(g.date)}</span></div>
+      ${g.mistake?`<div class="lb">${g.mistake}</div>`:''}
+    </div>`;
+  }).join('');
+}
+
+// ── AUSTRIA ───────────────────────────────────────────────────────
+async function renderAustria(){
+  document.getElementById('at-days').textContent=Math.ceil((new Date('2027-01-01')-new Date())/86400000);
+  const ms=await dbGet('milestones',DEF_MS);
+  const done=ms.filter(m=>m.done).length;
+  document.getElementById('ms-done').textContent=done;
+  document.getElementById('ms-total').textContent='of '+ms.length;
+  document.getElementById('ms-list').innerHTML=ms.map((m,i)=>`
+    <div class="msi ${m.done?'msdone':''}">
+      <div class="msc ${m.done?'done':''}" onclick="toggleMs(${i})">${m.done?'✓':''}</div>
+      <div class="msb"><div class="mst">${m.text}</div><div class="msn">${m.note}</div></div>
+      ${m.id==='aws-book'&&!m.done?'<span class="badge br_">Today!</span>':''}
+      <span class="del" onclick="removeMs(${i})">×</span>
+    </div>`).join('');
+  renderLL('career-log',await dbGet('career-log',[]),l=>`${l.type} — ${l.note}`,'var(--amber)');
+}
+
+async function toggleMs(i){
+  const m=await dbGet('milestones',DEF_MS); m[i].done=!m[i].done;
+  await dbSet('milestones',m); await renderAustria();
+  if(m[i].done) toast('Milestone complete! 🎉');
+}
+async function removeMs(i){const m=await dbGet('milestones',DEF_MS);m.splice(i,1);await dbSet('milestones',m);await renderAustria();}
+async function addMs(){
+  const text=document.getElementById('nm-text').value.trim();
+  const note=document.getElementById('nm-note').value.trim();
+  if(!text) return;
+  const m=await dbGet('milestones',DEF_MS);
+  m.push({id:'ms-'+Date.now(),text,note:note||'Custom milestone',done:false});
+  await dbSet('milestones',m);
+  document.getElementById('nm-text').value='';
+  document.getElementById('nm-note').value='';
+  toggleEp('ep-ms');
+  await renderAustria();
+  toast('Milestone added ✓');
+}
+async function logCareer(){
+  const type=document.getElementById('career-type').value;
+  const note=document.getElementById('career-note').value.trim();
+  if(!note) return;
+  const logs=await dbGet('career-log',[]); logs.unshift({date:today(),type,note});
+  await dbSet('career-log',logs.slice(0,300));
+  document.getElementById('career-note').value='';
+  renderLL('career-log',logs,l=>`${l.type} — ${l.note}`,'var(--amber)');
+  toast('Logged ✓');
+}
+
+// ── QURAN ─────────────────────────────────────────────────────────
+async function renderQuran(){
+  const juzDone=await dbGet('juz-done',[]);
+  const logs=await dbGet('qlog',[]);
+  const totalPages=logs.reduce((s,l)=>s+(l.pages||0),0);
+  document.getElementById('juz-done-n').textContent=juzDone.length;
+  document.getElementById('total-pages').textContent=totalPages;
+  let html='';
+  for(let i=1;i<=30;i++) html+=`<div class="jc ${juzDone.includes(i)?'done':''}" onclick="toggleJuz(${i})">${i}</div>`;
+  document.getElementById('juz-grid').innerHTML=html;
+  renderLL('q-full-log',logs.slice(0,10),l=>`${l.ref||'Quran'} · ${l.pages} pages${l.note?' — '+l.note:''}`,'var(--goldb)');
+  const pData=await dbGet('prayers',{});
+  const days=[]; for(let i=6;i>=0;i--){const d=new Date();d.setDate(d.getDate()-i);days.push(d.toISOString().slice(0,10));}
+  document.getElementById('prayer-hist').innerHTML=days.map(d=>{
+    const dp=pData[d]||{};
+    const cnt=PRAYERS.filter(p=>dp[p]).length;
+    return `<div style="display:flex;align-items:center;justify-content:space-between;padding:7px 0;border-bottom:0.5px solid var(--border);">
+      <span style="font-size:12px;font-weight:700;color:var(--text2);">${fmt(d)}</span>
+      <div style="display:flex;gap:3px;">${PRAYERS.map(p=>`<div style="width:26px;height:26px;border-radius:50%;background:${dp[p]?'var(--goldb)':'var(--surface2)'};border:1px solid ${dp[p]?'var(--goldb)':'var(--border-md)'};display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:800;color:${dp[p]?'#fff':'var(--text3)'};">${p[0]}</div>`).join('')}</div>
+      <span class="badge ${cnt===5?'bgold_':cnt>=3?'ba_':'br_'}">${cnt}/5</span>
+    </div>`;
+  }).join('');
+}
+
+async function toggleJuz(n){
+  const juzDone=await dbGet('juz-done',[]);
+  const idx=juzDone.indexOf(n); if(idx>=0) juzDone.splice(idx,1); else juzDone.push(n);
+  await dbSet('juz-done',juzDone);
+  await renderQuran(); await renderQuranBar();
+  toast(idx<0?'Juz '+n+' complete! 📖':'Juz '+n+' unmarked');
+}
+
+async function logQuranFull(){
+  const pages=parseInt(document.getElementById('q-pages-f').value)||0;
+  const ref=document.getElementById('q-ref-f').value.trim();
+  const note=document.getElementById('q-note-f').value.trim();
+  if(!pages) return;
+  const logs=await dbGet('qlog',[]); logs.unshift({date:today(),pages,ref,note});
+  await dbSet('qlog',logs.slice(0,1000));
+  document.getElementById('q-pages-f').value='';
+  document.getElementById('q-ref-f').value='';
+  document.getElementById('q-note-f').value='';
+  await renderQuran(); await renderQuranBar();
+  toast('Quran session logged ✓');
+}
+
+// ── JOURNAL ──────────────────────────────────────────────────────
+async function saveJournal(){
+  const j1=document.getElementById('j1').value.trim();
+  const j2=document.getElementById('j2').value.trim();
+  const j3=document.getElementById('j3').value.trim();
+  const j4=document.getElementById('j4').value.trim();
+  if(!j1&&!j2&&!j3) return;
+  const entries=await dbGet('journal',[]); entries.unshift({date:today(),j1,j2,j3,j4});
+  await dbSet('journal',entries.slice(0,500));
+  ['j1','j2','j3','j4'].forEach(id=>document.getElementById(id).value='');
+  await renderJournal();
+  toast('Journal saved ✓');
+}
+
+async function renderJournal(){
+  const entries=await dbGet('journal',[]);
+  const el=document.getElementById('journal-list');
+  if(!entries.length){el.innerHTML='<div style="color:var(--text3);font-size:13px;padding:8px 0;">No entries yet.</div>';return;}
+  el.innerHTML=entries.map(e=>`
+    <div class="li" style="border-color:var(--amber);">
+      <div class="lh"><span class="lt">Reflection</span><span class="ld">${fmt(e.date)}</span></div>
+      <div class="lb" style="display:grid;gap:5px;margin-top:5px;">
+        ${e.j1?`<div><span style="font-size:9px;font-weight:800;color:var(--text3);text-transform:uppercase;letter-spacing:0.5px;">Meaningful</span><br>${e.j1}</div>`:''}
+        ${e.j2?`<div><span style="font-size:9px;font-weight:800;color:var(--text3);text-transform:uppercase;letter-spacing:0.5px;">Avoiding</span><br>${e.j2}</div>`:''}
+        ${e.j3?`<div><span style="font-size:9px;font-weight:800;color:var(--text3);text-transform:uppercase;letter-spacing:0.5px;">Action</span><br>${e.j3}</div>`:''}
+        ${e.j4?`<div><span style="font-size:9px;font-weight:800;color:var(--text3);text-transform:uppercase;letter-spacing:0.5px;">Kaizen</span><br>${e.j4}</div>`:''}
+      </div>
+    </div>`).join('');
+}
+
+// ── SHARED ────────────────────────────────────────────────────────
+function renderLL(elId,items,textFn,color){
+  const el=document.getElementById(elId);
+  if(!el) return;
+  if(!items||!items.length){el.innerHTML='';return;}
+  el.innerHTML=items.slice(0,6).map(l=>`
+    <div class="li" style="border-color:${color};">
+      <div class="lh"><span class="lt">${textFn(l)}</span><span class="ld">${fmt(l.date)}</span></div>
+    </div>`).join('');
+}
+
+const renders={today:renderToday,learn:renderLearn,chess:renderChess,austria:renderAustria,quran:renderQuran,journal:renderJournal};
+
+// ── INIT ──────────────────────────────────────────────────────────
+renderToday();
+</script>
+</body>
+</html>
