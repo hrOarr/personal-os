@@ -6,1593 +6,1376 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Personal OS">
-<meta name="theme-color" content="#0F0F10">
+<meta name="theme-color" content="#0D1117">
 <title>Personal OS</title>
 <style>
-:root{
-  --bg:#F6F5F1;--surf:#FFFFFF;--surf2:#EDECE7;--surf3:#E4E3DC;
-  --b:rgba(0,0,0,0.07);--bm:rgba(0,0,0,0.12);--bs:rgba(0,0,0,0.18);
-  --t:#111112;--t2:#5C5B57;--t3:#9A9893;
-  --ac:#1D4ED8;--acb:#EFF6FF;--act:#1E40AF;
-  --gr:#15803D;--grb:#F0FDF4;
-  --am:#92400E;--amb:#FFFBEB;
-  --pu:#6D28D9;--pub:#F5F3FF;
-  --re:#B91C1C;--reb:#FEF2F2;
-  --go:#B45309;--gob:#FEF3C7;--gob2:#D97706;
-  --te:#0F766E;--teb:#F0FDFA;
-  --r:14px;--rs:10px;--rsm:7px;
-  --nav:60px;
+:root {
+  /* Surfaces */
+  --bg:#F7F6F2; --s0:#FFFFFF; --s1:#F0EEE8; --s2:#E5E2D9; --s3:#D8D4C8;
+  /* Borders */
+  --b0:rgba(0,0,0,0.06); --b1:rgba(0,0,0,0.11); --b2:rgba(0,0,0,0.20);
+  /* Text */
+  --t0:#0C0C0B; --t1:#4A4740; --t2:#8E8B82;
+  /* Accent colors */
+  --blue:#1A52D4;  --blue-bg:#EBF1FF;  --blue-mid:#2563EB; --blue-fg:#1741A8;
+  --green:#146B3A; --green-bg:#EDFAF2; --green-fg:#0F7A3C;
+  --gold:#A05C00;  --gold-bg:#FFF3DC;  --gold-fg:#B86800;
+  --purple:#5B17CC;--purple-bg:#F2EEFF;--purple-fg:#6D22E0;
+  --red:#C01818;   --red-bg:#FEF2F2;   --red-fg:#DC2626;
+  --teal:#0A6B62; --teal-bg:#ECFCF9;  --teal-fg:#0B7A70;
+  --amber:#8F4200;--amber-bg:#FFF7EC; --amber-fg:#B05000;
+  /* Nav */
+  --nav:56px;
+  /* Radii */
+  --r:20px; --rm:14px; --rs:9px;
 }
 @media(prefers-color-scheme:dark){
   :root{
-    --bg:#0F0F10;--surf:#1A1A1C;--surf2:#232325;--surf3:#2C2C2F;
-    --b:rgba(255,255,255,0.06);--bm:rgba(255,255,255,0.11);--bs:rgba(255,255,255,0.18);
-    --t:#F2F2F0;--t2:#A8A7A1;--t3:#6B6A65;
-    --ac:#3B82F6;--acb:#172554;--act:#60A5FA;
-    --gr:#22C55E;--grb:#052E16;
-    --am:#F59E0B;--amb:#1C0A00;
-    --pu:#A78BFA;--pub:#1E1B4B;
-    --re:#F87171;--reb:#1C0000;
-    --go:#FCD34D;--gob:#1C1200;--gob2:#F59E0B;
-    --te:#2DD4BF;--teb:#042F2E;
+    --bg:#0D1117; --s0:#161B22; --s1:#1E2430; --s2:#252D3B; --s3:#2E3848;
+    --b0:rgba(255,255,255,0.05); --b1:rgba(255,255,255,0.10); --b2:rgba(255,255,255,0.18);
+    --t0:#E8E6E0; --t1:#9B9890; --t2:#5C5A54;
+    --blue:#4C8EF8; --blue-bg:#0F1F45; --blue-mid:#3B82F6; --blue-fg:#7AABFF;
+    --green:#2DD46A;--green-bg:#071F12;--green-fg:#3EE078;
+    --gold:#F0B840; --gold-bg:#1C1200;  --gold-fg:#F5C850;
+    --purple:#B07DFF;--purple-bg:#160A38;--purple-fg:#C8A0FF;
+    --red:#F07070;  --red-bg:#200808;   --red-fg:#FA8888;
+    --teal:#2DD4BF; --teal-bg:#041E1B;  --teal-fg:#4DE0D0;
+    --amber:#F0A030;--amber-bg:#1C0E00;--amber-fg:#F5B840;
   }
 }
-*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;-webkit-touch-callout:none;}
-html{height:100%;overflow:hidden;}
-body{height:100%;background:var(--bg);color:var(--t);font-family:-apple-system,'SF Pro Text',system-ui,sans-serif;font-size:15px;line-height:1.5;overflow:hidden;}
-button,input,select,textarea{font-family:inherit;color:var(--t);}
-a{color:var(--ac);}
 
-/* LAYOUT */
+/* ── RESET ── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;-webkit-touch-callout:none;-webkit-font-smoothing:antialiased;}
+html,body{height:100%;overflow:hidden;}
+body{background:var(--bg);color:var(--t0);font-family:-apple-system,'SF Pro Text',system-ui,sans-serif;font-size:15px;line-height:1.5;}
+input,button,select,textarea{font-family:inherit;color:var(--t0);font-size:14px;}
+
+/* ── SHELL ── */
 #app{display:flex;flex-direction:column;height:100%;max-width:430px;margin:0 auto;}
 #pages{flex:1;overflow:hidden;position:relative;}
-.page{position:absolute;inset:0;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:0 0 16px;display:none;opacity:0;transition:opacity 0.18s ease;}
-.page.active{display:block;opacity:1;}
-.pscroll{padding:0 14px 20px;}
+.pg{position:absolute;inset:0;overflow-y:auto;-webkit-overflow-scrolling:touch;display:none;}
+.pg.on{display:block;}
+.pi{padding-bottom:32px;}
 
-/* NAV */
-#nav{height:var(--nav);background:var(--surf);border-top:0.5px solid var(--bm);display:flex;flex-shrink:0;padding-bottom:env(safe-area-inset-bottom);}
-.nb{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;border:none;background:none;color:var(--t3);font-size:10px;font-weight:600;cursor:pointer;padding:6px 2px 4px;transition:color 0.15s;}
-.nb.on{color:var(--ac);}
-.ni{font-size:23px;line-height:1;}
-
-/* TOAST */
-#toast{position:fixed;top:env(safe-area-inset-top,20px);top:calc(env(safe-area-inset-top,0px) + 16px);left:50%;transform:translateX(-50%) translateY(-120%);background:var(--t);color:var(--bg);font-size:13px;font-weight:700;padding:10px 20px;border-radius:30px;z-index:9999;transition:transform 0.28s cubic-bezier(0.34,1.56,0.64,1);pointer-events:none;white-space:nowrap;max-width:90vw;text-align:center;}
-#toast.show{transform:translateX(-50%) translateY(0);}
-
-/* SYNC */
-#sbar{position:fixed;top:0;left:0;right:0;height:2px;background:var(--ac);transform:scaleX(0);transform-origin:left;z-index:9998;transition:transform 0.3s;}
-#sbar.s1{transform:scaleX(0.6);transition:transform 2s ease-out;}
-#sbar.s2{transform:scaleX(1);transition:transform 0.15s;}
-
-/* OFFLINE */
-#offbanner{display:none;background:var(--amb);color:var(--am);text-align:center;font-size:12px;font-weight:700;padding:5px 14px;position:sticky;top:0;z-index:90;}
-.offline #offbanner{display:block;}
-
-/* SECTION HEADERS */
-.sh{font-size:11px;font-weight:800;color:var(--t3);text-transform:uppercase;letter-spacing:0.7px;padding:18px 14px 8px;}
-.sh:first-child{padding-top:14px;}
-
-/* CARDS */
-.card{background:var(--surf);border:0.5px solid var(--b);border-radius:var(--r);margin:0 14px 10px;overflow:hidden;}
-.card-p{padding:14px;}
-.ctit{font-size:11px;font-weight:800;color:var(--t3);text-transform:uppercase;letter-spacing:0.6px;margin-bottom:10px;}
-
-/* STAT GRIDS */
-.sg2{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:0 14px 10px;}
-.sg3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin:0 14px 10px;}
-.sg4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:6px;margin:0 14px 10px;}
-.sc{background:var(--surf);border:0.5px solid var(--b);border-radius:var(--rs);padding:12px 10px;}
-.sl{font-size:10px;color:var(--t3);font-weight:700;text-transform:uppercase;letter-spacing:0.4px;margin-bottom:3px;}
-.sv{font-size:23px;font-weight:800;letter-spacing:-0.6px;line-height:1;}
-.ss{font-size:11px;color:var(--t3);margin-top:2px;}
-.sc.accent{background:var(--acb);border-color:transparent;}
-.sc.accent .sl{color:var(--act);}
-.sc.accent .sv{color:var(--ac);}
-.sc.green{background:var(--grb);border-color:transparent;}
-.sc.green .sl{color:var(--gr);}
-.sc.green .sv{color:var(--gr);}
-.sc.gold{background:var(--gob);border-color:transparent;}
-.sc.gold .sl{color:var(--gob2);}
-.sc.gold .sv{color:var(--gob2);}
-.sc.purple{background:var(--pub);border-color:transparent;}
-.sc.purple .sl{color:var(--pu);}
-.sc.purple .sv{color:var(--pu);}
-
-/* INPUTS */
-.fl{font-size:11px;font-weight:700;color:var(--t2);margin-bottom:4px;display:block;}
-input[type=text],input[type=number],input[type=time],input[type=date],select,textarea{
-  width:100%;padding:10px 12px;background:var(--surf2);border:0.5px solid var(--bm);
-  border-radius:var(--rs);color:var(--t);font-size:14px;outline:none;
-  -webkit-appearance:none;appearance:none;transition:border-color 0.15s;
+/* ── HERO GRADIENT HEADER (Today page) ── */
+.hero-header{
+  background:linear-gradient(160deg,#0D1B3E 0%,#162450 40%,#1B3070 70%,#0D1117 100%);
+  padding:calc(env(safe-area-inset-top,0px)+20px) 20px 28px;
+  position:relative;overflow:hidden;
 }
-select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%239A9893' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;padding-right:28px;}
-input:focus,select:focus,textarea:focus{border-color:var(--ac);}
-textarea{resize:none;min-height:72px;}
-.frow{display:flex;gap:8px;align-items:flex-end;margin-bottom:10px;}
-.frow>*{flex:1;}.frow>.btn{flex:0 0 auto;}
-.fgroup{margin-bottom:10px;}
-.fgroup:last-child{margin-bottom:0;}
+@media(prefers-color-scheme:light){
+  .hero-header{background:linear-gradient(160deg,#1A2E6B 0%,#1E3A85 45%,#2448A8 75%,#1A2E6B 100%);}
+}
+.hero-header::before{
+  content:'';position:absolute;top:-40px;right:-40px;width:200px;height:200px;
+  border-radius:50%;background:rgba(255,255,255,0.04);pointer-events:none;
+}
+.hero-date{font-size:13px;font-weight:600;color:rgba(255,255,255,0.55);margin-bottom:6px;letter-spacing:0.3px;}
+.hero-greet{font-size:26px;font-weight:800;color:#fff;letter-spacing:-0.5px;line-height:1.2;margin-bottom:20px;}
 
-/* BUTTONS */
-.btn{padding:10px 16px;border-radius:var(--rs);border:0.5px solid var(--bm);background:var(--surf);color:var(--t);font-size:13px;font-weight:700;cursor:pointer;transition:opacity 0.12s,transform 0.1s;white-space:nowrap;display:inline-flex;align-items:center;justify-content:center;gap:6px;}
-.btn:active{opacity:0.65;transform:scale(0.97);}
-.bp{background:var(--ac);color:#fff;border-color:var(--ac);}
-.bsm{padding:8px 12px;font-size:12px;}
-.bblock{width:100%;margin-top:10px;}
-.bdanger{background:var(--reb);color:var(--re);border-color:transparent;}
-
-/* BADGES */
-.badge{display:inline-flex;align-items:center;font-size:11px;font-weight:800;padding:3px 8px;border-radius:20px;letter-spacing:0.1px;}
-.bgr{background:var(--grb);color:var(--gr);}
-.bam{background:var(--amb);color:var(--am);}
-.bac{background:var(--acb);color:var(--ac);}
-.bre{background:var(--reb);color:var(--re);}
-.bgo{background:var(--gob);color:var(--gob2);}
-.bpu{background:var(--pub);color:var(--pu);}
-.bte{background:var(--teb);color:var(--te);}
-
-/* PROGRESS BAR */
-.pbw{background:var(--surf2);border-radius:20px;height:6px;overflow:hidden;margin-top:6px;}
-.pb{height:100%;border-radius:20px;transition:width 0.5s ease;}
-
-/* HABITS */
-.hi{display:flex;align-items:center;gap:10px;padding:11px 14px;border-bottom:0.5px solid var(--b);transition:background 0.1s;}
-.hi:last-child{border-bottom:none;}
-.hi:active{background:var(--surf2);}
-.htap{width:36px;height:36px;border-radius:50%;border:2px solid var(--bm);background:var(--surf2);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;font-size:18px;transition:all 0.2s;}
-.htap.done{background:var(--gr);border-color:var(--gr);}
-.htap.done::after{content:'✓';color:#fff;font-weight:900;font-size:17px;}
-.htap.done .hico{display:none;}
-.hinfo{flex:1;min-width:0;}
-.hn{font-size:14px;font-weight:500;line-height:1.3;}
-.hst{font-size:11px;color:var(--t3);margin-top:1px;}
-.hdots{display:flex;gap:3px;flex-shrink:0;}
-.hd{width:7px;height:7px;border-radius:50%;background:var(--surf3);border:none;}
-.hd.on{background:var(--gr);}
-.hico{font-size:18px;pointer-events:none;}
-
-/* PRAYER GRID */
-.pgrid{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;padding:0 14px 14px;}
-.pc{background:var(--surf2);border-radius:var(--rs);padding:12px 4px 10px;text-align:center;cursor:pointer;border:1.5px solid transparent;transition:all 0.15s;}
-.pc.done{background:var(--gob);border-color:var(--gob2);}
-.pck{font-size:22px;margin-bottom:3px;display:block;}
-.pn{font-size:10px;font-weight:800;color:var(--t2);letter-spacing:0.2px;}
-.pc.done .pn{color:var(--gob2);}
-
-/* JUZ GRID */
-.jgrid{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;}
-.jc{aspect-ratio:1;border-radius:8px;background:var(--surf2);border:1px solid var(--b);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:var(--t3);cursor:pointer;transition:all 0.15s;}
-.jc.done{background:var(--gob2);border-color:var(--gob2);color:#fff;}
-.jc:active{transform:scale(0.92);}
-
-/* MILESTONE */
-.msi{display:flex;align-items:flex-start;gap:10px;padding:11px 14px;border-bottom:0.5px solid var(--b);}
-.msi:last-child{border-bottom:none;}
-.msc{width:24px;height:24px;border-radius:50%;border:2px solid var(--bm);cursor:pointer;flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;transition:all 0.15s;}
-.msc.done{background:var(--gr);border-color:var(--gr);color:#fff;}
-.msb{flex:1;min-width:0;}
-.mst{font-size:14px;font-weight:500;line-height:1.3;}
-.msn{font-size:12px;color:var(--t3);margin-top:2px;}
-.msdone .mst{text-decoration:line-through;color:var(--t3);}
-.del{color:var(--t3);cursor:pointer;font-size:22px;padding:0 2px;line-height:1;flex-shrink:0;font-weight:300;}
-
-/* LOG ITEMS */
-.llist{display:flex;flex-direction:column;gap:0;}
-.li{padding:10px 14px;border-bottom:0.5px solid var(--b);display:flex;justify-content:space-between;align-items:flex-start;gap:8px;}
-.li:last-child{border-bottom:none;}
-.li-main{flex:1;min-width:0;}
-.li-title{font-size:13px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-.li-sub{font-size:12px;color:var(--t2);margin-top:2px;line-height:1.4;}
-.li-date{font-size:11px;color:var(--t3);flex-shrink:0;margin-top:1px;}
-
-/* SCORE RING */
-.score-wrap{display:flex;align-items:center;gap:16px;padding:16px 14px;}
-.score-ring{position:relative;width:80px;height:80px;flex-shrink:0;}
+/* Score ring in hero */
+.hero-score-row{display:flex;align-items:center;gap:20px;}
+.score-ring{position:relative;width:88px;height:88px;flex-shrink:0;}
 .score-ring svg{transform:rotate(-90deg);}
-.score-num{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:800;letter-spacing:-0.5px;}
+.score-ring-num{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:900;color:#fff;letter-spacing:-0.5px;}
 .score-info{flex:1;}
-.score-label{font-size:13px;font-weight:700;margin-bottom:4px;}
-.score-sub{font-size:12px;color:var(--t3);line-height:1.5;}
+.score-label{font-size:14px;font-weight:700;color:rgba(255,255,255,0.9);margin-bottom:4px;}
+.score-sub{font-size:12px;color:rgba(255,255,255,0.5);line-height:1.5;}
+.score-badges{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px;}
+.score-badge{font-size:11px;font-weight:700;padding:3px 9px;border-radius:100px;background:rgba(255,255,255,0.15);color:rgba(255,255,255,0.9);}
 
-/* QUICK LOG */
-.ql-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:0 14px 14px;}
-.ql-btn{background:var(--surf2);border:0.5px solid var(--b);border-radius:var(--rs);padding:12px;cursor:pointer;text-align:left;transition:all 0.12s;}
-.ql-btn:active{opacity:0.7;transform:scale(0.97);}
-.ql-icon{font-size:22px;margin-bottom:4px;display:block;}
-.ql-label{font-size:12px;font-weight:700;color:var(--t2);}
-.ql-sub{font-size:11px;color:var(--t3);margin-top:1px;}
+/* ── STD PAGE HEADER ── */
+.ph{padding:calc(env(safe-area-inset-top,0px)+18px) 18px 0;display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4px;}
+.ph-title{font-size:28px;font-weight:800;letter-spacing:-0.6px;line-height:1.1;}
+.ph-action{font-size:14px;color:var(--blue-mid);font-weight:600;cursor:pointer;padding:4px 0;margin-top:6px;}
 
-/* CHESS RESULT */
-.rbrow{display:flex;gap:8px;margin-bottom:12px;}
-.rb{flex:1;padding:12px 4px;border-radius:var(--rs);border:1.5px solid var(--bm);background:var(--surf2);color:var(--t2);font-weight:800;font-size:14px;cursor:pointer;text-align:center;transition:all 0.15s;}
-.rb:active{transform:scale(0.96);}
-.rw{background:var(--grb);border-color:var(--gr);color:var(--gr);}
-.rd{background:var(--amb);border-color:var(--am);color:var(--am);}
-.rl{background:var(--reb);border-color:var(--re);color:var(--re);}
+/* ── NAV ── */
+#nav{height:var(--nav);background:var(--s0);border-top:0.5px solid var(--b1);display:flex;flex-shrink:0;padding-bottom:env(safe-area-inset-bottom);}
+.nb{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;border:none;background:none;color:var(--t2);font-size:10px;font-weight:600;cursor:pointer;padding:6px 2px 4px;transition:color 0.15s;}
+.nb.on{color:var(--blue-mid);}
+.nbi{font-size:21px;line-height:1;}
 
-/* EDIT PANEL */
-.etog{font-size:12px;color:var(--ac);cursor:pointer;font-weight:700;padding:2px 0;}
-.epanel{display:none;background:var(--surf2);border-top:0.5px solid var(--bm);padding:14px;}
-.epanel.open{display:block;}
+/* ── TOAST ── */
+#toast{position:fixed;top:calc(env(safe-area-inset-top,0px)+14px);left:50%;transform:translateX(-50%) translateY(-120%);background:var(--t0);color:var(--bg);font-size:13px;font-weight:700;padding:10px 18px;border-radius:100px;z-index:9999;transition:transform 0.3s cubic-bezier(0.34,1.4,0.64,1);pointer-events:none;white-space:nowrap;max-width:90vw;display:flex;align-items:center;gap:10px;}
+#toast.on{transform:translateX(-50%) translateY(0);}
+#toast-undo{background:rgba(255,255,255,0.25);border:none;color:inherit;font-size:12px;font-weight:800;padding:4px 10px;border-radius:100px;cursor:pointer;pointer-events:all;letter-spacing:0.3px;}
 
-/* WEEKLY GRID */
-.wgrid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;}
-.wday{display:flex;flex-direction:column;align-items:center;gap:3px;}
-.wday-label{font-size:9px;font-weight:700;color:var(--t3);text-transform:uppercase;}
-.wday-dot{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;background:var(--surf2);color:var(--t3);}
-.wday-dot.full{background:var(--gr);color:#fff;}
-.wday-dot.part{background:var(--amb);color:var(--am);}
-.wday-dot.today-ring{box-shadow:0 0 0 2px var(--ac);}
+/* ── SYNC LINE ── */
+#sline{position:fixed;top:0;left:0;right:0;height:2px;background:var(--blue-mid);transform-origin:left;transform:scaleX(0);z-index:9998;transition:transform 0.2s;}
+#sline.go{transform:scaleX(0.65);transition:transform 2.5s ease-out;}
+#sline.ok{transform:scaleX(1);transition:transform 0.12s;}
 
-/* PRAYER HISTORY */
-.ph-row{display:flex;align-items:center;justify-content:space-between;padding:8px 14px;border-bottom:0.5px solid var(--b);}
-.ph-row:last-child{border-bottom:none;}
-.ph-dots{display:flex;gap:4px;}
-.ph-dot{width:28px;height:28px;border-radius:50%;background:var(--surf2);border:1px solid var(--bm);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:800;color:var(--t3);}
-.ph-dot.done{background:var(--gob2);border-color:var(--gob2);color:#fff;}
+/* ── OFFLINE ── */
+#offbar{display:none;background:var(--amber-bg);color:var(--amber-fg);font-size:12px;font-weight:700;text-align:center;padding:6px 16px;position:sticky;top:0;z-index:88;}
+body.offline #offbar{display:block;}
 
-/* SKELETON */
-.skel{background:linear-gradient(90deg,var(--surf2) 25%,var(--surf3) 50%,var(--surf2) 75%);background-size:200% 100%;animation:skel 1.4s infinite;border-radius:var(--rsm);height:16px;margin-bottom:8px;}
-@keyframes skel{0%{background-position:200% 0}100%{background-position:-200% 0}}
+/* ── SECTION LABELS ── */
+.sec{font-size:11px;font-weight:800;color:var(--t2);text-transform:uppercase;letter-spacing:0.9px;padding:20px 18px 8px;}
 
-/* DIVIDER */
-.divider{height:0.5px;background:var(--b);margin:0 14px;}
+/* ── CARDS ── */
+.card{background:var(--s0);border:0.5px solid var(--b0);border-radius:var(--r);margin:0 16px 10px;overflow:hidden;}
+.cp{padding:16px;}
 
-/* WEEKLY REVIEW */
-.wr-section{margin-bottom:16px;}
-.wr-title{font-size:13px;font-weight:700;margin-bottom:8px;color:var(--t2);}
-.wr-stat{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:0.5px solid var(--b);font-size:13px;}
-.wr-stat:last-child{border-bottom:none;}
-.wr-val{font-weight:700;}
+/* ── STAT GRIDS ── */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:0 16px 10px;}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin:0 16px 10px;}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin:0 16px 10px;}
+.sc{border-radius:var(--rm);padding:14px 12px;}
+.sc-pl{background:var(--s0);border:0.5px solid var(--b0);}
+.sc-bl{background:var(--blue-bg);}  .sc-gr{background:var(--green-bg);}
+.sc-go{background:var(--gold-bg);}  .sc-pu{background:var(--purple-bg);}
+.sc-te{background:var(--teal-bg);} .sc-am{background:var(--amber-bg);}
+.sc-re{background:var(--red-bg);}
+.sv{font-size:24px;font-weight:800;letter-spacing:-0.7px;line-height:1.05;}
+.sl2{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px;opacity:0.7;}
+.ss{font-size:11px;margin-top:3px;opacity:0.65;}
+.sc-pl .sl2,.sc-pl .ss{color:var(--t2);} .sc-pl .sv{color:var(--t0);}
+.sc-bl .sl2,.sc-bl .sv,.sc-bl .ss{color:var(--blue-fg);}
+.sc-gr .sl2,.sc-gr .sv,.sc-gr .ss{color:var(--green-fg);}
+.sc-go .sl2,.sc-go .sv,.sc-go .ss{color:var(--gold-fg);}
+.sc-pu .sl2,.sc-pu .sv,.sc-pu .ss{color:var(--purple-fg);}
+.sc-te .sl2,.sc-te .sv,.sc-te .ss{color:var(--teal-fg);}
+.sc-am .sl2,.sc-am .sv,.sc-am .ss{color:var(--amber-fg);}
+.sc-re .sl2,.sc-re .sv,.sc-re .ss{color:var(--red-fg);}
 
-/* SETTINGS (edit in goals) */
-.set-row{display:flex;align-items:center;justify-content:space-between;padding:11px 14px;border-bottom:0.5px solid var(--b);}
-.set-row:last-child{border-bottom:none;}
-.set-label{font-size:14px;font-weight:500;}
-.set-sub{font-size:12px;color:var(--t3);}
+/* ── FORMS ── */
+.fl{font-size:12px;font-weight:700;color:var(--t1);margin-bottom:5px;display:block;}
+input[type=text],input[type=number],input[type=time],input[type=date],select,textarea{
+  width:100%;padding:11px 13px;background:var(--s1);border:0.5px solid var(--b1);
+  border-radius:var(--rm);color:var(--t0);font-size:14px;outline:none;
+  -webkit-appearance:none;transition:border-color 0.15s,background 0.15s;
+}
+select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='7'%3E%3Cpath d='M1 1l4.5 5 4.5-5' stroke='%238E8B82' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:30px;}
+input:focus,select:focus,textarea:focus{border-color:var(--blue-mid);background:var(--s0);}
+textarea{resize:none;min-height:68px;line-height:1.55;}
+.fr{display:flex;gap:8px;align-items:flex-end;}.fr>*{flex:1;}.fr>.btn{flex:0 0 auto;}
+.fg{margin-bottom:12px;}.fg:last-child{margin-bottom:0;}
 
-/* PAGE TITLE BAR */
-.ptbar{display:flex;align-items:center;justify-content:space-between;padding:16px 14px 4px;}
-.ptitle{font-size:22px;font-weight:800;letter-spacing:-0.5px;}
-.psub{font-size:12px;color:var(--t3);padding:0 14px 14px;}
+/* ── BUTTONS ── */
+.btn{padding:11px 18px;border-radius:var(--rm);border:0.5px solid var(--b1);background:var(--s0);color:var(--t0);font-size:14px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:6px;transition:opacity 0.12s,transform 0.1s;white-space:nowrap;}
+.btn:active{opacity:0.65;transform:scale(0.97);}
+.btn-p{background:var(--blue-mid);color:#fff;border-color:var(--blue-mid);}
+.btn-sm{padding:8px 14px;font-size:13px;}
+.btn-block{width:100%;margin-top:12px;}
+.btn-ghost{background:transparent;border-color:transparent;color:var(--blue-mid);font-size:13px;padding:6px 0;font-weight:700;}
+.btn-red{background:var(--red-bg);border-color:var(--red-fg);color:var(--red-fg);}
+
+/* ── BADGES ── */
+.badge{display:inline-flex;align-items:center;font-size:11px;font-weight:800;padding:3px 9px;border-radius:100px;}
+.b-gr{background:var(--green-bg);color:var(--green-fg);}
+.b-am{background:var(--amber-bg);color:var(--amber-fg);}
+.b-bl{background:var(--blue-bg);color:var(--blue-fg);}
+.b-re{background:var(--red-bg);color:var(--red-fg);}
+.b-go{background:var(--gold-bg);color:var(--gold-fg);}
+.b-pu{background:var(--purple-bg);color:var(--purple-fg);}
+.b-te{background:var(--teal-bg);color:var(--teal-fg);}
+
+/* ── PROGRESS BAR ── */
+.pbw{background:var(--s2);border-radius:100px;height:7px;overflow:hidden;}
+.pb{height:100%;border-radius:100px;transition:width 0.7s cubic-bezier(0.34,1.1,0.64,1);}
+
+/* ── SWIPEABLE LOG ROWS ── */
+.log-wrap{position:relative;overflow:hidden;}
+.log-wrap .log-del-btn{position:absolute;right:0;top:0;bottom:0;width:72px;background:var(--red-fg);color:#fff;font-size:13px;font-weight:800;display:flex;align-items:center;justify-content:center;cursor:pointer;transform:translateX(100%);transition:transform 0.22s ease;}
+.log-wrap.swiped .log-del-btn{transform:translateX(0);}
+.log-wrap .lr{transition:transform 0.22s ease;}
+.log-wrap.swiped .lr{transform:translateX(-72px);}
+
+/* ── LIST ROWS ── */
+.lr{display:flex;align-items:flex-start;gap:10px;padding:12px 16px;border-bottom:0.5px solid var(--b0);background:var(--s0);}
+.lr:last-child{border-bottom:none;}
+.lr-accent{width:3px;border-radius:4px;align-self:stretch;flex-shrink:0;min-height:20px;}
+.lr-body{flex:1;min-width:0;}
+.lr-title{font-size:14px;font-weight:500;line-height:1.35;overflow:hidden;text-overflow:ellipsis;}
+.lr-sub{font-size:12px;color:var(--t1);margin-top:2px;line-height:1.45;}
+.lr-date{font-size:11px;color:var(--t2);flex-shrink:0;margin-top:2px;}
+.lr-tap-del{color:var(--t2);font-size:22px;font-weight:300;cursor:pointer;padding:0 2px;line-height:1;flex-shrink:0;align-self:flex-start;}
+
+/* ── PRAYER GRID ── */
+.pgrid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;padding:4px 16px 16px;}
+.pcard{background:var(--s1);border-radius:var(--rm);padding:14px 4px 12px;text-align:center;cursor:pointer;border:1.5px solid transparent;transition:all 0.2s cubic-bezier(0.34,1.2,0.64,1);}
+.pcard.done{background:var(--gold-bg);border-color:var(--gold-fg);}
+.pcard:active{transform:scale(0.92);}
+.p-ico{font-size:22px;display:block;margin-bottom:4px;}
+.p-name{font-size:10px;font-weight:800;color:var(--t1);letter-spacing:0.2px;}
+.pcard.done .p-name{color:var(--gold-fg);}
+
+/* ── JUZ GRID ── */
+.jgrid{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;}
+.jcell{aspect-ratio:1;border-radius:10px;background:var(--s1);border:0.5px solid var(--b0);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:var(--t2);cursor:pointer;transition:all 0.15s;}
+.jcell.done{background:var(--gold-fg);border-color:var(--gold-fg);color:#fff;}
+.jcell:active{transform:scale(0.85);}
+
+/* ── HABIT ROWS ── */
+.hrow{display:flex;align-items:center;gap:12px;padding:14px 16px;border-bottom:0.5px solid var(--b0);cursor:pointer;transition:background 0.1s;-webkit-user-select:none;}
+.hrow:last-child{border-bottom:none;}
+.hrow:active{background:var(--s1);}
+.hcheck{width:40px;height:40px;border-radius:50%;border:2px solid var(--b2);background:var(--s1);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:20px;transition:all 0.25s cubic-bezier(0.34,1.3,0.64,1);}
+.hcheck.done{background:var(--green-fg);border-color:var(--green-fg);}
+.hcheck.done::after{content:'✓';color:#fff;font-weight:900;font-size:18px;}
+.hcheck.done .hico{display:none;}
+.hico{pointer-events:none;}
+.h-info{flex:1;min-width:0;}
+.h-name{font-size:15px;font-weight:500;line-height:1.3;}
+.h-streak{font-size:11px;color:var(--t2);font-weight:600;margin-top:2px;}
+.hdots{display:flex;gap:3px;flex-shrink:0;}
+.hdot{width:9px;height:9px;border-radius:50%;background:var(--s2);}
+.hdot.done{background:var(--green-fg);}
+
+/* ── MILESTONE ROWS ── */
+.msrow{display:flex;align-items:flex-start;gap:12px;padding:14px 16px;border-bottom:0.5px solid var(--b0);transition:background 0.1s;}
+.msrow:last-child{border-bottom:none;}
+.msrow:active{background:var(--s1);}
+.mscheck{width:26px;height:26px;border-radius:50%;border:2px solid var(--b2);flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900;cursor:pointer;transition:all 0.2s cubic-bezier(0.34,1.2,0.64,1);}
+.mscheck.done{background:var(--green-fg);border-color:var(--green-fg);color:#fff;}
+.mscheck.done.pop{animation:pop 0.4s ease;}
+@keyframes pop{0%{transform:scale(1)}40%{transform:scale(1.35)}70%{transform:scale(0.9)}100%{transform:scale(1)}}
+.ms-body{flex:1;min-width:0;}
+.ms-title{font-size:14px;font-weight:500;line-height:1.35;}
+.ms-note{font-size:12px;color:var(--t2);margin-top:3px;line-height:1.4;}
+.msrow.crossed .ms-title{text-decoration:line-through;color:var(--t2);}
+.ms-del{color:var(--t2);font-size:22px;font-weight:300;cursor:pointer;padding:0 2px;line-height:1;flex-shrink:0;}
+
+/* ── CHESS RESULT BUTTONS ── */
+.rbrow{display:flex;gap:8px;margin-bottom:14px;}
+.rbt{flex:1;padding:15px 4px;border-radius:var(--rm);border:1.5px solid var(--b1);background:var(--s1);font-weight:800;font-size:15px;cursor:pointer;text-align:center;transition:all 0.18s;color:var(--t1);}
+.rbt:active{transform:scale(0.95);}
+.rbt.win{background:var(--green-bg);border-color:var(--green-fg);color:var(--green-fg);}
+.rbt.draw{background:var(--amber-bg);border-color:var(--amber-fg);color:var(--amber-fg);}
+.rbt.loss{background:var(--red-bg);border-color:var(--red-fg);color:var(--red-fg);}
+
+/* ── INNER TABS ── */
+.itabs{display:flex;margin:10px 16px 12px;background:var(--s1);border-radius:var(--rm);padding:3px;gap:0;}
+.itab{flex:1;padding:9px 4px;border-radius:var(--rs);border:none;background:none;font-size:11px;font-weight:700;color:var(--t2);cursor:pointer;transition:all 0.18s;white-space:nowrap;}
+.itab.on{background:var(--s0);color:var(--t0);box-shadow:0 1px 6px rgba(0,0,0,0.12);}
+.itpg{display:none;}.itpg.on{display:block;}
+
+/* ── AUSTRIA HERO ── */
+.at-hero{margin:0 16px 12px;border-radius:var(--r);padding:22px 20px;position:relative;overflow:hidden;
+  background:linear-gradient(135deg,#0D2B6B 0%,#1040A0 55%,#1850C0 100%);}
+@media(prefers-color-scheme:dark){.at-hero{background:linear-gradient(135deg,#081830 0%,#0C2660 55%,#103080 100%);}}
+.at-hero::after{content:'🇦🇹';position:absolute;right:-8px;bottom:-12px;font-size:80px;opacity:0.12;pointer-events:none;line-height:1;}
+.at-track{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:0.9px;color:rgba(255,255,255,0.55);margin-bottom:8px;}
+.at-days{font-size:56px;font-weight:900;letter-spacing:-2px;line-height:1;color:#fff;}
+.at-label{font-size:14px;font-weight:600;color:rgba(255,255,255,0.65);margin-top:6px;}
+.at-meta{position:absolute;top:22px;right:20px;text-align:right;}
+.at-ms-num{font-size:30px;font-weight:800;color:#fff;letter-spacing:-0.5px;}
+.at-ms-lbl{font-size:11px;color:rgba(255,255,255,0.55);font-weight:700;}
+.at-bar-wrap{margin-top:18px;background:rgba(255,255,255,0.15);border-radius:100px;height:5px;overflow:hidden;}
+.at-bar{height:100%;border-radius:100px;background:rgba(255,255,255,0.8);transition:width 0.8s ease;}
+
+/* ── WEEKLY DOTS ── */
+.wkrow{display:flex;justify-content:space-between;}
+.wkday{display:flex;flex-direction:column;align-items:center;gap:5px;}
+.wkd-lbl{font-size:10px;font-weight:700;color:var(--t2);text-transform:uppercase;}
+.wkd-dot{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;background:var(--s1);color:var(--t2);transition:all 0.3s;}
+.wkd-dot.full{background:var(--green-fg);color:#fff;}
+.wkd-dot.part{background:var(--gold-bg);color:var(--gold-fg);}
+.wkd-dot.today{box-shadow:0 0 0 2.5px var(--blue-mid);}
+
+/* ── MODAL SHEET ── */
+#m-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:500;align-items:flex-end;justify-content:center;}
+#m-box{background:var(--s0);border-radius:26px 26px 0 0;width:100%;max-width:430px;padding-bottom:env(safe-area-inset-bottom,0px);max-height:90vh;overflow-y:auto;transform:translateY(100%);transition:transform 0.32s cubic-bezier(0.32,0.72,0,1);}
+#m-box.on{transform:translateY(0);}
+.m-handle{width:38px;height:4px;border-radius:2px;background:var(--b2);margin:13px auto 5px;}
+.m-head{padding:6px 20px 14px;font-size:19px;font-weight:800;letter-spacing:-0.3px;}
+.m-body{padding:0 20px 28px;}
+
+/* ── EDIT PANEL ── */
+.ep{display:none;border-top:0.5px solid var(--b0);padding:14px 16px 16px;background:var(--s1);}
+.ep.on{display:block;}
+
+/* ── INFO BOXES ── */
+.ib{border-radius:var(--rm);padding:13px 15px;margin-bottom:12px;font-size:13px;line-height:1.65;}
+.ib-warn{background:var(--red-bg);color:var(--red-fg);}
+.ib-info{background:var(--blue-bg);color:var(--blue-fg);}
+.ib-tip{background:var(--gold-bg);color:var(--gold-fg);}
+.ib-ok{background:var(--green-bg);color:var(--green-fg);}
+
+/* ── EMPTY STATES ── */
+.empty{display:flex;flex-direction:column;align-items:center;padding:30px 16px;color:var(--t2);font-size:13px;text-align:center;gap:7px;line-height:1.5;}
+.empty-ico{font-size:36px;}
+
+/* ── CHECK-IN MOODS ── */
+.ci-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px;}
+.ci-cell{background:var(--s1);border:1.5px solid transparent;border-radius:var(--rm);padding:11px 6px;text-align:center;cursor:pointer;transition:all 0.15s;}
+.ci-cell:active{transform:scale(0.95);}
+.ci-cell.on{border-color:var(--blue-mid);background:var(--blue-bg);}
+.ci-cell .ci-ico{font-size:24px;display:block;margin-bottom:3px;}
+.ci-cell .ci-lbl{font-size:11px;font-weight:700;color:var(--t2);}
+.ci-cell.on .ci-lbl{color:var(--blue-fg);}
+
+/* ── QUICK LOG GRID ── */
+.qa-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:0 16px;}
+.qa-card{background:var(--s0);border:0.5px solid var(--b0);border-radius:var(--rm);padding:15px;cursor:pointer;transition:all 0.14s;}
+.qa-card:active{opacity:0.65;transform:scale(0.96);}
+.qa-ico{font-size:26px;display:block;margin-bottom:7px;}
+.qa-label{font-size:13px;font-weight:700;line-height:1.2;}
+.qa-sub{font-size:11px;color:var(--t2);margin-top:2px;}
+
+/* ── STREAK PILLS ── */
+.streak-row{display:flex;gap:8px;padding:0 16px;flex-wrap:wrap;}
+.streak-pill{flex:1;min-width:0;background:var(--s0);border:0.5px solid var(--b0);border-radius:var(--rm);padding:12px 10px;text-align:center;}
+.streak-num{font-size:28px;font-weight:900;letter-spacing:-0.8px;line-height:1;}
+.streak-ico{font-size:16px;display:block;margin-bottom:2px;}
+.streak-lbl{font-size:10px;font-weight:700;color:var(--t2);text-transform:uppercase;letter-spacing:0.5px;margin-top:3px;}
+.streak-sub{font-size:10px;color:var(--t2);margin-top:1px;}
+.streak-pill.fire .streak-num{color:var(--gold-fg);}
+.streak-pill.teal .streak-num{color:var(--teal-fg);}
+.streak-pill.green .streak-num{color:var(--green-fg);}
 </style>
 </head>
 <body>
-<div id="sbar"></div>
-<div id="toast"></div>
-
+<div id="sline"></div>
+<div id="toast"><span id="toast-msg"></span><button id="toast-undo" style="display:none" onclick="doUndo()">Undo</button></div>
 <div id="app">
 <div id="pages">
 
-<!-- ═══ HOME ═══ -->
-<div id="page-home" class="page active">
-<div id="offbanner">⚡ Offline — changes sync when reconnected</div>
-<div class="pscroll">
+<!-- ═══════════════ TODAY ═══════════════ -->
+<div id="pg-today" class="pg on">
+<div id="offbar">⚡ Offline — syncing when reconnected</div>
+<div class="pi">
 
-  <!-- Score ring + greeting -->
-  <div class="score-wrap">
-    <div class="score-ring">
-      <svg width="80" height="80" viewBox="0 0 80 80">
-        <circle cx="40" cy="40" r="34" fill="none" stroke="var(--surf2)" stroke-width="7"/>
-        <circle id="score-arc" cx="40" cy="40" r="34" fill="none" stroke="var(--ac)" stroke-width="7" stroke-linecap="round" stroke-dasharray="213.6" stroke-dashoffset="213.6" style="transition:stroke-dashoffset 0.8s ease;"/>
-      </svg>
-      <div class="score-num" id="score-num">—</div>
-    </div>
-    <div class="score-info">
-      <div class="score-label" id="home-greeting">Assalamu Alaikum 🌙</div>
-      <div class="score-sub" id="home-date"></div>
-      <div style="margin-top:6px;" id="home-score-sub"></div>
+  <!-- Hero header with score -->
+  <div class="hero-header">
+    <div class="hero-date" id="h-date"></div>
+    <div class="hero-greet" id="h-greet">Assalamu Alaikum 🌙</div>
+    <div class="hero-score-row">
+      <div class="score-ring">
+        <svg width="88" height="88" viewBox="0 0 88 88">
+          <circle cx="44" cy="44" r="37" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="7"/>
+          <circle id="ring-arc" cx="44" cy="44" r="37" fill="none" stroke="#fff" stroke-width="7" stroke-linecap="round" stroke-dasharray="232.5" stroke-dashoffset="232.5" style="transition:stroke-dashoffset 1s cubic-bezier(0.34,1.1,0.64,1);"/>
+        </svg>
+        <div class="score-ring-num" id="ring-num">—</div>
+      </div>
+      <div class="score-info">
+        <div class="score-label" id="ring-label">Daily score</div>
+        <div class="score-sub" id="ring-sub">Prayers 40 · Habits 40 · Check-in 20</div>
+        <div class="score-badges" id="h-badges"></div>
+      </div>
     </div>
   </div>
 
-  <!-- Quick stats -->
-  <div class="sg4">
-    <div class="sc gold"><div class="sl">Prayers</div><div class="sv" id="hs-prayers">0/5</div></div>
-    <div class="sc green"><div class="sl">Habits</div><div class="sv" id="hs-habits">0/9</div></div>
-    <div class="sc accent"><div class="sl">Quran</div><div class="sv" id="hs-quran">0p</div></div>
-    <div class="sc purple"><div class="sl">Days to AT</div><div class="sv" id="hs-days">—</div></div>
+  <!-- Quick stats strip -->
+  <div class="g4" style="margin-top:14px;">
+    <div class="sc sc-go"><div class="sl2">Prayer</div><div class="sv" id="h-p">0/5</div></div>
+    <div class="sc sc-gr"><div class="sl2">Habits</div><div class="sv" id="h-h">0</div></div>
+    <div class="sc sc-bl"><div class="sl2">Quran</div><div class="sv" id="h-q">0p</div></div>
+    <div class="sc sc-pu"><div class="sl2">German</div><div class="sv" id="h-g">0m</div></div>
   </div>
 
-  <!-- Quick log shortcuts -->
-  <div class="sh">Quick log</div>
-  <div class="ql-grid">
-    <div class="ql-btn" onclick="quickPrayer()">
-      <span class="ql-icon">🕌</span>
-      <div class="ql-label">Mark prayer</div>
-      <div class="ql-sub" id="ql-prayer-sub">0 of 5 today</div>
-    </div>
-    <div class="ql-btn" onclick="quickQuran()">
-      <span class="ql-icon">📖</span>
-      <div class="ql-label">Log Quran</div>
-      <div class="ql-sub" id="ql-quran-sub">Tap to log pages</div>
-    </div>
-    <div class="ql-btn" onclick="quickChess()">
-      <span class="ql-icon">♟</span>
-      <div class="ql-label">Chess result</div>
-      <div class="ql-sub" id="ql-chess-sub">Log a game</div>
-    </div>
-    <div class="ql-btn" onclick="quickGerman()">
-      <span class="ql-icon">🇩🇪</span>
-      <div class="ql-label">German study</div>
-      <div class="ql-sub" id="ql-german-sub">Log minutes</div>
+  <!-- Prayer today -->
+  <div class="sec">Salah — today</div>
+  <div class="card"><div class="pgrid" id="today-pgrid"></div></div>
+
+  <!-- Habits -->
+  <div class="sec" style="display:flex;align-items:center;justify-content:space-between;padding-right:18px;">
+    <span>Habits</span>
+    <span class="btn-ghost" onclick="toggleEp('ep-habits')" style="padding:0;font-size:12px;">Edit</span>
+  </div>
+  <div class="card">
+    <div id="habit-list"></div>
+    <div class="ep" id="ep-habits">
+      <div style="font-size:12px;color:var(--t2);margin-bottom:10px;font-weight:600;">Tap × to remove. Add below.</div>
+      <div id="habit-edit"></div>
+      <div class="fr" style="margin-top:12px;">
+        <input type="text" id="nh-name" placeholder="Habit name" style="flex:2;">
+        <input type="text" id="nh-icon" placeholder="🔥" style="flex:0 0 54px;text-align:center;font-size:18px;">
+        <button class="btn btn-p btn-sm" onclick="addHabit()">Add</button>
+      </div>
     </div>
   </div>
 
-  <!-- Weekly habit overview -->
-  <div class="sh">This week</div>
-  <div class="card card-p">
-    <div class="ctit">Habit completion</div>
-    <div class="wgrid" id="weekly-grid"></div>
+  <!-- Quick log -->
+  <div class="sec">Quick log</div>
+  <div class="qa-grid">
+    <div class="qa-card" onclick="openM('quran')"><span class="qa-ico">📖</span><div class="qa-label">Quran</div><div class="qa-sub" id="qa-q">Log pages</div></div>
+    <div class="qa-card" onclick="openM('german')"><span class="qa-ico">🇩🇪</span><div class="qa-label">German</div><div class="qa-sub" id="qa-g">Log study</div></div>
+    <div class="qa-card" onclick="openM('chess')"><span class="qa-ico">♟</span><div class="qa-label">Chess</div><div class="qa-sub" id="qa-c">Log game</div></div>
+    <div class="qa-card" onclick="openM('checkin')"><span class="qa-ico">💭</span><div class="qa-label">Check-in</div><div class="qa-sub" id="qa-ci">Mood & energy</div></div>
   </div>
 
   <!-- Streaks -->
-  <div class="sh">Streaks</div>
-  <div class="sg3" id="streaks-grid">
-    <div class="sc"><div class="sl">Prayers</div><div class="sv" id="str-pray">—</div><div class="ss">days 5/5</div></div>
-    <div class="sc"><div class="sl">Quran</div><div class="sv" id="str-quran">—</div><div class="ss">days read</div></div>
-    <div class="sc"><div class="sl">Habits</div><div class="sv" id="str-habit">—</div><div class="ss">day streak</div></div>
+  <div class="sec">Streaks</div>
+  <div class="streak-row" style="margin-bottom:10px;">
+    <div class="streak-pill fire"><span class="streak-ico">🕌</span><div class="streak-num" id="s-pray">0</div><div class="streak-lbl">Prayer</div><div class="streak-sub">full 5/5</div></div>
+    <div class="streak-pill teal"><span class="streak-ico">📖</span><div class="streak-num" id="s-quran">0</div><div class="streak-lbl">Quran</div><div class="streak-sub">days read</div></div>
+    <div class="streak-pill green"><span class="streak-ico">✅</span><div class="streak-num" id="s-habit">0</div><div class="streak-lbl">Habits</div><div class="streak-sub">all complete</div></div>
   </div>
+
+  <!-- Weekly view -->
+  <div class="sec">This week</div>
+  <div class="card cp" style="margin-bottom:16px;"><div class="wkrow" id="wk-row"></div></div>
 
 </div>
 </div>
 
-<!-- ═══ DEEN ═══ -->
-<div id="page-deen" class="page">
-<div class="pscroll">
-  <div class="ptbar"><div class="ptitle">Deen 🌙</div></div>
-  <div class="psub">Prayer · Quran · reflection</div>
+<!-- ═══════════════ DEEN ═══════════════ -->
+<div id="pg-deen" class="pg">
+<div class="pi">
+  <div class="ph"><div class="ph-title">Deen 🌙</div></div>
 
-  <!-- Prayer today -->
-  <div class="sh">Salah today</div>
-  <div class="card">
-    <div class="pgrid" id="prayer-grid"></div>
+  <div class="sec">Salah — today</div>
+  <div class="card"><div class="pgrid" id="deen-pgrid"></div></div>
+
+  <!-- Prayer 7-day history -->
+  <div class="sec">Last 7 days</div>
+  <div class="card" id="prayer-hist"></div>
+
+  <!-- Quran -->
+  <div class="sec">Quran</div>
+  <div class="card cp">
+    <div style="display:flex;justify-content:space-between;margin-bottom:12px;">
+      <div><div style="font-size:30px;font-weight:900;letter-spacing:-1px;" id="q-juz-n">0</div><div style="font-size:11px;color:var(--t2);font-weight:600;margin-top:1px;">of 30 juz complete</div></div>
+      <div style="text-align:right;"><div style="font-size:30px;font-weight:900;letter-spacing:-1px;" id="q-pages-n">0</div><div style="font-size:11px;color:var(--t2);font-weight:600;margin-top:1px;">total pages</div></div>
+    </div>
+    <div class="pbw"><div class="pb" id="q-prog" style="width:0%;background:var(--gold-fg);"></div></div>
+    <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--t2);margin-top:4px;"><span>Completion</span><span id="q-prog-pct">0%</span></div>
+    <div class="fr" style="margin-top:14px;">
+      <div class="fg" style="flex:1;margin-bottom:0;"><label class="fl">Pages</label><input type="number" id="q-pg" placeholder="5" min="1"></div>
+      <div class="fg" style="flex:2;margin-bottom:0;"><label class="fl">Surah / Juz</label><input type="text" id="q-ref" placeholder="e.g. Al-Baqarah"></div>
+      <button class="btn btn-p btn-sm" onclick="logQuran()">Log</button>
+    </div>
+    <div class="fg" style="margin-top:10px;margin-bottom:0;"><label class="fl">Reflection (optional)</label><textarea id="q-note" placeholder="Ayah that moved you..." style="min-height:52px;"></textarea></div>
+    <button class="btn btn-p btn-block" onclick="logQuran()">Save session</button>
   </div>
 
-  <!-- Quran today -->
-  <div class="sh">Quran</div>
-  <div class="card card-p">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
-      <div class="ctit" style="margin-bottom:0;">Today's reading</div>
-      <span class="badge bgo" id="q-today-badge">0 pages</span>
-    </div>
-    <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--t3);margin-bottom:3px;"><span>Juz completion</span><span id="q-juz-lbl">0 / 30 juz</span></div>
-    <div class="pbw"><div class="pb" id="q-bar" style="width:0%;background:var(--gob2);"></div></div>
-    <div class="frow" style="margin-top:12px;">
-      <div><label class="fl">Pages read</label><input type="number" id="q-pages" placeholder="5" min="1"></div>
-      <div><label class="fl">Surah / Juz</label><input type="text" id="q-ref" placeholder="e.g. Al-Baqarah"></div>
-      <button class="btn bp bsm" onclick="logQuran()">Log</button>
-    </div>
-    <div><label class="fl">Reflection (optional)</label><textarea id="q-note" placeholder="Ayah that moved you..." style="min-height:52px;"></textarea></div>
-    <button class="btn bp bblock" onclick="logQuran()">Save reading session</button>
-  </div>
-
-  <!-- Juz tracker -->
-  <div class="sh">Juz tracker</div>
-  <div class="card card-p">
-    <div class="ctit">Tap to mark a juz complete</div>
+  <div class="sec">Juz tracker</div>
+  <div class="card cp">
     <div class="jgrid" id="juz-grid"></div>
-    <div style="display:flex;gap:14px;margin-top:10px;font-size:11px;color:var(--t3);">
-      <span style="display:flex;align-items:center;gap:4px;"><span style="width:10px;height:10px;border-radius:2px;background:var(--surf3);display:inline-block;"></span>Not started</span>
-      <span style="display:flex;align-items:center;gap:4px;"><span style="width:10px;height:10px;border-radius:2px;background:var(--gob2);display:inline-block;"></span>Complete</span>
+    <div style="display:flex;gap:14px;margin-top:12px;font-size:11px;color:var(--t2);">
+      <span style="display:flex;align-items:center;gap:5px;"><span style="width:11px;height:11px;border-radius:3px;background:var(--s2);display:inline-block;"></span>Not done</span>
+      <span style="display:flex;align-items:center;gap:5px;"><span style="width:11px;height:11px;border-radius:3px;background:var(--gold-fg);display:inline-block;"></span>Complete</span>
     </div>
   </div>
 
-  <!-- Reading log -->
-  <div class="sh">Reading history</div>
-  <div class="card">
-    <div id="q-log-list"></div>
-  </div>
-
-  <!-- Prayer history -->
-  <div class="sh">Prayer — last 7 days</div>
-  <div class="card">
-    <div id="prayer-hist"></div>
-  </div>
-
+  <div class="sec">Reading log <span style="font-size:10px;font-weight:600;color:var(--t2);text-transform:none;letter-spacing:0;">(swipe left to delete)</span></div>
+  <div class="card" id="q-log"></div>
 </div>
 </div>
 
-<!-- ═══ TODAY (HABITS) ═══ -->
-<div id="page-today" class="page">
-<div class="pscroll">
-  <div class="ptbar">
-    <div class="ptitle">Today</div>
-    <span class="etog" onclick="toggleEp('ep-habits')">Edit habits</span>
-  </div>
-  <div class="psub" id="today-date-sub"></div>
+<!-- ═══════════════ GOALS ═══════════════ -->
+<div id="pg-goals" class="pg">
+<div class="pi">
+  <div class="ph"><div class="ph-title">Goals 🎯</div></div>
 
-  <!-- Habits -->
-  <div class="card">
-    <div id="habit-list"></div>
+  <div class="itabs">
+    <button class="itab on" onclick="swTab('austria',this)">🇦🇹 Austria</button>
+    <button class="itab" onclick="swTab('certify',this)">📜 Certify</button>
+    <button class="itab" onclick="swTab('german',this)">🇩🇪 German</button>
+    <button class="itab" onclick="swTab('chess',this)">♟ Chess</button>
   </div>
 
-  <!-- Edit panel -->
-  <div class="card" style="overflow:visible;">
-    <div class="epanel" id="ep-habits" style="border-radius:0 0 var(--r) var(--r);">
-      <div style="font-size:12px;color:var(--t3);margin-bottom:10px;">Add or remove habits. Tap × to delete.</div>
-      <div id="habit-manage"></div>
-      <div class="frow" style="margin-top:10px;">
-        <input type="text" id="nh-name" placeholder="New habit name" style="flex:2;">
-        <input type="text" id="nh-icon" placeholder="🔥" style="flex:0 0 50px;text-align:center;">
-        <button class="btn bp bsm" onclick="addHabit()">Add</button>
+  <!-- ── AUSTRIA ── -->
+  <div class="itpg on" id="gt-austria">
+    <div class="at-hero">
+      <div class="at-track">Study Austria</div>
+      <div class="at-days" id="at-days">—</div>
+      <div class="at-label">days until September 2027</div>
+      <div class="at-meta">
+        <div class="at-ms-num" id="at-ms-done">0</div>
+        <div class="at-ms-lbl" id="at-ms-of">of 0 done</div>
       </div>
+      <div class="at-bar-wrap"><div class="at-bar" id="at-bar" style="width:0%;"></div></div>
+    </div>
+    <div class="ib ib-info" style="margin:0 16px 12px;"><b>Study track:</b> German B2 · IELTS 6.5+ · University application · Funding · Student visa · Target: Sep 2027</div>
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:0 16px;">
+      <div class="sec" style="padding:12px 0 8px;">Milestones</div>
+      <button class="btn-ghost btn btn-sm" onclick="openAddMs()">+ Add</button>
+    </div>
+    <div class="card"><div id="ms-list"></div></div>
+    <div class="sec">Research log <span style="font-size:10px;font-weight:600;color:var(--t2);text-transform:none;letter-spacing:0;">(tap × to delete)</span></div>
+    <div class="card cp">
+      <div class="fr">
+        <div style="flex:1;"><label class="fl">Note</label><input type="text" id="study-note" placeholder="University researched, deadline, email sent..."></div>
+        <button class="btn btn-p btn-sm" onclick="logStudy()">Log</button>
+      </div>
+    </div>
+    <div class="card" id="study-log"></div>
+  </div>
+
+  <!-- ── CERTIFY (AWS + IELTS) ── -->
+  <div class="itpg" id="gt-certify">
+
+    <!-- AWS -->
+    <div class="sec" style="padding-top:8px;">☁️ AWS SAA Certification</div>
+    <div class="card cp">
+      <div class="g2" style="margin:0 0 12px;">
+        <div class="sc sc-pl"><div class="sl2">Status</div><div style="font-size:13px;font-weight:700;margin-top:5px;" id="aws-status">Not scheduled</div></div>
+        <div class="sc sc-pl"><div class="sl2">Exam date</div><input type="date" id="aws-date" onchange="saveAwsDate()" style="margin-top:5px;font-size:12px;padding:6px 9px;"></div>
+      </div>
+      <div class="ib ib-warn" id="aws-warn">⚠️ <b>Book your exam NOW.</b> You prepared 4 months ago — knowledge fades fast. Takes 5 min at aws.amazon.com/certification</div>
+      <div class="fr">
+        <div><label class="fl">Study type</label><select id="aws-type"><option>Practice exam</option><option>Video review</option><option>Concept study</option><option>Flashcards</option><option>Weak area review</option></select></div>
+        <div><label class="fl">Minutes</label><input type="number" id="aws-mins" placeholder="30" min="1"></div>
+        <button class="btn btn-p btn-sm" onclick="logAws()">Log</button>
+      </div>
+      <div class="card" id="aws-log" style="margin:10px 0 0;"></div>
+    </div>
+
+    <!-- IELTS -->
+    <div class="sec">📝 IELTS</div>
+    <div class="card cp">
+      <div class="g2" style="margin:0 0 14px;">
+        <div class="sc sc-pl"><div class="sl2">Sessions</div><div class="sv" id="ielts-cnt">0</div><div class="ss">target: 7.5 band</div></div>
+        <div class="sc sc-pl">
+          <div class="sl2">Exam date</div>
+          <div style="font-size:13px;font-weight:700;margin-top:4px;" id="ielts-date-show">Not booked</div>
+          <input type="date" id="ielts-date" onchange="saveIeltsDate()" style="margin-top:6px;font-size:12px;padding:6px 9px;">
+        </div>
+      </div>
+      <div class="fr">
+        <div><label class="fl">Skill</label><select id="ielts-skill"><option>Writing Task 1</option><option>Writing Task 2</option><option>Reading</option><option>Listening</option><option>Speaking</option><option>Full mock test</option></select></div>
+        <div><label class="fl">Score</label><input type="number" id="ielts-score" placeholder="6.5" step="0.5" min="0" max="9"></div>
+        <button class="btn btn-p btn-sm" onclick="logIelts()">Log</button>
+      </div>
+      <div class="card" id="ielts-log" style="margin:10px 0 0;"></div>
     </div>
   </div>
 
-  <!-- Check-in -->
-  <div class="sh">Daily check-in</div>
-  <div class="card card-p">
-    <div class="sg3" style="margin:0 0 12px;">
-      <div class="sc" style="text-align:center;padding:10px 6px;">
-        <div class="sl">Mood</div>
-        <select id="ci-mood" style="background:transparent;border:none;font-size:22px;font-weight:700;text-align:center;padding:4px 0;width:100%;-webkit-appearance:none;">
-          <option value="">—</option><option value="5">😄</option><option value="4">🙂</option>
-          <option value="3">😐</option><option value="2">😔</option><option value="1">😞</option>
-        </select>
+  <!-- ── GERMAN ── -->
+  <div class="itpg" id="gt-german">
+    <div class="sec" style="padding-top:8px;">🇩🇪 German language</div>
+    <div class="card cp">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+        <div>
+          <div style="font-size:11px;color:var(--t2);font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:3px;">Current level</div>
+          <select id="german-level" onchange="saveGermanLevel()" style="font-size:24px;font-weight:900;background:transparent;border:none;color:var(--purple-fg);padding:0;-webkit-appearance:none;cursor:pointer;letter-spacing:-0.5px;">
+            <option>A0</option><option>A1</option><option>A2</option><option>B1</option><option>B2</option>
+          </select>
+        </div>
+        <div style="text-align:right;">
+          <div style="font-size:11px;color:var(--t2);font-weight:700;margin-bottom:3px;">Study: B2</div>
+          <div style="font-size:14px;font-weight:800;color:var(--purple-fg);" id="g-pct-lbl">0% to B1</div>
+        </div>
       </div>
-      <div class="sc" style="text-align:center;padding:10px 6px;">
-        <div class="sl">Energy</div>
-        <select id="ci-energy" style="background:transparent;border:none;font-size:22px;font-weight:700;text-align:center;padding:4px 0;width:100%;-webkit-appearance:none;">
-          <option value="">—</option><option value="5">⚡</option><option value="4">🔋</option>
-          <option value="3">🔌</option><option value="2">😴</option><option value="1">💤</option>
-        </select>
+      <div class="pbw"><div class="pb" id="g-bar" style="width:0%;background:var(--purple-fg);"></div></div>
+      <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--t2);margin-top:4px;"><span>B0 → B2 journey</span><span id="g-pct-sub"></span></div>
+      <div class="fr" style="margin-top:14px;">
+        <div><label class="fl">Minutes</label><input type="number" id="g-mins" placeholder="30" min="1"></div>
+        <div><label class="fl">Activity</label><select id="g-act"><option>Vocabulary (Anki)</option><option>DW Nicos Weg</option><option>Speaking practice</option><option>Grammar</option><option>Listening</option><option>Reading</option></select></div>
+        <button class="btn btn-p btn-sm" onclick="logGerman()">Log</button>
       </div>
-      <div class="sc" style="text-align:center;padding:10px 6px;">
-        <div class="sl">Sleep by</div>
-        <input type="time" id="ci-sleep" value="23:00" style="background:transparent;border:none;font-size:12px;font-weight:700;text-align:center;padding:4px 0;width:100%;">
+      <div class="card" id="g-log" style="margin:10px 0 0;"></div>
+    </div>
+    <div class="sec">Total study time</div>
+    <div class="g3" style="margin-bottom:16px;">
+      <div class="sc sc-pu"><div class="sl2">This week</div><div class="sv" id="g-week-hrs">0h</div></div>
+      <div class="sc sc-pu"><div class="sl2">This month</div><div class="sv" id="g-month-hrs">0h</div></div>
+      <div class="sc sc-pu"><div class="sl2">Total</div><div class="sv" id="g-total-hrs">0h</div></div>
+    </div>
+  </div>
+
+  <!-- ── CHESS ── -->
+  <div class="itpg" id="gt-chess">
+    <div class="g3" style="margin-top:4px;">
+      <div class="sc sc-pl"><div class="sl2">Rapid</div><div class="sv" id="c-rapid">—</div><div class="ss" id="c-rapid-d"></div></div>
+      <div class="sc sc-pl"><div class="sl2">Blitz</div><div class="sv" id="c-blitz">—</div><div class="ss" id="c-blitz-d"></div></div>
+      <div class="sc sc-pl"><div class="sl2">Puzzles</div><div class="sv" id="c-puzzle">—</div><div class="ss" id="c-puzzle-d"></div></div>
+    </div>
+    <div class="g3" style="margin-bottom:4px;">
+      <div class="sc sc-gr"><div class="sl2">Wins</div><div class="sv" id="c-wins">0</div></div>
+      <div class="sc sc-pl"><div class="sl2">Draws</div><div class="sv" id="c-draws">0</div></div>
+      <div class="sc sc-re"><div class="sl2">Losses</div><div class="sv" id="c-losses">0</div></div>
+    </div>
+    <div class="sec" style="padding-top:8px;">Update rating</div>
+    <div class="card cp">
+      <div class="fr">
+        <div><label class="fl">Platform</label><select id="c-plat"><option>Chess.com</option><option>Lichess</option><option>FIDE OTB</option></select></div>
+        <div><label class="fl">Category</label><select id="c-cat"><option>Rapid</option><option>Blitz</option><option>Bullet</option><option>Puzzle rating</option></select></div>
+        <div><label class="fl">Rating</label><input type="number" id="c-rating-in" placeholder="1200"></div>
+        <button class="btn btn-p btn-sm" onclick="updateRating()">Set</button>
       </div>
     </div>
-    <div class="fgroup"><label class="fl">Wake time today</label><input type="time" id="ci-wake" value="06:30"></div>
-    <div class="fgroup"><label class="fl">One sentence about today</label><textarea id="ci-note" placeholder="How did today feel?" style="min-height:52px;"></textarea></div>
-    <button class="btn bp bblock" onclick="saveCheckin()">Save check-in</button>
+    <div class="sec">Log a game</div>
+    <div class="card cp">
+      <div class="rbrow">
+        <div class="rbt" id="rb-win" onclick="selRes('win')">Win</div>
+        <div class="rbt" id="rb-draw" onclick="selRes('draw')">Draw</div>
+        <div class="rbt" id="rb-loss" onclick="selRes('loss')">Loss</div>
+      </div>
+      <div class="fg"><label class="fl">Opening</label><input type="text" id="c-opening" placeholder="e.g. Sicilian Defense"></div>
+      <div class="fg"><label class="fl">Key lesson</label><textarea id="c-lesson" placeholder="What to remember from this game?" style="min-height:52px;"></textarea></div>
+      <button class="btn btn-p btn-block" onclick="logGame()">Save game</button>
+    </div>
+    <div class="sec">Study session</div>
+    <div class="card cp">
+      <div class="fr">
+        <div><label class="fl">Type</label><select id="c-stype"><option>Puzzles / tactics</option><option>Opening study</option><option>Endgame study</option><option>Game analysis</option><option>Video lesson</option></select></div>
+        <div><label class="fl">Minutes</label><input type="number" id="c-smins" placeholder="20" min="1"></div>
+        <button class="btn btn-p btn-sm" onclick="logChessStudy()">Log</button>
+      </div>
+    </div>
+    <div class="sec">Rating history <span style="font-size:10px;font-weight:600;color:var(--t2);text-transform:none;letter-spacing:0;">(swipe to delete)</span></div>
+    <div class="card" id="chess-hist"></div>
+    <div class="sec">Game log <span style="font-size:10px;font-weight:600;color:var(--t2);text-transform:none;letter-spacing:0;">(swipe to delete)</span></div>
+    <div class="card" id="chess-games-log"></div>
+    <div class="sec">Kaizen plan</div>
+    <div class="card cp" style="background:var(--gold-bg);border-color:transparent;margin-bottom:16px;">
+      <div style="font-size:13px;color:var(--gold-fg);line-height:2;font-weight:500;">
+        <b>Daily 15–20 min:</b> 10 puzzles · review 1 game · 1 focus weakness/week<br>
+        <b>Weekly deep session:</b> Opening prep · Endgame technique · GM game<br>
+        <b>Shoshin order:</b> Tactics first → Endgames → Openings
+      </div>
+    </div>
   </div>
-
-  <!-- Sleep trend -->
-  <div class="sh">Recent check-ins</div>
-  <div class="card">
-    <div id="checkin-log"></div>
-  </div>
-
 </div>
 </div>
 
-<!-- ═══ GOALS ═══ -->
-<div id="page-goals" class="page">
-<div class="pscroll">
-  <div class="ptbar"><div class="ptitle">Goals 🎯</div></div>
-  <div class="psub">Austria · Learning · Chess · Career</div>
+<!-- ═══════════════ JOURNAL ═══════════════ -->
+<div id="pg-journal" class="pg">
+<div class="pi">
+  <div class="ph"><div class="ph-title">Journal ✍️</div></div>
 
-  <!-- Austria countdown -->
-  <div class="sg2">
-    <div class="sc accent"><div class="sl">Days to Austria</div><div class="sv" id="g-days">—</div><div class="ss">Jan 2027 target</div></div>
-    <div class="sc green"><div class="sl">Milestones</div><div class="sv" id="g-ms-done">0</div><div class="ss" id="g-ms-total">of 0 done</div></div>
-  </div>
-
-  <!-- Milestones -->
-  <div class="sh" style="display:flex;align-items:center;justify-content:space-between;padding-right:14px;">
-    <span>Milestones</span>
-    <span class="etog" onclick="toggleEp('ep-ms')">+ Add</span>
-  </div>
-  <div class="card">
-    <div id="ms-list"></div>
-  </div>
-  <div class="epanel open" id="ep-ms" style="display:none;background:var(--surf);border:0.5px solid var(--b);border-radius:var(--r);margin:0 14px 10px;padding:14px;">
-    <div class="frow">
-      <input type="text" id="nm-text" placeholder="Milestone..." style="flex:2;">
-      <input type="text" id="nm-note" placeholder="Note" style="flex:1.5;">
-      <button class="btn bp bsm" onclick="addMs()">Add</button>
-    </div>
+  <div class="sec">Today's reflection</div>
+  <div class="card cp">
+    <div class="fg"><label class="fl">What felt meaningful?</label><textarea id="j1" placeholder="One thing that gave me a sense of progress or purpose..."></textarea></div>
+    <div class="fg"><label class="fl">What am I avoiding?</label><textarea id="j2" placeholder="The task or decision I keep pushing back..."></textarea></div>
+    <div class="fg"><label class="fl">One small next action</label><textarea id="j3" placeholder="The smallest concrete step I can take..."></textarea></div>
+    <div class="fg"><label class="fl">Kaizen (optional)</label><input type="text" id="j4" placeholder="What 1% improvement can I make today?"></div>
+    <button class="btn btn-p btn-block" onclick="saveJournal()" id="j-btn">Save entry</button>
   </div>
 
-  <!-- German -->
-  <div class="sh">🇩🇪 German</div>
-  <div class="card card-p">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
-      <div class="ctit" style="margin-bottom:0;">Current level</div>
-      <select id="german-level" onchange="saveGermanLevel()" style="font-size:16px;font-weight:800;background:transparent;border:none;color:var(--pu);padding:0;-webkit-appearance:none;text-align:right;">
-        <option>A0</option><option>A1</option><option>A2</option><option>B1</option><option>B2</option>
-      </select>
-    </div>
-    <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--t3);margin-bottom:3px;"><span>Progress to B1</span><span id="g-german-pct">0%</span></div>
-    <div class="pbw"><div class="pb" id="german-bar" style="width:0%;background:var(--pu);"></div></div>
-    <div class="frow" style="margin-top:12px;">
-      <div><label class="fl">Minutes</label><input type="number" id="g-mins" placeholder="30" min="1"></div>
-      <div><label class="fl">Activity</label>
-        <select id="g-act"><option>Vocabulary (Anki)</option><option>DW Nicos Weg</option><option>Speaking practice</option><option>Grammar</option><option>Listening</option><option>Reading</option></select>
-      </div>
-      <button class="btn bp bsm" onclick="logGerman()">Log</button>
-    </div>
-    <div id="german-log-list" class="card" style="margin:8px 0 0;padding:0;border-color:var(--b);"></div>
+  <div class="sec">Check-in history <span style="font-size:10px;font-weight:600;color:var(--t2);text-transform:none;letter-spacing:0;">(tap × to delete)</span></div>
+  <div class="card" id="ci-log"></div>
+
+  <div class="sec">This week</div>
+  <div class="card cp" id="weekly-review">
+    <div class="empty"><div class="empty-ico">📊</div>Log for a few days to see your weekly summary.</div>
   </div>
 
-  <!-- IELTS -->
-  <div class="sh">📝 IELTS</div>
-  <div class="card card-p">
-    <div class="sg2" style="margin:0 0 12px;">
-      <div class="sc"><div class="sl">Sessions logged</div><div class="sv" id="ielts-cnt">0</div><div class="ss">target: 7.5 band</div></div>
-      <div class="sc"><div class="sl">Exam booked</div><div style="font-size:13px;font-weight:700;margin-top:4px;" id="ielts-date-show">Not set</div><input type="date" id="ielts-date" onchange="saveIeltsDate()" style="margin-top:4px;font-size:11px;padding:5px 8px;"></div>
-    </div>
-    <div class="frow">
-      <div><label class="fl">Skill</label>
-        <select id="ielts-skill"><option>Writing Task 1</option><option>Writing Task 2</option><option>Reading</option><option>Listening</option><option>Speaking</option><option>Full mock test</option></select>
-      </div>
-      <div><label class="fl">Score</label><input type="number" id="ielts-score" placeholder="6.5" step="0.5" min="0" max="9"></div>
-      <button class="btn bp bsm" onclick="logIelts()">Log</button>
-    </div>
-    <div id="ielts-log-list" class="card" style="margin:8px 0 0;padding:0;border-color:var(--b);"></div>
-  </div>
-
-  <!-- AWS -->
-  <div class="sh">☁️ AWS Certification</div>
-  <div class="card card-p">
-    <div class="sg2" style="margin:0 0 12px;">
-      <div class="sc"><div class="sl">Exam status</div><div style="font-size:13px;font-weight:700;margin-top:4px;" id="aws-status">Not scheduled</div></div>
-      <div class="sc"><div class="sl">Exam date</div><input type="date" id="aws-date" onchange="saveAwsDate()" style="margin-top:4px;font-size:11px;padding:5px 8px;"></div>
-    </div>
-    <div style="background:var(--reb);border-radius:var(--rsm);padding:10px 12px;margin-bottom:12px;" id="aws-urgency">
-      <span style="font-size:13px;font-weight:700;color:var(--re);">⚠️ Book your exam today — you prepared 4 months ago!</span>
-    </div>
-    <div class="frow">
-      <div><label class="fl">Study type</label>
-        <select id="aws-type"><option>Practice exam</option><option>Video review</option><option>Concept study</option><option>Flashcards</option><option>Weak area review</option></select>
-      </div>
-      <div><label class="fl">Minutes</label><input type="number" id="aws-mins" placeholder="30" min="1"></div>
-      <button class="btn bp bsm" onclick="logAws()">Log</button>
-    </div>
-    <div id="aws-log-list" class="card" style="margin:8px 0 0;padding:0;border-color:var(--b);"></div>
-  </div>
-
-  <!-- Chess -->
-  <div class="sh">♟ Chess</div>
-  <div class="card card-p">
-    <div class="sg3" style="margin:0 0 12px;">
-      <div class="sc"><div class="sl">Rating</div><div class="sv" id="chess-r">—</div><div class="ss" id="chess-delta"></div></div>
-      <div class="sc"><div class="sl">Win rate</div><div class="sv" id="chess-wr">—</div><div class="ss" id="chess-gsub">0 games</div></div>
-      <div class="sc"><div class="sl">Study sessions</div><div class="sv" id="chess-ssub">0</div></div>
-    </div>
-    <!-- Update rating -->
-    <div class="frow">
-      <div><label class="fl">Platform</label>
-        <select id="c-plat"><option>Chess.com</option><option>Lichess</option><option>FIDE OTB</option></select>
-      </div>
-      <div><label class="fl">Time control</label>
-        <select id="c-tc"><option>Rapid</option><option>Blitz</option><option>Bullet</option><option>Classical</option><option>Puzzle rating</option></select>
-      </div>
-      <div><label class="fl">Rating</label><input type="number" id="c-rating" placeholder="1200"></div>
-      <button class="btn bp bsm" onclick="updateRating()">Set</button>
-    </div>
-    <!-- Log game -->
-    <div style="margin-top:4px;"><div class="ctit" style="margin-bottom:8px;">Log a game</div>
-    <div class="rbrow">
-      <div class="rb" id="rb-win" onclick="selRes('win')">Win</div>
-      <div class="rb" id="rb-draw" onclick="selRes('draw')">Draw</div>
-      <div class="rb" id="rb-loss" onclick="selRes('loss')">Loss</div>
-    </div>
-    <div class="fgroup"><input type="text" id="c-opening" placeholder="Opening (e.g. Sicilian Defense)"></div>
-    <div class="fgroup"><textarea id="c-lesson" placeholder="Key lesson or mistake to remember..." style="min-height:52px;"></textarea></div>
-    <button class="btn bp bblock" onclick="logGame()">Save game</button>
-    </div>
-    <!-- Study -->
-    <div style="margin-top:12px;"><div class="ctit" style="margin-bottom:8px;">Study session</div>
-    <div class="frow">
-      <div><label class="fl">Type</label>
-        <select id="c-study"><option>Puzzles / tactics</option><option>Opening study</option><option>Endgame study</option><option>Game analysis</option><option>Video lesson</option><option>Book study</option></select>
-      </div>
-      <div><label class="fl">Minutes</label><input type="number" id="c-smins" placeholder="20"></div>
-      <button class="btn bp bsm" onclick="logChessStudy()">Log</button>
-    </div>
-    </div>
-    <div id="chess-game-log" class="card" style="margin:10px 0 0;padding:0;border-color:var(--b);"></div>
-  </div>
-
-  <!-- Engineering -->
-  <div class="sh" style="display:flex;align-items:center;justify-content:space-between;padding-right:14px;">
-    <span>💻 Engineering</span>
-    <span class="etog" onclick="toggleEp('ep-proj')">+ Project</span>
-  </div>
-  <div class="card">
-    <div id="proj-list"></div>
-  </div>
-  <div class="epanel" id="ep-proj" style="background:var(--surf);border:0.5px solid var(--b);border-radius:var(--r);margin:0 14px 10px;padding:14px;">
-    <div class="frow">
-      <input type="text" id="np-name" placeholder="Project name" style="flex:2;">
-      <select id="np-status" style="flex:1;"><option value="planning">Planning</option><option value="building">Building</option><option value="shipped">Shipped ✓</option></select>
-      <button class="btn bp bsm" onclick="addProject()">Add</button>
-    </div>
-  </div>
-  <div class="card card-p">
-    <div class="frow">
-      <div><label class="fl">Activity</label>
-        <select id="eng-type"><option>Feature built</option><option>Bug fixed</option><option>Learning new tech</option><option>Architecture</option><option>Code review</option><option>Deployment</option></select>
-      </div>
-      <div><label class="fl">Note</label><input type="text" id="eng-note" placeholder="What did you build?"></div>
-      <button class="btn bp bsm" onclick="logEng()">Log</button>
-    </div>
-    <div id="eng-log-list" class="card" style="margin:4px 0 0;padding:0;border-color:var(--b);"></div>
-  </div>
-
-  <!-- Career log -->
-  <div class="sh">Career log</div>
-  <div class="card card-p">
-    <div class="frow">
-      <div><label class="fl">Type</label>
-        <select id="career-type"><option>Achievement</option><option>Job application</option><option>Interview</option><option>Skill learned</option><option>Certification</option><option>Networking</option></select>
-      </div>
-      <div><label class="fl">Note</label><input type="text" id="career-note" placeholder="What happened?"></div>
-      <button class="btn bp bsm" onclick="logCareer()">Log</button>
-    </div>
-    <div id="career-log-list" class="card" style="margin:4px 0 0;padding:0;border-color:var(--b);"></div>
-  </div>
-
-</div>
-</div>
-
-<!-- ═══ JOURNAL ═══ -->
-<div id="page-journal" class="page">
-<div class="pscroll">
-  <div class="ptbar"><div class="ptitle">Journal ✍️</div></div>
-  <div class="psub">Daily reflection · weekly review</div>
-
-  <!-- Daily journal -->
-  <div class="sh">Today's entry</div>
-  <div class="card card-p">
-    <div class="fgroup">
-      <label class="fl">What felt meaningful?</label>
-      <textarea id="j1" placeholder="One thing that gave me a sense of progress or purpose..."></textarea>
-    </div>
-    <div class="fgroup">
-      <label class="fl">What am I avoiding?</label>
-      <textarea id="j2" placeholder="The task or decision I keep pushing back..."></textarea>
-    </div>
-    <div class="fgroup">
-      <label class="fl">One small next action</label>
-      <textarea id="j3" placeholder="The smallest thing I can do today to move forward..."></textarea>
-    </div>
-    <div class="fgroup">
-      <label class="fl">Kaizen question (optional)</label>
-      <input type="text" id="j4" placeholder="What 1% improvement can I make today?">
-    </div>
-    <button class="btn bp bblock" onclick="saveJournal()" id="j-btn">Save entry</button>
-  </div>
-
-  <!-- Weekly review -->
-  <div class="sh">Weekly review</div>
-  <div class="card card-p" id="weekly-review">
-    <div style="color:var(--t3);font-size:13px;">Log for a few days to see your weekly review.</div>
-  </div>
-
-  <!-- Past entries -->
-  <div class="sh">Past entries</div>
-  <div class="card">
-    <div id="journal-list"></div>
-  </div>
-
+  <div class="sec">Past entries <span style="font-size:10px;font-weight:600;color:var(--t2);text-transform:none;letter-spacing:0;">(tap × to delete)</span></div>
+  <div class="card" id="j-list"></div>
 </div>
 </div>
 
 </div><!-- /pages -->
-
-<!-- NAV -->
 <nav id="nav">
-  <button class="nb on" onclick="goPage('home',this)"><span class="ni">🏠</span><span>Home</span></button>
-  <button class="nb" onclick="goPage('deen',this)"><span class="ni">🌙</span><span>Deen</span></button>
-  <button class="nb" onclick="goPage('today',this)"><span class="ni">✅</span><span>Today</span></button>
-  <button class="nb" onclick="goPage('goals',this)"><span class="ni">🎯</span><span>Goals</span></button>
-  <button class="nb" onclick="goPage('journal',this)"><span class="ni">✍️</span><span>Journal</span></button>
+  <button class="nb on" onclick="goPage('today',this)"><span class="nbi">🏠</span>Today</button>
+  <button class="nb" onclick="goPage('deen',this)"><span class="nbi">🌙</span>Deen</button>
+  <button class="nb" onclick="goPage('goals',this)"><span class="nbi">🎯</span>Goals</button>
+  <button class="nb" onclick="goPage('journal',this)"><span class="nbi">✍️</span>Journal</button>
 </nav>
-</div><!-- /app -->
+</div>
 
-<!-- QUICK LOG MODALS -->
-<div id="modal-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:500;align-items:flex-end;justify-content:center;" onclick="closeModal(event)">
-  <div id="modal-box" style="background:var(--surf);border-radius:20px 20px 0 0;padding:20px 16px 32px;width:100%;max-width:430px;transform:translateY(100%);transition:transform 0.3s cubic-bezier(0.34,1.1,0.64,1);">
-    <div id="modal-content"></div>
+<!-- MODAL -->
+<div id="m-overlay" onclick="closeModalOverlay(event)">
+  <div id="m-box">
+    <div class="m-handle"></div>
+    <div class="m-head" id="m-head"></div>
+    <div class="m-body" id="m-body"></div>
   </div>
 </div>
 
 <script>
-// ════════════════════════════════════════════════════════
-// SUPABASE CONFIG
-// ════════════════════════════════════════════════════════
-const SB_URL='https://jtxgrpwfvuqyynzjgdsj.supabase.co';
-const SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp0eGdycHdmdnVxeXluempnZHNqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODM1OTI1OTEsImV4cCI6MjA5OTE2ODU5MX0.XCf3wsv98xqiZcdb1GAyX0s-qP7_BFkOpgXI8s6npWo';
+// ══════════════════════ SUPABASE ══════════════════════
+const SB='https://jtxgrpwfvuqyynzjgdsj.supabase.co';
+const SBKEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp0eGdycHdmdnVxeXluempnZHNqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODM1OTI1OTEsImV4cCI6MjA5OTE2ODU5MX0.XCf3wsv98xqiZcdb1GAyX0s-qP7_BFkOpgXI8s6npWo';
 const UID='main';
+const H={'apikey':SBKEY,'Authorization':'Bearer '+SBKEY,'Content-Type':'application/json','Prefer':'resolution=merge-duplicates'};
 
-// ════════════════════════════════════════════════════════
-// OFFLINE-FIRST STORAGE
-// ════════════════════════════════════════════════════════
 const LC={
-  get:(k,fb)=>{try{const v=localStorage.getItem('pos3_'+k);return v!=null?JSON.parse(v):fb;}catch{return fb;}},
-  set:(k,v)=>{try{localStorage.setItem('pos3_'+k,JSON.stringify(v));}catch{}}
+  g:(k,fb)=>{try{const v=localStorage.getItem('pos7_'+k);return v!=null?JSON.parse(v):fb;}catch{return fb;}},
+  s:(k,v)=>{try{localStorage.setItem('pos7_'+k,JSON.stringify(v));}catch{}}
 };
+let pq=LC.g('__pq',{});
+const sl=document.getElementById('sline');
 
-// Persist offline queue across sessions
-function getQueue(){return LC.get('__queue',{});}
-function saveQueue(q){LC.set('__queue',q);}
-
-const sbar=document.getElementById('sbar');
-let syncing=false;
-
-async function dbGet(key,fb){
-  const local=LC.get(key,null);
-  if(local!==null) return local; // return cache instantly
-  // No local data — fetch from Supabase
-  return await dbFetch(key,fb);
-}
-
-async function dbFetch(key,fb){
-  if(!navigator.onLine) return fb;
+async function dbGet(k,fb=null){
+  const lv=LC.g(k,null);if(lv!==null)return lv;
+  if(!navigator.onLine)return fb;
   try{
-    const r=await fetch(`${SB_URL}/rest/v1/personal_os?user_id=eq.${UID}&key=eq.${encodeURIComponent(key)}&select=value`,{
-      headers:{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY}
-    });
-    if(r.ok){const d=await r.json();if(d&&d.length){const v=d[0].value;LC.set(key,v);return v;}}
+    const r=await fetch(`${SB}/rest/v1/personal_os?user_id=eq.${UID}&key=eq.${encodeURIComponent(k)}&select=value`,{headers:H});
+    if(r.ok){const d=await r.json();if(d.length){LC.s(k,d[0].value);return d[0].value;}}
   }catch{}
   return fb;
 }
-
-async function dbSet(key,value){
-  LC.set(key,value); // always save locally first
-  if(!navigator.onLine){
-    const q=getQueue(); q[key]=value; saveQueue(q);
-    return;
-  }
-  await pushToSB(key,value);
-}
-
-async function pushToSB(key,value){
-  sbar.className='s1';
+async function dbSet(k,v){
+  LC.s(k,v);
+  if(!navigator.onLine){pq[k]=v;LC.s('__pq',pq);return;}
+  sl.className='go';
   try{
-    const r=await fetch(`${SB_URL}/rest/v1/personal_os`,{
-      method:'POST',
-      headers:{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Content-Type':'application/json','Prefer':'resolution=merge-duplicates'},
-      body:JSON.stringify({user_id:UID,key,value,updated_at:new Date().toISOString()})
-    });
-    sbar.className='s2';
-    setTimeout(()=>sbar.className='',500);
-  }catch{
-    sbar.className='';
-    const q=getQueue(); q[key]=value; saveQueue(q);
-  }
+    await fetch(`${SB}/rest/v1/personal_os`,{method:'POST',headers:H,body:JSON.stringify({user_id:UID,key:k,value:v,updated_at:new Date().toISOString()})});
+    sl.className='ok';setTimeout(()=>sl.className='',500);delete pq[k];
+  }catch{sl.className='';pq[k]=v;LC.s('__pq',pq);}
 }
-
-// Sync on reconnect
 window.addEventListener('online',async()=>{
   document.body.classList.remove('offline');
-  const q=getQueue();
-  const keys=Object.keys(q);
-  if(!keys.length) return;
-  for(const k of keys) await pushToSB(k,q[k]);
-  saveQueue({});
-  toast('Synced '+keys.length+' change'+(keys.length>1?'s':'')+' ✓');
-  renders[currentPage]();
+  pq=LC.g('__pq',{});
+  for(const k of Object.keys(pq))await dbSet(k,pq[k]);
+  LC.s('__pq',{});pq={};
+  renders[curPage]();
 });
 window.addEventListener('offline',()=>document.body.classList.add('offline'));
-if(!navigator.onLine) document.body.classList.add('offline');
-
-// Pull fresh data from Supabase on app open (background)
-async function syncFromCloud(){
-  if(!navigator.onLine) return;
-  try{
-    const r=await fetch(`${SB_URL}/rest/v1/personal_os?user_id=eq.${UID}&select=key,value`,{
-      headers:{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY}
-    });
-    if(r.ok){
-      const rows=await r.json();
-      rows.forEach(row=>LC.set(row.key,row.value));
-    }
-  }catch{}
+if(!navigator.onLine)document.body.classList.add('offline');
+async function pullCloud(){
+  if(!navigator.onLine)return;
+  try{const r=await fetch(`${SB}/rest/v1/personal_os?user_id=eq.${UID}&select=key,value`,{headers:H});if(r.ok)(await r.json()).forEach(row=>LC.s(row.key,row.value));}catch{}
 }
 
-// ════════════════════════════════════════════════════════
-// DEFAULTS
-// ════════════════════════════════════════════════════════
+// ══════════════════════ DEFAULTS ══════════════════════
 const DEF_HABITS=[
-  {id:'fajr',   name:'Wake for Fajr',        icon:'🌅'},
-  {id:'prayers',name:'5 prayers complete',    icon:'🕌'},
-  {id:'quran',  name:'Quran reading',          icon:'📖'},
-  {id:'german', name:'German study (30 min)', icon:'🇩🇪'},
-  {id:'walk',   name:'Evening walk',           icon:'🚶'},
-  {id:'journal',name:'Morning journal',        icon:'✍️'},
-  {id:'nophone',name:'No phone on waking',    icon:'📵'},
-  {id:'aws',    name:'AWS study (30 min)',     icon:'☁️'},
-  {id:'chess',  name:'Chess puzzles',          icon:'♟'},
+  {id:'fajr',name:'Wake for Fajr',icon:'🌅'},
+  {id:'5pray',name:'5 prayers complete',icon:'🕌'},
+  {id:'quran',name:'Quran reading',icon:'📖'},
+  {id:'german',name:'German study',icon:'🇩🇪'},
+  {id:'walk',name:'Evening walk',icon:'🚶'},
+  {id:'journal',name:'Morning journal',icon:'✍️'},
+  {id:'nophone',name:'No phone on waking',icon:'📵'},
+  {id:'aws',name:'AWS study',icon:'☁️'},
+  {id:'chess',name:'Chess puzzles',icon:'♟'},
 ];
-
 const DEF_MS=[
-  {id:'aws-book', text:'Book AWS exam',              note:'Do this TODAY — overdue!',  done:false, urgent:true},
-  {id:'ielts-bk', text:'Book IELTS exam',            note:'3–4 months out',            done:false},
-  {id:'ger-a1',   text:'Reach German A1',            note:'~3 months',                 done:false},
-  {id:'aws-pass', text:'Pass AWS SAA',               note:'Phase 1 goal',              done:false},
-  {id:'ielts-75', text:'IELTS 7.5+ score',          note:'Phase 2 goal',              done:false},
-  {id:'ger-a2',   text:'Reach German A2',            note:'~7 months',                 done:false},
-  {id:'github3',  text:'3 solid GitHub projects',   note:'Including iOS app',          done:false},
-  {id:'ger-b1',   text:'German B1 certificate',      note:'Required for Austrian visa', done:false},
-  {id:'apply-at', text:'Apply to Austrian companies',note:'Phase 3 — year 2',          done:false},
+  {id:'m1',text:'Research Austrian universities',note:'TU Wien, Uni Wien, TU Graz, JKU Linz',done:false},
+  {id:'m2',text:'Reach German B2',note:'Required for most AT study programs',done:false},
+  {id:'m3',text:'Score IELTS 6.5+',note:'For English-medium programs',done:false},
+  {id:'m4',text:'Prepare application portfolio',note:'CV, motivation letter, transcripts',done:false},
+  {id:'m5',text:'Apply to 3+ universities',note:'Deadlines usually Jan–Mar each year',done:false},
+  {id:'m6',text:'Secure funding / scholarship',note:'ÖAD, Erasmus+, self-funded plan',done:false},
+  {id:'m7',text:'Receive acceptance letter',note:'Required to apply for student visa',done:false},
+  {id:'m8',text:'Get student visa approved',note:'Submit at Austrian embassy in Dhaka',done:false},
 ];
-
 const PRAYERS=['Fajr','Dhuhr','Asr','Maghrib','Isha'];
-const DAYS=['S','M','T','W','T','F','S'];
+const WDAYS=['S','M','T','W','T','F','S'];
+const STUDY_TARGET=new Date('2027-09-01');
+
+// ══════════════════════ UTILS ══════════════════════
 const today=()=>new Date().toISOString().slice(0,10);
-const fmt=d=>{try{return new Date(d).toLocaleDateString('en-GB',{day:'numeric',month:'short'});}catch{return d;}};
-let selChessResult=null;
-let currentPage='home';
+const fmt=d=>{try{return new Date(d+'T12:00').toLocaleDateString('en-GB',{day:'numeric',month:'short'});}catch{return d;}};
+const daysTo=d=>Math.max(0,Math.ceil((new Date(d)-new Date())/86400000));
+function calcStreak(fn){let s=0;for(let i=1;i<=90;i++){const d=new Date();d.setDate(d.getDate()-i);if(fn(d.toISOString().slice(0,10)))s++;else break;}return s;}
+function greet(){const h=new Date().getHours();if(h<5)return'Late night 🌙';if(h<12)return'Good morning 🌤';if(h<17)return'Good afternoon ☀️';if(h<21)return'Good evening 🌆';return'Good night 🌙';}
 
-// ════════════════════════════════════════════════════════
-// TOAST
-// ════════════════════════════════════════════════════════
-let toastT;
-function toast(msg){
+// ══════════════════════ TOAST + UNDO ══════════════════════
+let toastTimer,undoFn=null;
+function toast(msg,undoCb=null,dur=3000){
   const el=document.getElementById('toast');
-  el.textContent=msg; el.classList.add('show');
-  clearTimeout(toastT); toastT=setTimeout(()=>el.classList.remove('show'),2200);
+  document.getElementById('toast-msg').textContent=msg;
+  const ub=document.getElementById('toast-undo');
+  undoFn=undoCb;
+  ub.style.display=undoCb?'inline-flex':'none';
+  el.classList.add('on');
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>{el.classList.remove('on');undoFn=null;},dur);
 }
+function doUndo(){if(undoFn){undoFn();undoFn=null;}document.getElementById('toast').classList.remove('on');}
 
-// ════════════════════════════════════════════════════════
-// NAV
-// ════════════════════════════════════════════════════════
-function goPage(page,btn){
-  document.querySelectorAll('.page').forEach(p=>{p.classList.remove('active');});
-  document.querySelectorAll('.nb').forEach(b=>b.classList.remove('on'));
-  const pg=document.getElementById('page-'+page);
-  pg.classList.add('active');
-  btn.classList.add('on');
-  currentPage=page;
-  renders[page]();
-}
-
-function toggleEp(id){
-  const el=document.getElementById(id);
-  const open=el.style.display==='block'||el.classList.contains('open');
-  el.style.display=open?'none':'block';
-  if(id==='ep-habits') renderHabitManage();
-}
-
-// ════════════════════════════════════════════════════════
-// MODAL
-// ════════════════════════════════════════════════════════
-function openModal(html){
-  const ov=document.getElementById('modal-overlay');
-  const box=document.getElementById('modal-box');
-  document.getElementById('modal-content').innerHTML=html;
-  ov.style.display='flex';
-  setTimeout(()=>box.style.transform='translateY(0)',10);
-}
-function closeModal(e){
-  if(e&&e.target!==document.getElementById('modal-overlay')) return;
-  const box=document.getElementById('modal-box');
-  box.style.transform='translateY(100%)';
-  setTimeout(()=>document.getElementById('modal-overlay').style.display='none',300);
-}
-function forceCloseModal(){
-  const box=document.getElementById('modal-box');
-  box.style.transform='translateY(100%)';
-  setTimeout(()=>document.getElementById('modal-overlay').style.display='none',300);
-}
-
-// ════════════════════════════════════════════════════════
-// QUICK LOG MODALS
-// ════════════════════════════════════════════════════════
-async function quickPrayer(){
-  const pData=await dbGet('prayers',{});
-  const tp=pData[today()]||{};
-  openModal(`
-    <div style="font-size:16px;font-weight:800;margin-bottom:14px;">🕌 Mark Salah</div>
-    <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:16px;">
-      ${PRAYERS.map(p=>`
-        <div onclick="quickTogglePrayer('${p}',this)" style="background:${tp[p]?'var(--gob2)':'var(--surf2)'};border:1.5px solid ${tp[p]?'var(--gob2)':'var(--bm)'};border-radius:10px;padding:12px 4px;text-align:center;cursor:pointer;transition:all 0.15s;">
-          <div style="font-size:20px;margin-bottom:3px;">${tp[p]?'✅':'🕌'}</div>
-          <div style="font-size:11px;font-weight:800;color:${tp[p]?'#fff':'var(--t2)'};">${p}</div>
-        </div>`).join('')}
-    </div>
-    <button class="btn bp bblock" onclick="forceCloseModal();renderHome();">Done</button>
-  `);
-}
-
-async function quickTogglePrayer(name,el){
-  const pData=await dbGet('prayers',{});
-  if(!pData[today()]) pData[today()]={};
-  pData[today()][name]=!pData[today()][name];
-  await dbSet('prayers',pData);
-  const done=pData[today()][name];
-  el.style.background=done?'var(--gob2)':'var(--surf2)';
-  el.style.borderColor=done?'var(--gob2)':'var(--bm)';
-  el.querySelector('div').textContent=done?'✅':'🕌';
-  el.querySelectorAll('div')[1].style.color=done?'#fff':'var(--t2)';
-  toast(done?name+' ✓':'Unmarked');
-}
-
-function quickQuran(){
-  openModal(`
-    <div style="font-size:16px;font-weight:800;margin-bottom:14px;">📖 Log Quran</div>
-    <div style="margin-bottom:10px;"><label class="fl">Pages read</label><input type="number" id="m-pages" placeholder="5" min="1" style="width:100%;padding:10px 12px;background:var(--surf2);border:0.5px solid var(--bm);border-radius:var(--rs);color:var(--t);font-size:16px;outline:none;"></div>
-    <div style="margin-bottom:16px;"><label class="fl">Surah / Juz (optional)</label><input type="text" id="m-ref" placeholder="e.g. Al-Baqarah, Juz 2" style="width:100%;padding:10px 12px;background:var(--surf2);border:0.5px solid var(--bm);border-radius:var(--rs);color:var(--t);font-size:14px;outline:none;"></div>
-    <button class="btn bp bblock" onclick="quickLogQuran()">Save</button>
-  `);
-}
-
-async function quickLogQuran(){
-  const pages=parseInt(document.getElementById('m-pages').value)||0;
-  const ref=document.getElementById('m-ref').value.trim();
-  if(!pages){toast('Enter pages read');return;}
-  const logs=await dbGet('qlog',[]); logs.unshift({date:today(),pages,ref,note:''});
-  await dbSet('qlog',logs.slice(0,1000));
-  forceCloseModal(); toast('Quran logged — '+pages+' pages ✓');
-  renderHome();
-}
-
-function quickGerman(){
-  openModal(`
-    <div style="font-size:16px;font-weight:800;margin-bottom:14px;">🇩🇪 German study</div>
-    <div style="margin-bottom:10px;"><label class="fl">Minutes studied</label><input type="number" id="m-gmins" placeholder="30" min="1" style="width:100%;padding:10px 12px;background:var(--surf2);border:0.5px solid var(--bm);border-radius:var(--rs);color:var(--t);font-size:16px;outline:none;"></div>
-    <div style="margin-bottom:16px;"><label class="fl">Activity</label><select id="m-gact" style="width:100%;padding:10px 12px;background:var(--surf2);border:0.5px solid var(--bm);border-radius:var(--rs);color:var(--t);font-size:14px;outline:none;-webkit-appearance:none;"><option>Vocabulary (Anki)</option><option>DW Nicos Weg</option><option>Speaking practice</option><option>Grammar</option><option>Listening</option><option>Reading</option></select></div>
-    <button class="btn bp bblock" onclick="quickLogGerman()">Save</button>
-  `);
-}
-
-async function quickLogGerman(){
-  const mins=parseInt(document.getElementById('m-gmins').value)||0;
-  const act=document.getElementById('m-gact').value;
-  if(!mins){toast('Enter minutes');return;}
-  const logs=await dbGet('german-log',[]); logs.unshift({date:today(),mins,act});
-  await dbSet('german-log',logs.slice(0,500));
-  forceCloseModal(); toast('German logged — '+mins+' min ✓');
-  renderHome();
-}
-
-function quickChess(){
-  openModal(`
-    <div style="font-size:16px;font-weight:800;margin-bottom:14px;">♟ Log chess game</div>
-    <div style="display:flex;gap:8px;margin-bottom:12px;">
-      <div onclick="qSelRes('win',this)" style="flex:1;padding:12px;border-radius:10px;border:1.5px solid var(--bm);background:var(--surf2);text-align:center;cursor:pointer;font-weight:800;font-size:14px;">Win</div>
-      <div onclick="qSelRes('draw',this)" style="flex:1;padding:12px;border-radius:10px;border:1.5px solid var(--bm);background:var(--surf2);text-align:center;cursor:pointer;font-weight:800;font-size:14px;">Draw</div>
-      <div onclick="qSelRes('loss',this)" style="flex:1;padding:12px;border-radius:10px;border:1.5px solid var(--bm);background:var(--surf2);text-align:center;cursor:pointer;font-weight:800;font-size:14px;">Loss</div>
-    </div>
-    <div style="margin-bottom:16px;"><label class="fl">Opening (optional)</label><input type="text" id="m-cop" placeholder="e.g. Sicilian Defense" style="width:100%;padding:10px 12px;background:var(--surf2);border:0.5px solid var(--bm);border-radius:var(--rs);color:var(--t);font-size:14px;outline:none;"></div>
-    <button class="btn bp bblock" onclick="quickLogChess()">Save</button>
-  `);
-}
-
-let qChessRes=null;
-function qSelRes(r,el){
-  qChessRes=r;
-  document.querySelectorAll('#modal-content .rb-q,#modal-content div[onclick^="qSelRes"]').forEach(e=>{
-    e.style.background='var(--surf2)'; e.style.borderColor='var(--bm)'; e.style.color='var(--t2)';
-  });
-  const colors={win:['var(--grb)','var(--gr)'],draw:['var(--amb)','var(--am)'],loss:['var(--reb)','var(--re)']};
-  el.style.background=colors[r][0]; el.style.borderColor=colors[r][1]; el.style.color=colors[r][1];
-}
-
-async function quickLogChess(){
-  if(!qChessRes){toast('Select a result first');return;}
-  const opening=document.getElementById('m-cop').value.trim();
-  const games=await dbGet('chess-games',[]); games.unshift({date:today(),result:qChessRes,opening,mistake:''});
-  await dbSet('chess-games',games.slice(0,500));
-  forceCloseModal(); toast(qChessRes.toUpperCase()+' saved ✓'); qChessRes=null;
-  renderHome();
-}
-
-// ════════════════════════════════════════════════════════
-// HOME
-// ════════════════════════════════════════════════════════
-async function renderHome(){
-  const d=new Date();
-  document.getElementById('home-date').textContent=d.toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long'});
-  document.getElementById('hs-days').textContent=Math.ceil((new Date('2027-01-01')-d)/86400000);
-
-  const [pData,hData,qLogs,juzDone,checkins]=await Promise.all([
-    dbGet('prayers',{}),dbGet('hdata',{}),dbGet('qlog',[]),dbGet('juz-done',[]),dbGet('checkins',{})
-  ]);
-
-  // Prayers today
-  const tp=pData[today()]||{};
-  const pDone=PRAYERS.filter(p=>tp[p]).length;
-  document.getElementById('hs-prayers').textContent=pDone+'/5';
-  document.getElementById('ql-prayer-sub').textContent=pDone+' of 5 today';
-
-  // Quran today
-  const todayPages=qLogs.filter(l=>l.date===today()).reduce((s,l)=>s+(l.pages||0),0);
-  document.getElementById('hs-quran').textContent=todayPages+'p';
-  document.getElementById('ql-quran-sub').textContent=todayPages?todayPages+' pages today':'Tap to log';
-
-  // Habits today
-  const habits=await dbGet('habits',DEF_HABITS);
-  const todayH=hData[today()]||{};
-  const hDone=habits.filter(h=>todayH[h.id]).length;
-  document.getElementById('hs-habits').textContent=hDone+'/'+habits.length;
-
-  // Chess today
-  const cgames=await dbGet('chess-games',[]);
-  const todayGames=cgames.filter(g=>g.date===today()).length;
-  document.getElementById('ql-chess-sub').textContent=todayGames?todayGames+' game'+(todayGames>1?'s':'')+' today':'Log a game';
-
-  // German today
-  const gLogs=await dbGet('german-log',[]);
-  const todayGMins=gLogs.filter(l=>l.date===today()).reduce((s,l)=>s+(l.mins||0),0);
-  document.getElementById('ql-german-sub').textContent=todayGMins?todayGMins+' min today':'Tap to log';
-
-  // SCORE (0-100)
-  const pScore=Math.round((pDone/5)*40); // prayers 40pts
-  const hScore=habits.length?Math.round((hDone/habits.length)*40):0; // habits 40pts
-  const ciToday=checkins[today()]||{};
-  const ciScore=ciToday.mood?20:0; // check-in 20pts
-  const score=Math.min(100,pScore+hScore+ciScore);
-  document.getElementById('score-num').textContent=score;
-  const arc=document.getElementById('score-arc');
-  const circ=2*Math.PI*34;
-  arc.style.strokeDashoffset=circ-(circ*score/100);
-  arc.style.stroke=score>=80?'var(--gr)':score>=50?'var(--am)':'var(--ac)';
-  document.getElementById('home-score-sub').innerHTML=`<span class="badge ${score>=80?'bgr':score>=50?'bam':'bac'}">${score>=80?'Great day':'score '+score+'/100'}</span>`;
-
-  // Weekly grid
-  const days=[];
-  for(let i=6;i>=0;i--){const d2=new Date();d2.setDate(d2.getDate()-i);days.push(d2.toISOString().slice(0,10));}
-  const wg=document.getElementById('weekly-grid');
-  wg.innerHTML=days.map(d2=>{
-    const dH=hData[d2]||{};
-    const dPray=pData[d2]||{};
-    const done=habits.filter(h=>dH[h.id]).length;
-    const praydone=PRAYERS.filter(p=>dPray[p]).length;
-    const total=habits.length+5;
-    const totalDone=done+praydone;
-    const pct=total?totalDone/total:0;
-    const cls=pct>=0.8?'full':pct>=0.4?'part':'';
-    const isToday=d2===today();
-    const day=new Date(d2).getDay();
-    return `<div class="wday"><div class="wday-label">${DAYS[day]}</div><div class="wday-dot ${cls}${isToday?' today-ring':''}">${Math.round(pct*100)||0}</div></div>`;
-  }).join('');
-
-  // Streaks
-  let pStreak=0,qStreak=0,hStreak=0;
-  for(let i=0;i<90;i++){
-    const d2=new Date();d2.setDate(d2.getDate()-i);
-    const k=d2.toISOString().slice(0,10);
-    const dp=pData[k]||{};
-    const dc=hData[k]||{};
-    const dq=qLogs.filter(l=>l.date===k);
-    const allP=PRAYERS.every(p=>dp[p]);
-    const anyH=habits.some(h=>dc[h.id]);
-    const anyQ=dq.length>0;
-    if(allP||(i===0&&pDone>0)) pStreak++; else if(i>0) pStreak=pStreak; // keep counting only if valid
-    if(i===0){if(!allP) pStreak=0;}
-    else if(!allP) { if(pStreak>0&&i>0) break;}
-  }
-  // simpler streak calc
-  pStreak=0;qStreak=0;hStreak=0;
-  for(let i=0;i<90;i++){
-    const d2=new Date();d2.setDate(d2.getDate()-i);
-    const k=d2.toISOString().slice(0,10);
-    if(i===0&&PRAYERS.every(p=>(pData[k]||{})[p])) pStreak++;
-    else if(i>0){if(PRAYERS.every(p=>(pData[k]||{})[p])) pStreak++; else break;}
-  }
-  // Actually do clean streaks
-  pStreak=calcStreakFn(k=>PRAYERS.every(p=>(pData[k]||{})[p]));
-  qStreak=calcStreakFn(k=>qLogs.some(l=>l.date===k));
-  hStreak=calcStreakFn(k=>habits.length>0&&habits.every(h=>(hData[k]||{})[h.id]));
-
-  document.getElementById('str-pray').textContent=pStreak||'—';
-  document.getElementById('str-quran').textContent=qStreak||'—';
-  document.getElementById('str-habit').textContent=hStreak||'—';
-}
-
-function calcStreakFn(checkFn){
-  let s=0;
-  for(let i=0;i<90;i++){
-    const d=new Date();d.setDate(d.getDate()-i);
-    const k=d.toISOString().slice(0,10);
-    if(checkFn(k)) s++;
-    else if(i>0) break;
-    else if(i===0) break; // today not done, streak is 0 (could be partial day)
-  }
-  return s;
-}
-
-// ════════════════════════════════════════════════════════
-// DEEN
-// ════════════════════════════════════════════════════════
-async function renderDeen(){
-  const [pData,qLogs,juzDone]=await Promise.all([dbGet('prayers',{}),dbGet('qlog',[]),dbGet('juz-done',[])]);
-  // Prayers
-  const tp=pData[today()]||{};
-  document.getElementById('prayer-grid').innerHTML=PRAYERS.map(p=>`
-    <div class="pc ${tp[p]?'done':''}" onclick="togglePrayer('${p}')">
-      <span class="pck">${tp[p]?'✅':'🕌'}</span>
-      <div class="pn">${p}</div>
-    </div>`).join('');
-  // Quran bar
-  const todayPages=qLogs.filter(l=>l.date===today()).reduce((s,l)=>s+(l.pages||0),0);
-  document.getElementById('q-today-badge').textContent=todayPages?todayPages+' pages today':'Not yet today';
-  document.getElementById('q-bar').style.width=Math.min((juzDone.length/30)*100,100)+'%';
-  document.getElementById('q-juz-lbl').textContent=juzDone.length+' / 30 juz';
-  // Juz grid
-  let jhtml='';
-  for(let i=1;i<=30;i++) jhtml+=`<div class="jc ${juzDone.includes(i)?'done':''}" onclick="toggleJuz(${i})">${i}</div>`;
-  document.getElementById('juz-grid').innerHTML=jhtml;
-  // Reading log
-  renderLogInCard('q-log-list',qLogs.slice(0,8),l=>`${l.ref||'Quran'} — ${l.pages} pages`,l=>l.note,'var(--gob2)');
-  // Prayer history
-  const days=[];for(let i=6;i>=0;i--){const d=new Date();d.setDate(d.getDate()-i);days.push(d.toISOString().slice(0,10));}
-  document.getElementById('prayer-hist').innerHTML=days.map(d=>{
-    const dp=pData[d]||{};
-    const cnt=PRAYERS.filter(p=>dp[p]).length;
-    return `<div class="ph-row">
-      <span style="font-size:12px;font-weight:700;color:var(--t2);min-width:54px;">${fmt(d)}</span>
-      <div class="ph-dots">${PRAYERS.map(p=>`<div class="ph-dot ${dp[p]?'done':''}">${p[0]}</div>`).join('')}</div>
-      <span class="badge ${cnt===5?'bgo':cnt>=3?'bam':'bre'}">${cnt}/5</span>
-    </div>`;
-  }).join('');
-}
-
-async function togglePrayer(name){
-  const pData=await dbGet('prayers',{});
-  if(!pData[today()]) pData[today()]={};
-  pData[today()][name]=!pData[today()][name];
-  await dbSet('prayers',pData);
-  toast(pData[today()][name]?name+' ✓':'Unmarked');
-  await renderDeen();
-}
-
-async function toggleJuz(n){
-  const juzDone=await dbGet('juz-done',[]);
-  const idx=juzDone.indexOf(n);
-  if(idx>=0) juzDone.splice(idx,1); else juzDone.push(n);
-  await dbSet('juz-done',juzDone);
-  toast(idx<0?'Juz '+n+' complete! 📖':'Juz '+n+' unmarked');
-  await renderDeen();
-}
-
-async function logQuran(){
-  const pages=parseInt(document.getElementById('q-pages').value)||0;
-  const ref=document.getElementById('q-ref').value.trim();
-  const note=document.getElementById('q-note').value.trim();
-  if(!pages){toast('Enter pages read');return;}
-  const logs=await dbGet('qlog',[]); logs.unshift({date:today(),pages,ref,note});
-  await dbSet('qlog',logs.slice(0,1000));
-  document.getElementById('q-pages').value='';
-  document.getElementById('q-ref').value='';
-  document.getElementById('q-note').value='';
-  toast('Quran logged — '+pages+' pages ✓');
-  await renderDeen();
-}
-
-// ════════════════════════════════════════════════════════
-// TODAY (HABITS)
-// ════════════════════════════════════════════════════════
-async function renderTodayPage(){
-  const d=new Date();
-  document.getElementById('today-date-sub').textContent=d.toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long'});
-  const [habits,hData,checkins]=await Promise.all([dbGet('habits',DEF_HABITS),dbGet('hdata',{}),dbGet('checkins',{})]);
-  const todayH=hData[today()]||{};
-  // Build days array for dots
-  const days=[];
-  for(let i=6;i>=0;i--){const d2=new Date();d2.setDate(d2.getDate()-i);days.push(d2.toISOString().slice(0,10));}
-  document.getElementById('habit-list').innerHTML=habits.map(h=>{
-    const done=!!todayH[h.id];
-    const streak=calcStreakFor(h.id,hData);
-    const dots=days.map(d2=>`<div class="hd ${(hData[d2]&&hData[d2][h.id])?'on':''}"></div>`).join('');
-    return `<div class="hi" onclick="toggleHabit('${h.id}')">
-      <div class="htap ${done?'done':''}"><span class="hico">${h.icon||'•'}</span></div>
-      <div class="hinfo">
-        <div class="hn">${h.name}</div>
-        <div class="hst">${streak>1?'🔥 '+streak+' day streak':streak===1?'🔥 1 day':'start today'}</div>
+// ══════════════════════ SWIPE-TO-DELETE ══════════════════════
+// Renders a deletable list. Each item gets a swipe-left delete button.
+function renderDeletableList(elId,items,titleFn,subFn,colorFn,onDelete){
+  const el=document.getElementById(elId);if(!el)return;
+  if(!items||!items.length){el.innerHTML=`<div class="empty"><div class="empty-ico">📝</div>Nothing yet.</div>`;return;}
+  el.innerHTML=items.map((item,i)=>`
+    <div class="log-wrap" id="lw-${elId}-${i}">
+      <div class="lr" ontouchstart="swipeStart(event,'${elId}',${i})" ontouchend="swipeEnd(event,'${elId}',${i})">
+        <div class="lr-accent" style="background:${colorFn(item)};"></div>
+        <div class="lr-body">
+          <div class="lr-title">${titleFn(item)}</div>
+          ${subFn(item)?`<div class="lr-sub">${subFn(item)}</div>`:''}
+        </div>
+        <div class="lr-date">${fmt(item.date||item.d||'')}</div>
+        <div class="lr-tap-del" onclick="deleteItem('${elId}',${i})">×</div>
       </div>
+      <div class="log-del-btn" onclick="deleteItem('${elId}',${i})">Delete</div>
+    </div>`).join('');
+  // Store delete callbacks per list
+  el._onDelete=onDelete;
+  el._items=[...items];
+}
+
+// Swipe tracking
+let _swTouch={};
+function swipeStart(e,id,i){_swTouch={id,i,x:e.touches[0].clientX};}
+function swipeEnd(e,id,i){
+  if(!_swTouch.id)return;
+  const dx=_swTouch.x-e.changedTouches[0].clientX;
+  const wrap=document.getElementById(`lw-${id}-${i}`);
+  if(!wrap)return;
+  if(dx>40){wrap.classList.add('swiped');}
+  else if(dx<-20){wrap.classList.remove('swiped');}
+  _swTouch={};
+}
+// Close open swipes when tapping elsewhere
+document.addEventListener('touchstart',e=>{
+  document.querySelectorAll('.log-wrap.swiped').forEach(w=>{
+    if(!w.contains(e.target))w.classList.remove('swiped');
+  });
+},{passive:true});
+
+async function deleteItem(elId,i){
+  const el=document.getElementById(elId);
+  if(!el||!el._items)return;
+  const items=[...el._items];
+  const removed=items.splice(i,1)[0];
+  el._items=items;
+  if(el._onDelete)await el._onDelete(items,removed,i);
+}
+
+// ══════════════════════ NAV ══════════════════════
+let curPage='today';
+function goPage(page,btn){
+  document.querySelectorAll('.pg').forEach(p=>p.classList.remove('on'));
+  document.querySelectorAll('.nb').forEach(b=>b.classList.remove('on'));
+  document.getElementById('pg-'+page).classList.add('on');
+  btn.classList.add('on');curPage=page;renders[page]();
+}
+function swTab(tab,btn){
+  document.querySelectorAll('.itab').forEach(b=>b.classList.remove('on'));
+  document.querySelectorAll('.itpg').forEach(p=>p.classList.remove('on'));
+  btn.classList.add('on');document.getElementById('gt-'+tab).classList.add('on');
+  if(tab==='chess')renderChessStats();
+  if(tab==='german')renderGermanStats();
+}
+function toggleEp(id){document.getElementById(id).classList.toggle('on');if(id==='ep-habits')renderHabitEdit();}
+
+// ══════════════════════ MODAL ══════════════════════
+function openModal(){const ov=document.getElementById('m-overlay');ov.style.display='flex';requestAnimationFrame(()=>document.getElementById('m-box').classList.add('on'));}
+function closeModal(){document.getElementById('m-box').classList.remove('on');setTimeout(()=>document.getElementById('m-overlay').style.display='none',320);}
+function closeModalOverlay(e){if(e.target===document.getElementById('m-overlay'))closeModal();}
+
+async function openM(type){
+  const mh=document.getElementById('m-head'),mb=document.getElementById('m-body');
+  if(type==='quran'){
+    mh.textContent='📖 Log Quran reading';
+    const ql=await dbGet('qlog',[]);
+    const tp=ql.filter(l=>l.date===today()).reduce((s,l)=>s+(l.pages||0),0);
+    mb.innerHTML=`${tp?`<div class="ib ib-ok" style="margin-bottom:12px;">✅ ${tp} pages logged today already</div>`:''}
+      <div class="fg"><label class="fl">Pages read</label><input type="number" id="mq-pg" placeholder="5" min="1" style="font-size:16px;"></div>
+      <div class="fg"><label class="fl">Surah / Juz (optional)</label><input type="text" id="mq-ref" placeholder="e.g. Al-Baqarah, Juz 2"></div>
+      <button class="btn btn-p btn-block" onclick="mLogQuran()">Save</button>`;
+  } else if(type==='german'){
+    mh.textContent='🇩🇪 German study';
+    const gl=await dbGet('german-log',[]);
+    const tp=gl.filter(l=>l.date===today()).reduce((s,l)=>s+(l.mins||0),0);
+    mb.innerHTML=`${tp?`<div class="ib ib-ok" style="margin-bottom:12px;">✅ ${tp} min logged today</div>`:''}
+      <div class="fg"><label class="fl">Minutes studied</label><input type="number" id="mg-mins" placeholder="30" min="1" style="font-size:16px;"></div>
+      <div class="fg"><label class="fl">Activity</label><select id="mg-act"><option>Vocabulary (Anki)</option><option>DW Nicos Weg</option><option>Speaking</option><option>Grammar</option><option>Listening</option><option>Reading</option></select></div>
+      <button class="btn btn-p btn-block" onclick="mLogGerman()">Save</button>`;
+  } else if(type==='chess'){
+    let cres=null;
+    mh.textContent='♟ Log chess game';
+    mb.innerHTML=`<div style="display:flex;gap:8px;margin-bottom:14px;">
+        <div id="mc-win" onclick="mSelR('win')" style="flex:1;padding:14px;border-radius:var(--rm);border:1.5px solid var(--b1);background:var(--s1);font-weight:800;font-size:15px;cursor:pointer;text-align:center;transition:all 0.15s;">Win</div>
+        <div id="mc-draw" onclick="mSelR('draw')" style="flex:1;padding:14px;border-radius:var(--rm);border:1.5px solid var(--b1);background:var(--s1);font-weight:800;font-size:15px;cursor:pointer;text-align:center;transition:all 0.15s;">Draw</div>
+        <div id="mc-loss" onclick="mSelR('loss')" style="flex:1;padding:14px;border-radius:var(--rm);border:1.5px solid var(--b1);background:var(--s1);font-weight:800;font-size:15px;cursor:pointer;text-align:center;transition:all 0.15s;">Loss</div>
+      </div>
+      <div class="fg"><label class="fl">Opening (optional)</label><input type="text" id="mc-op" placeholder="e.g. Sicilian Defense"></div>
+      <button class="btn btn-p btn-block" onclick="mLogChess()">Save game</button>`;
+    window._mCRes=null;
+  } else if(type==='checkin'){
+    mh.textContent='💭 Daily check-in';
+    const cis=await dbGet('checkins',{});
+    const ci=cis[today()]||{};
+    mb.innerHTML=`<div class="ci-grid" id="mood-grid">
+      ${[['😄','Great',5],['🙂','Good',4],['😐','Okay',3],['😔','Low',2],['😞','Bad',1]].map(([ico,lbl,v])=>`
+        <div class="ci-cell ${ci.mood==v?'on':''}" onclick="ciSel('mood',${v},this)">
+          <span class="ci-ico">${ico}</span><div class="ci-lbl">${lbl}</div></div>`).join('')}
+    </div>
+    <div style="font-size:11px;font-weight:800;color:var(--t2);text-transform:uppercase;letter-spacing:0.6px;margin-bottom:8px;">Energy</div>
+    <div class="ci-grid">
+      ${[['⚡','High',5],['🔋','Good',4],['🔌','Medium',3],['😴','Low',2],['💤','Drained',1]].map(([ico,lbl,v])=>`
+        <div class="ci-cell ${ci.energy==v?'on':''}" onclick="ciSel('energy',${v},this)">
+          <span class="ci-ico">${ico}</span><div class="ci-lbl">${lbl}</div></div>`).join('')}
+    </div>
+    <div class="fg" style="margin-top:4px;"><label class="fl">One sentence about today</label><textarea id="ci-note" placeholder="How did today feel?">${ci.note||''}</textarea></div>
+    <div style="display:flex;gap:8px;margin-top:0;">
+      <div class="fg" style="flex:1;margin-bottom:0;"><label class="fl">Wake</label><input type="time" id="ci-wake" value="${ci.wake||'06:30'}"></div>
+      <div class="fg" style="flex:1;margin-bottom:0;"><label class="fl">Sleep by</label><input type="time" id="ci-sleep" value="${ci.sleep||'23:00'}"></div>
+    </div>
+    <button class="btn btn-p btn-block" onclick="saveCheckin()">Save check-in</button>`;
+    window._ciMood=ci.mood||null;window._ciEnergy=ci.energy||null;
+  }
+  openModal();
+}
+function ciSel(type,val,el){
+  const parent=el.closest('.ci-grid');
+  parent.querySelectorAll('.ci-cell').forEach(c=>c.classList.remove('on'));
+  el.classList.add('on');
+  if(type==='mood')window._ciMood=val;else window._ciEnergy=val;
+}
+function mSelR(r){
+  window._mCRes=r;
+  const s={win:['var(--green-bg)','var(--green-fg)'],draw:['var(--amber-bg)','var(--amber-fg)'],loss:['var(--red-bg)','var(--red-fg)']};
+  ['win','draw','loss'].forEach(x=>{
+    const e=document.getElementById('mc-'+x);if(!e)return;
+    e.style.background=x===r?s[x][0]:'var(--s1)';e.style.borderColor=x===r?s[x][1]:'var(--b1)';e.style.color=x===r?s[x][1]:'var(--t1)';
+  });
+}
+async function mLogQuran(){
+  const pg=parseInt(document.getElementById('mq-pg').value)||0;
+  const ref=document.getElementById('mq-ref').value.trim();
+  if(!pg){toast('Enter pages read');return;}
+  const logs=await dbGet('qlog',[]);logs.unshift({date:today(),pages:pg,ref,note:''});
+  await dbSet('qlog',logs.slice(0,1000));closeModal();toast('📖 '+pg+' pages logged ✓');renderToday();
+}
+async function mLogGerman(){
+  const mins=parseInt(document.getElementById('mg-mins').value)||0;
+  const act=document.getElementById('mg-act').value;
+  if(!mins){toast('Enter minutes');return;}
+  const logs=await dbGet('german-log',[]);logs.unshift({date:today(),mins,act});
+  await dbSet('german-log',logs.slice(0,500));closeModal();toast('🇩🇪 '+mins+' min logged ✓');renderToday();
+}
+async function mLogChess(){
+  if(!window._mCRes){toast('Select Win / Draw / Loss first');return;}
+  const op=document.getElementById('mc-op').value.trim();
+  const games=await dbGet('chess-games',[]);games.unshift({date:today(),result:window._mCRes,opening:op,mistake:''});
+  await dbSet('chess-games',games.slice(0,500));closeModal();toast('♟ '+window._mCRes+' logged ✓');window._mCRes=null;renderToday();
+}
+async function saveCheckin(){
+  const ci={mood:window._ciMood,energy:window._ciEnergy,note:document.getElementById('ci-note').value,wake:document.getElementById('ci-wake').value,sleep:document.getElementById('ci-sleep').value};
+  const cis=await dbGet('checkins',{});cis[today()]=ci;
+  await dbSet('checkins',cis);closeModal();toast('Check-in saved ✓');renderToday();
+}
+
+// ══════════════════════ TODAY ══════════════════════
+async function renderToday(){
+  document.getElementById('h-greet').textContent=greet();
+  document.getElementById('h-date').textContent=new Date().toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long'});
+  const [pData,hData,qLogs,gLogs,checkins]=await Promise.all([dbGet('prayers',{}),dbGet('hdata',{}),dbGet('qlog',[]),dbGet('german-log',[]),dbGet('checkins',{})]);
+  const habits=await dbGet('habits',DEF_HABITS);
+  const tp=pData[today()]||{},th=hData[today()]||{};
+  const pDone=PRAYERS.filter(p=>tp[p]).length;
+  const hDone=habits.filter(h=>th[h.id]).length;
+  const qPg=qLogs.filter(l=>l.date===today()).reduce((s,l)=>s+(l.pages||0),0);
+  const gMins=gLogs.filter(l=>l.date===today()).reduce((s,l)=>s+(l.mins||0),0);
+
+  document.getElementById('h-p').textContent=pDone+'/5';
+  document.getElementById('h-h').textContent=hDone+'/'+habits.length;
+  document.getElementById('h-q').textContent=qPg+'p';
+  document.getElementById('h-g').textContent=gMins+'m';
+  document.getElementById('qa-q').textContent=qPg?qPg+' pages today':'Tap to log';
+  document.getElementById('qa-g').textContent=gMins?gMins+' min today':'Tap to log';
+  const cg=await dbGet('chess-games',[]);
+  document.getElementById('qa-c').textContent=cg.filter(g=>g.date===today()).length?'Game logged':'Tap to log';
+  const ci=checkins[today()]||{};
+  document.getElementById('qa-ci').textContent=ci.mood?'Saved today':'Mood & energy';
+
+  // Score
+  const ciPts=ci.mood?20:0;
+  const score=Math.min(100,Math.round((pDone/5)*40+(habits.length?hDone/habits.length*40:0)+ciPts));
+  document.getElementById('ring-num').textContent=score;
+  const arc=document.getElementById('ring-arc'),circ=2*Math.PI*37;
+  setTimeout(()=>{arc.style.strokeDashoffset=circ-(circ*score/100);},80);
+  arc.style.stroke=score>=80?'#6EE7A0':score>=50?'#FDD770':'#ffffff';
+  document.getElementById('ring-label').textContent=score>=80?'🌟 Excellent!':score>=50?'📈 Good progress':'Daily score';
+  document.getElementById('ring-sub').textContent=score>=80?'All systems running. Keep it up.':score>=50?'More than halfway there.':'Prayers 40 · Habits 40 · Check-in 20';
+  const badges=[];
+  if(pDone===5)badges.push('🕌 5/5 prayers');
+  if(habits.length&&hDone===habits.length)badges.push('✅ All habits');
+  if(qPg>=5)badges.push('📖 Quran done');
+  if(gMins>=30)badges.push('🇩🇪 German done');
+  document.getElementById('h-badges').innerHTML=badges.map(b=>`<span class="score-badge">${b}</span>`).join('');
+
+  // Prayer grid (today page)
+  document.getElementById('today-pgrid').innerHTML=PRAYERS.map(p=>`
+    <div class="pcard ${tp[p]?'done':''}" onclick="togglePrayer('${p}','today')">
+      <span class="p-ico">${tp[p]?'✅':'🕌'}</span><div class="p-name">${p}</div>
+    </div>`).join('');
+
+  // Habits
+  const days7=[];for(let i=6;i>=0;i--){const d=new Date();d.setDate(d.getDate()-i);days7.push(d.toISOString().slice(0,10));}
+  document.getElementById('habit-list').innerHTML=habits.length?habits.map(h=>{
+    const done=!!th[h.id];
+    const streak=calcStreak(k=>!!(hData[k]&&hData[k][h.id]));
+    const dots=days7.map(d=>`<div class="hdot ${hData[d]&&hData[d][h.id]?'done':''}"></div>`).join('');
+    return `<div class="hrow" onclick="toggleHabit('${h.id}')">
+      <div class="hcheck ${done?'done':''}"><span class="hico">${h.icon||'•'}</span></div>
+      <div class="h-info"><div class="h-name">${h.name}</div>
+        <div class="h-streak">${streak>0?'🔥 '+streak+' day streak':'Start today'}</div></div>
       <div class="hdots">${dots}</div>
     </div>`;
+  }).join(''):`<div class="empty"><div class="empty-ico">✅</div>No habits yet. Tap Edit above.</div>`;
+
+  // Streaks
+  document.getElementById('s-pray').textContent=calcStreak(k=>PRAYERS.every(p=>(pData[k]||{})[p]));
+  document.getElementById('s-quran').textContent=calcStreak(k=>qLogs.some(l=>l.date===k));
+  document.getElementById('s-habit').textContent=calcStreak(k=>habits.length>0&&habits.every(h=>(hData[k]||{})[h.id]));
+
+  // Weekly grid
+  document.getElementById('wk-row').innerHTML=days7.map(d=>{
+    const dh=hData[d]||{},dp=pData[d]||{};
+    const hc=habits.filter(h=>dh[h.id]).length,pc=PRAYERS.filter(p=>dp[p]).length;
+    const total=habits.length+5,done=hc+pc;const pct=total?done/total:0;
+    const cls=pct>=0.85?'full':pct>=0.4?'part':'';
+    return `<div class="wkday"><div class="wkd-lbl">${WDAYS[new Date(d+'T12:00').getDay()]}</div><div class="wkd-dot ${cls}${d===today()?' today':''}">${Math.round(pct*100)}</div></div>`;
   }).join('');
-  // Check-in
-  const ci=checkins[today()]||{};
-  if(ci.mood) document.getElementById('ci-mood').value=ci.mood;
-  if(ci.energy) document.getElementById('ci-energy').value=ci.energy;
-  if(ci.sleep) document.getElementById('ci-sleep').value=ci.sleep;
-  if(ci.wake) document.getElementById('ci-wake').value=ci.wake;
-  if(ci.note) document.getElementById('ci-note').value=ci.note;
-  // Checkin log
-  const recentCi=Object.entries(checkins).sort((a,b)=>b[0].localeCompare(a[0])).slice(0,7);
-  document.getElementById('checkin-log').innerHTML=recentCi.length?recentCi.map(([date,c])=>`
-    <div class="li">
-      <div class="li-main">
-        <div class="li-title">${c.mood?'Mood '+c.mood+' · ':''} ${c.energy?'Energy '+c.energy:''}${(!c.mood&&!c.energy)?'Check-in logged':''}</div>
-        ${c.note?`<div class="li-sub">${c.note}</div>`:''}
-        <div class="li-sub">Wake ${c.wake||'—'} · Sleep ${c.sleep||'—'}</div>
-      </div>
-      <div class="li-date">${fmt(date)}</div>
-    </div>`).join(''):'<div style="padding:14px;color:var(--t3);font-size:13px;">No check-ins yet.</div>';
 }
 
+async function togglePrayer(name,src){
+  const pData=await dbGet('prayers',{});
+  if(!pData[today()])pData[today()]={};
+  pData[today()][name]=!pData[today()][name];
+  await dbSet('prayers',pData);
+  toast(pData[today()][name]?name+' ✓':name+' unmarked');
+  if(src==='deen')renderDeen();else renderToday();
+}
 async function toggleHabit(hid){
   const hData=await dbGet('hdata',{});
-  if(!hData[today()]) hData[today()]={};
+  if(!hData[today()])hData[today()]={};
   hData[today()][hid]=!hData[today()][hid];
-  await dbSet('hdata',hData);
-  await renderTodayPage();
+  await dbSet('hdata',hData);await renderToday();
 }
-
-function calcStreakFor(hid,data){
-  let s=0;
-  for(let i=0;i<90;i++){
-    const d=new Date();d.setDate(d.getDate()-i);
-    const k=d.toISOString().slice(0,10);
-    if(data[k]&&data[k][hid]) s++;
-    else if(i>0) break;
-  }
-  return s;
-}
-
-async function renderHabitManage(){
+async function renderHabitEdit(){
   const habits=await dbGet('habits',DEF_HABITS);
-  document.getElementById('habit-manage').innerHTML=habits.map((h,i)=>`
-    <div style="display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:0.5px solid var(--b);">
-      <span style="font-size:20px;">${h.icon||'•'}</span>
-      <span style="flex:1;font-size:14px;">${h.name}</span>
-      <span onclick="removeHabit(${i})" style="color:var(--re);cursor:pointer;font-size:24px;font-weight:300;padding:0 4px;line-height:1;">×</span>
+  document.getElementById('habit-edit').innerHTML=habits.map((h,i)=>`
+    <div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:0.5px solid var(--b0);">
+      <span style="font-size:22px;">${h.icon||'•'}</span>
+      <span style="flex:1;font-size:14px;font-weight:500;">${h.name}</span>
+      <span onclick="removeHabit(${i})" style="color:var(--red-fg);font-size:26px;font-weight:300;cursor:pointer;padding:0 4px;line-height:1;">×</span>
     </div>`).join('');
 }
-
 async function addHabit(){
   const name=document.getElementById('nh-name').value.trim();
   const icon=document.getElementById('nh-icon').value.trim()||'✅';
-  if(!name) return;
-  const habits=await dbGet('habits',DEF_HABITS);
-  habits.push({id:'h-'+Date.now(),name,icon});
-  await dbSet('habits',habits);
-  document.getElementById('nh-name').value='';document.getElementById('nh-icon').value='';
-  await renderHabitManage(); await renderTodayPage();
-  toast('Habit added ✓');
+  if(!name){toast('Enter a habit name');return;}
+  const habits=await dbGet('habits',DEF_HABITS);habits.push({id:'h'+Date.now(),name,icon});
+  await dbSet('habits',habits);document.getElementById('nh-name').value='';document.getElementById('nh-icon').value='';
+  await renderHabitEdit();await renderToday();toast('Habit added ✓');
 }
-
 async function removeHabit(i){
-  if(!confirm('Remove this habit?')) return;
-  const habits=await dbGet('habits',DEF_HABITS); habits.splice(i,1);
-  await dbSet('habits',habits);
-  await renderHabitManage(); await renderTodayPage();
-  toast('Habit removed');
+  const habits=await dbGet('habits',DEF_HABITS);const n=habits[i].name;habits.splice(i,1);
+  await dbSet('habits',habits);await renderHabitEdit();await renderToday();toast('"'+n+'" removed');
 }
 
-async function saveCheckin(){
-  const ci={mood:document.getElementById('ci-mood').value,energy:document.getElementById('ci-energy').value,sleep:document.getElementById('ci-sleep').value,wake:document.getElementById('ci-wake').value,note:document.getElementById('ci-note').value};
-  const cis=await dbGet('checkins',{}); cis[today()]=ci;
-  await dbSet('checkins',cis);
-  toast('Check-in saved ✓');
-  await renderTodayPage();
-}
-
-// ════════════════════════════════════════════════════════
-// GOALS
-// ════════════════════════════════════════════════════════
-async function renderGoals(){
-  document.getElementById('g-days').textContent=Math.ceil((new Date('2027-01-01')-new Date())/86400000);
-  const [ms,gLogs,iLogs,awsLogs,engLogs,cGames,cStudy,careers,projects,gl]=await Promise.all([
-    dbGet('milestones',DEF_MS),dbGet('german-log',[]),dbGet('ielts-log',[]),
-    dbGet('aws-log',[]),dbGet('eng-log',[]),dbGet('chess-games',[]),
-    dbGet('chess-study',[]),dbGet('career-log',[]),dbGet('projects',[]),
-    dbGet('german-level','A0')
-  ]);
-
-  // Milestones
-  const done=ms.filter(m=>m.done).length;
-  document.getElementById('g-ms-done').textContent=done;
-  document.getElementById('g-ms-total').textContent='of '+ms.length+' done';
-  document.getElementById('ms-list').innerHTML=ms.map((m,i)=>`
-    <div class="msi ${m.done?'msdone':''}">
-      <div class="msc ${m.done?'done':''}" onclick="toggleMs(${i})">${m.done?'✓':''}</div>
-      <div class="msb"><div class="mst">${m.text}</div><div class="msn">${m.note}</div></div>
-      ${m.urgent&&!m.done?'<span class="badge bre">Now!</span>':''}
-      <span class="del" onclick="removeMs(${i})">×</span>
+// ══════════════════════ DEEN ══════════════════════
+async function renderDeen(){
+  const [pData,qLogs,juzDone]=await Promise.all([dbGet('prayers',{}),dbGet('qlog',[]),dbGet('juz-done',[])]);
+  const tp=pData[today()]||{};
+  document.getElementById('deen-pgrid').innerHTML=PRAYERS.map(p=>`
+    <div class="pcard ${tp[p]?'done':''}" onclick="togglePrayer('${p}','deen')">
+      <span class="p-ico">${tp[p]?'✅':'🕌'}</span><div class="p-name">${p}</div>
     </div>`).join('');
 
-  // German
-  document.getElementById('german-level').value=gl;
-  const lvls=['A0','A1','A2','B1','B2'];
-  const idx=Math.max(0,lvls.indexOf(gl));
-  const pct=Math.round((idx/3)*100);
-  document.getElementById('german-bar').style.width=pct+'%';
-  document.getElementById('g-german-pct').textContent=pct+'%';
-  renderLogInCard('german-log-list',gLogs.slice(0,5),l=>`${l.act} — ${l.mins} min`,null,'var(--pu)');
+  // 7-day prayer history
+  const days7=[];for(let i=6;i>=0;i--){const d=new Date();d.setDate(d.getDate()-i);days7.push(d.toISOString().slice(0,10));}
+  document.getElementById('prayer-hist').innerHTML=days7.map(d=>{
+    const dp=pData[d]||{};const cnt=PRAYERS.filter(p=>dp[p]).length;
+    return `<div style="display:flex;align-items:center;justify-content:space-between;padding:10px 16px;border-bottom:0.5px solid var(--b0);">
+      <span style="font-size:12px;font-weight:700;color:var(--t1);min-width:54px;">${fmt(d)}</span>
+      <div style="display:flex;gap:4px;">${PRAYERS.map(p=>`<div style="width:30px;height:30px;border-radius:50%;background:${dp[p]?'var(--gold-fg)':'var(--s1)'};border:1px solid ${dp[p]?'var(--gold-fg)':'var(--b1)'};display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:800;color:${dp[p]?'#fff':'var(--t2)'};">${p[0]}</div>`).join('')}</div>
+      <span class="badge ${cnt===5?'b-go':cnt>=3?'b-am':'b-re'}">${cnt}/5</span>
+    </div>`;
+  }).join('')+'<div style="height:4px;"></div>';
 
-  // IELTS
-  document.getElementById('ielts-cnt').textContent=iLogs.length;
-  const id2=await dbGet('ielts-date','');
-  if(id2){document.getElementById('ielts-date').value=id2;document.getElementById('ielts-date-show').textContent=fmt(id2);}
-  renderLogInCard('ielts-log-list',iLogs.slice(0,5),l=>`${l.skill}${l.score?' — score: '+l.score:''}`,null,'var(--ac)');
+  // Quran stats
+  const totalPg=qLogs.reduce((s,l)=>s+(l.pages||0),0);
+  const juzN=juzDone.length;
+  document.getElementById('q-juz-n').textContent=juzN;
+  document.getElementById('q-pages-n').textContent=totalPg;
+  const pct=Math.round((juzN/30)*100);
+  document.getElementById('q-prog').style.width=pct+'%';
+  document.getElementById('q-prog-pct').textContent=pct+'%';
+  let jh='';for(let i=1;i<=30;i++)jh+=`<div class="jcell ${juzDone.includes(i)?'done':''}" onclick="toggleJuz(${i})">${i}</div>`;
+  document.getElementById('juz-grid').innerHTML=jh;
+
+  // Quran log with delete
+  renderDeletableList('q-log',qLogs.slice(0,12),
+    l=>`${l.ref||'Quran'} — ${l.pages} pages`,
+    l=>l.note||'',l=>'var(--gold-fg)',
+    async(newItems,removed)=>{
+      const all=await dbGet('qlog',[]);
+      const idx=all.findIndex(x=>x.date===removed.date&&x.pages===removed.pages&&x.ref===removed.ref);
+      if(idx>=0){const snap=[...all];snap.splice(idx,1);await dbSet('qlog',snap.slice(0,1000));}
+      toast('Session deleted',async()=>{const a=await dbGet('qlog',[]);a.splice(idx,0,removed);await dbSet('qlog',a.slice(0,1000));renderDeen();});
+      renderDeen();
+    }
+  );
+}
+
+async function toggleJuz(n){
+  const juzDone=await dbGet('juz-done',[]);const idx=juzDone.indexOf(n);
+  idx>=0?juzDone.splice(idx,1):juzDone.push(n);
+  await dbSet('juz-done',juzDone);toast(idx<0?'Juz '+n+' complete! 📖':'Juz '+n+' unmarked');await renderDeen();
+}
+async function logQuran(){
+  const pg=parseInt(document.getElementById('q-pg').value)||0;
+  const ref=document.getElementById('q-ref').value.trim();
+  const note=document.getElementById('q-note').value.trim();
+  if(!pg){toast('Enter pages read');return;}
+  const logs=await dbGet('qlog',[]);logs.unshift({date:today(),pages:pg,ref,note});
+  await dbSet('qlog',logs.slice(0,1000));
+  document.getElementById('q-pg').value='';document.getElementById('q-ref').value='';document.getElementById('q-note').value='';
+  toast('📖 '+pg+' pages logged ✓');await renderDeen();
+}
+
+// ══════════════════════ GOALS ══════════════════════
+async function renderGoals(){
+  // Austria countdown
+  const totalDays=Math.ceil((STUDY_TARGET-new Date('2024-01-01'))/86400000);
+  const remaining=daysTo('2027-09-01');
+  const elapsed=totalDays-remaining;
+  document.getElementById('at-days').textContent=remaining;
+  const ms=await dbGet('study-ms',DEF_MS);
+  const done=ms.filter(m=>m.done).length;
+  document.getElementById('at-ms-done').textContent=done;
+  document.getElementById('at-ms-of').textContent='of '+ms.length+' done';
+  document.getElementById('at-bar').style.width=Math.round((elapsed/totalDays)*100)+'%';
+  renderMsList(ms);
+
+  // Study log
+  const stLogs=await dbGet('study-log',[]);
+  renderDeletableList('study-log',stLogs.slice(0,10),
+    l=>l.note,l=>'',l=>'var(--blue-fg)',
+    async(ni,rm)=>{
+      const a=await dbGet('study-log',[]);const ix=a.findIndex(x=>x.date===rm.date&&x.note===rm.note);
+      if(ix>=0){const s=[...a];s.splice(ix,1);await dbSet('study-log',s.slice(0,200));}
+      toast('Deleted',async()=>{const a=await dbGet('study-log',[]);a.splice(ix,0,rm);await dbSet('study-log',a.slice(0,200));renderGoals();});
+      renderGoals();
+    }
+  );
 
   // AWS
-  const ad=await dbGet('aws-date','');
-  if(ad){document.getElementById('aws-date').value=ad;document.getElementById('aws-status').textContent='Booked: '+fmt(ad);document.getElementById('aws-status').style.color='var(--gr)';document.getElementById('aws-urgency').style.display='none';}
-  renderLogInCard('aws-log-list',awsLogs.slice(0,5),l=>`${l.type} — ${l.mins} min`,null,'var(--te)');
+  const awsDate=await dbGet('aws-date','');
+  if(awsDate){document.getElementById('aws-date').value=awsDate;document.getElementById('aws-status').textContent='Booked: '+fmt(awsDate);document.getElementById('aws-status').style.color='var(--green-fg)';document.getElementById('aws-warn').style.display='none';}
+  const awsLogs=await dbGet('aws-log',[]);
+  renderDeletableList('aws-log',awsLogs.slice(0,8),l=>l.type+' — '+l.mins+' min',l=>'',l=>'var(--teal-fg)',
+    async(ni,rm)=>{const a=await dbGet('aws-log',[]);const ix=a.findIndex(x=>x.date===rm.date&&x.type===rm.type&&x.mins===rm.mins);
+      if(ix>=0){const s=[...a];s.splice(ix,1);await dbSet('aws-log',s.slice(0,300));}
+      toast('Deleted',async()=>{const a=await dbGet('aws-log',[]);a.splice(ix,0,rm);await dbSet('aws-log',a.slice(0,300));renderGoals();});renderGoals();});
 
-  // Chess
-  const hist=await dbGet('chess-ratings',[]);
-  const start=await dbGet('chess-start',null);
-  const cur=hist.length?hist[hist.length-1].rating:null;
-  document.getElementById('chess-r').textContent=cur||'—';
-  if(cur&&start){const d=cur-start;document.getElementById('chess-delta').textContent=(d>=0?'+':'')+d+' pts';document.getElementById('chess-delta').style.color=d>=0?'var(--gr)':'var(--re)';}
-  const wins=cGames.filter(g=>g.result==='win').length;
-  document.getElementById('chess-wr').textContent=cGames.length?Math.round(wins/cGames.length*100)+'%':'—';
-  document.getElementById('chess-gsub').textContent=cGames.length+' games';
-  document.getElementById('chess-ssub').textContent=cStudy.length;
-  renderLogInCard('chess-game-log',cGames.slice(0,6),g=>`${g.result.toUpperCase()}${g.opening?' — '+g.opening:''}`,g=>g.mistake,g=>g.result==='win'?'var(--gr)':g.result==='loss'?'var(--re)':'var(--am)');
+  // IELTS
+  const ieltsDate=await dbGet('ielts-date','');
+  document.getElementById('ielts-cnt').textContent=(await dbGet('ielts-log',[])).length;
+  if(ieltsDate){document.getElementById('ielts-date').value=ieltsDate;document.getElementById('ielts-date-show').textContent=fmt(ieltsDate);}
+  const iLogs=await dbGet('ielts-log',[]);
+  renderDeletableList('ielts-log',iLogs.slice(0,8),l=>l.skill+(l.score?' — score: '+l.score:''),l=>'',l=>'var(--blue-fg)',
+    async(ni,rm)=>{const a=await dbGet('ielts-log',[]);const ix=a.findIndex(x=>x.date===rm.date&&x.skill===rm.skill);
+      if(ix>=0){const s=[...a];s.splice(ix,1);await dbSet('ielts-log',s.slice(0,300));}
+      toast('Deleted',async()=>{const a=await dbGet('ielts-log',[]);a.splice(ix,0,rm);await dbSet('ielts-log',a.slice(0,300));renderGoals();});renderGoals();});
 
-  // Projects
-  const sc={planning:'bac',building:'bam',shipped:'bgr'};
-  document.getElementById('proj-list').innerHTML=projects.length?projects.map((p,i)=>`
-    <div class="msi">
-      <span style="font-size:18px;flex-shrink:0;">📁</span>
-      <div class="msb"><div class="mst">${p.name}</div><div class="msn">${p.date||''}</div></div>
-      <span class="badge ${sc[p.status]||'bac'}">${p.status}</span>
-      <span class="del" onclick="removeProject(${i})">×</span>
-    </div>`).join(''):'<div style="padding:12px 14px;color:var(--t3);font-size:13px;">No projects yet. Add one above.</div>';
+  // German
+  const gl=await dbGet('german-level','A0');document.getElementById('german-level').value=gl;
+  updateGermanBar(gl);
+  renderGermanStats();
+  const gLogs=await dbGet('german-log',[]);
+  renderDeletableList('g-log',gLogs.slice(0,8),l=>l.act+' — '+l.mins+' min',l=>'',l=>'var(--purple-fg)',
+    async(ni,rm)=>{const a=await dbGet('german-log',[]);const ix=a.findIndex(x=>x.date===rm.date&&x.mins===rm.mins&&x.act===rm.act);
+      if(ix>=0){const s=[...a];s.splice(ix,1);await dbSet('german-log',s.slice(0,500));}
+      toast('Deleted',async()=>{const a=await dbGet('german-log',[]);a.splice(ix,0,rm);await dbSet('german-log',a.slice(0,500));renderGoals();});renderGoals();});
 
-  // Eng + career logs
-  renderLogInCard('eng-log-list',engLogs.slice(0,5),l=>`${l.type}${l.note?' — '+l.note:''}`,null,'var(--gr)');
-  renderLogInCard('career-log-list',careers.slice(0,5),l=>`${l.type} — ${l.note}`,null,'var(--am)');
+  await renderChessStats();
 }
 
-async function saveGermanLevel(){
-  const v=document.getElementById('german-level').value;
-  await dbSet('german-level',v);
-  const lvls=['A0','A1','A2','B1','B2'];
-  const pct=Math.round((Math.max(0,lvls.indexOf(v))/3)*100);
-  document.getElementById('german-bar').style.width=pct+'%';
-  document.getElementById('g-german-pct').textContent=pct+'%';
-  toast('Level set to '+v+' ✓');
-}
-
-async function saveIeltsDate(){const v=document.getElementById('ielts-date').value;await dbSet('ielts-date',v);if(v){document.getElementById('ielts-date-show').textContent=fmt(v);toast('IELTS exam date saved ✓');}}
-async function saveAwsDate(){
-  const v=document.getElementById('aws-date').value;
-  await dbSet('aws-date',v);
-  if(v){document.getElementById('aws-status').textContent='Booked: '+fmt(v);document.getElementById('aws-status').style.color='var(--gr)';document.getElementById('aws-urgency').style.display='none';toast('AWS exam booked ✓ 🎉');}
-}
-
-async function logGerman(){
-  const mins=parseInt(document.getElementById('g-mins').value)||0;
-  const act=document.getElementById('g-act').value;
-  if(!mins){toast('Enter minutes');return;}
-  const logs=await dbGet('german-log',[]); logs.unshift({date:today(),mins,act});
-  await dbSet('german-log',logs.slice(0,500));
-  document.getElementById('g-mins').value='';
-  renderLogInCard('german-log-list',logs.slice(0,5),l=>`${l.act} — ${l.mins} min`,null,'var(--pu)');
-  toast('German logged — '+mins+' min ✓');
-}
-
-async function logIelts(){
-  const skill=document.getElementById('ielts-skill').value;
-  const score=document.getElementById('ielts-score').value;
-  const logs=await dbGet('ielts-log',[]); logs.unshift({date:today(),skill,score:score||null});
-  await dbSet('ielts-log',logs.slice(0,300));
-  document.getElementById('ielts-score').value='';
-  document.getElementById('ielts-cnt').textContent=logs.length;
-  renderLogInCard('ielts-log-list',logs.slice(0,5),l=>`${l.skill}${l.score?' — score: '+l.score:''}`,null,'var(--ac)');
-  toast('IELTS session logged ✓');
-}
-
-async function logAws(){
-  const type=document.getElementById('aws-type').value;
-  const mins=parseInt(document.getElementById('aws-mins').value)||0;
-  if(!mins){toast('Enter minutes');return;}
-  const logs=await dbGet('aws-log',[]); logs.unshift({date:today(),type,mins});
-  await dbSet('aws-log',logs.slice(0,300));
-  document.getElementById('aws-mins').value='';
-  renderLogInCard('aws-log-list',logs.slice(0,5),l=>`${l.type} — ${l.mins} min`,null,'var(--te)');
-  toast('AWS study logged ✓');
-}
-
-function selRes(r){
-  selChessResult=r;
-  document.getElementById('rb-win').className='rb'+(r==='win'?' rw':'');
-  document.getElementById('rb-draw').className='rb'+(r==='draw'?' rd':'');
-  document.getElementById('rb-loss').className='rb'+(r==='loss'?' rl':'');
-}
-
-async function updateRating(){
-  const rating=parseInt(document.getElementById('c-rating').value)||0;
-  if(!rating){toast('Enter a rating');return;}
-  const platform=document.getElementById('c-plat').value;
-  const tc=document.getElementById('c-tc').value;
-  const hist=await dbGet('chess-ratings',[]);
-  if(!hist.length) await dbSet('chess-start',rating);
-  hist.push({date:today(),rating,platform,tc});
-  await dbSet('chess-ratings',hist.slice(0,500));
-  document.getElementById('c-rating').value='';
-  document.getElementById('chess-r').textContent=rating;
-  const start=await dbGet('chess-start',rating);
-  const d=rating-start;
-  document.getElementById('chess-delta').textContent=(d>=0?'+':'')+d+' pts';
-  document.getElementById('chess-delta').style.color=d>=0?'var(--gr)':'var(--re)';
-  toast('Rating updated to '+rating+' ✓');
-}
-
-async function logGame(){
-  if(!selChessResult){toast('Select Win / Draw / Loss first');return;}
-  const opening=document.getElementById('c-opening').value.trim();
-  const mistake=document.getElementById('c-lesson').value.trim();
-  const games=await dbGet('chess-games',[]); games.unshift({date:today(),result:selChessResult,opening,mistake});
-  await dbSet('chess-games',games.slice(0,500));
-  document.getElementById('c-opening').value='';document.getElementById('c-lesson').value='';
-  selRes(null); selChessResult=null;
-  renderLogInCard('chess-game-log',games.slice(0,6),g=>`${g.result.toUpperCase()}${g.opening?' — '+g.opening:''}`,g=>g.mistake,g=>g.result==='win'?'var(--gr)':g.result==='loss'?'var(--re)':'var(--am)');
-  const wins=games.filter(g=>g.result==='win').length;
-  document.getElementById('chess-wr').textContent=Math.round(wins/games.length*100)+'%';
-  document.getElementById('chess-gsub').textContent=games.length+' games';
-  toast('Game saved ✓');
-}
-
-async function logChessStudy(){
-  const type=document.getElementById('c-study').value;
-  const mins=parseInt(document.getElementById('c-smins').value)||0;
-  if(!mins){toast('Enter minutes');return;}
-  const s=await dbGet('chess-study',[]); s.unshift({date:today(),type,mins});
-  await dbSet('chess-study',s.slice(0,300));
-  document.getElementById('c-smins').value='';
-  document.getElementById('chess-ssub').textContent=s.length;
-  toast('Study session logged ✓');
+function renderMsList(ms){
+  document.getElementById('ms-list').innerHTML=ms.length?ms.map((m,i)=>`
+    <div class="msrow ${m.done?'crossed':''}" onclick="toggleMs(${i})">
+      <div class="mscheck ${m.done?'done':''}" id="msc-${i}">${m.done?'✓':''}</div>
+      <div class="ms-body"><div class="ms-title">${m.text}</div><div class="ms-note">${m.note}</div></div>
+      <span class="ms-del" onclick="event.stopPropagation();removeMs(${i})">×</span>
+    </div>`).join(''):`<div class="empty"><div class="empty-ico">🎯</div>No milestones yet. Tap + Add.</div>`;
 }
 
 async function toggleMs(i){
-  const m=await dbGet('milestones',DEF_MS); m[i].done=!m[i].done;
-  await dbSet('milestones',m); await renderGoals();
-  if(m[i].done) toast('Milestone complete! 🎉');
+  const ms=await dbGet('study-ms',DEF_MS);ms[i].done=!ms[i].done;
+  await dbSet('study-ms',ms);
+  if(ms[i].done){
+    const el=document.getElementById('msc-'+i);
+    if(el){el.classList.add('pop');setTimeout(()=>el.classList.remove('pop'),400);}
+    toast('🎉 Milestone complete!');
+  }
+  const done=ms.filter(m=>m.done).length;
+  document.getElementById('at-ms-done').textContent=done;
+  renderMsList(ms);
 }
 async function removeMs(i){
-  if(!confirm('Remove milestone?')) return;
-  const m=await dbGet('milestones',DEF_MS); m.splice(i,1);
-  await dbSet('milestones',m); await renderGoals();
+  const ms=await dbGet('study-ms',DEF_MS);const rm=ms[i];ms.splice(i,1);
+  await dbSet('study-ms',ms);renderMsList(ms);
+  toast('Removed',async()=>{const m=await dbGet('study-ms',DEF_MS);m.splice(i,0,rm);await dbSet('study-ms',m);renderMsList(m);});
+}
+function openAddMs(){
+  document.getElementById('m-head').textContent='Add milestone';
+  document.getElementById('m-body').innerHTML=`
+    <div class="fg"><label class="fl">Milestone</label><input type="text" id="ma-t" placeholder="What do you want to achieve?"></div>
+    <div class="fg"><label class="fl">Note / deadline</label><input type="text" id="ma-n" placeholder="Context or target date..."></div>
+    <button class="btn btn-p btn-block" onclick="addMs()">Add</button>`;
+  openModal();
 }
 async function addMs(){
-  const text=document.getElementById('nm-text').value.trim();
-  const note=document.getElementById('nm-note').value.trim();
-  if(!text) return;
-  const m=await dbGet('milestones',DEF_MS);
-  m.push({id:'ms-'+Date.now(),text,note:note||'Custom milestone',done:false});
-  await dbSet('milestones',m);
-  document.getElementById('nm-text').value='';document.getElementById('nm-note').value='';
-  document.getElementById('ep-ms').style.display='none';
-  await renderGoals(); toast('Milestone added ✓');
+  const text=document.getElementById('ma-t').value.trim();const note=document.getElementById('ma-n').value.trim();
+  if(!text){toast('Enter milestone text');return;}
+  const ms=await dbGet('study-ms',DEF_MS);ms.push({id:'ms'+Date.now(),text,note:note||'Custom milestone',done:false});
+  await dbSet('study-ms',ms);closeModal();renderMsList(ms);toast('Milestone added ✓');
+}
+async function logStudy(){
+  const note=document.getElementById('study-note').value.trim();if(!note){toast('Add a note');return;}
+  const logs=await dbGet('study-log',[]);logs.unshift({date:today(),note});
+  await dbSet('study-log',logs.slice(0,200));document.getElementById('study-note').value='';
+  toast('Research note logged ✓');renderGoals();
+}
+async function saveAwsDate(){
+  const v=document.getElementById('aws-date').value;await dbSet('aws-date',v);
+  if(v){document.getElementById('aws-status').textContent='Booked: '+fmt(v);document.getElementById('aws-status').style.color='var(--green-fg)';document.getElementById('aws-warn').style.display='none';toast('✅ AWS exam booked! 🎉');}
+}
+async function saveIeltsDate(){
+  const v=document.getElementById('ielts-date').value;await dbSet('ielts-date',v);
+  if(v){document.getElementById('ielts-date-show').textContent=fmt(v);toast('IELTS date saved ✓');}
+}
+async function logAws(){
+  const type=document.getElementById('aws-type').value;const mins=parseInt(document.getElementById('aws-mins').value)||0;
+  if(!mins){toast('Enter minutes');return;}
+  const logs=await dbGet('aws-log',[]);logs.unshift({date:today(),type,mins});
+  await dbSet('aws-log',logs.slice(0,300));document.getElementById('aws-mins').value='';
+  renderDeletableList('aws-log',logs.slice(0,8),l=>l.type+' — '+l.mins+' min',l=>'',l=>'var(--teal-fg)',
+    async(ni,rm)=>{const a=await dbGet('aws-log',[]);const ix=a.findIndex(x=>x.date===rm.date&&x.type===rm.type&&x.mins===rm.mins);if(ix>=0){const s=[...a];s.splice(ix,1);await dbSet('aws-log',s.slice(0,300));}toast('Deleted');renderGoals();});
+  toast('☁️ '+mins+' min logged ✓');
+}
+async function logIelts(){
+  const skill=document.getElementById('ielts-skill').value;const score=document.getElementById('ielts-score').value;
+  const logs=await dbGet('ielts-log',[]);logs.unshift({date:today(),skill,score:score||null});
+  await dbSet('ielts-log',logs.slice(0,300));document.getElementById('ielts-score').value='';
+  document.getElementById('ielts-cnt').textContent=logs.length;
+  renderDeletableList('ielts-log',logs.slice(0,8),l=>l.skill+(l.score?' — score: '+l.score:''),l=>'',l=>'var(--blue-fg)',
+    async(ni,rm)=>{const a=await dbGet('ielts-log',[]);const ix=a.findIndex(x=>x.date===rm.date&&x.skill===rm.skill);if(ix>=0){const s=[...a];s.splice(ix,1);await dbSet('ielts-log',s.slice(0,300));}toast('Deleted');renderGoals();});
+  toast('IELTS session logged ✓');
+}
+async function logGerman(){
+  const mins=parseInt(document.getElementById('g-mins').value)||0;const act=document.getElementById('g-act').value;
+  if(!mins){toast('Enter minutes');return;}
+  const logs=await dbGet('german-log',[]);logs.unshift({date:today(),mins,act});
+  await dbSet('german-log',logs.slice(0,500));document.getElementById('g-mins').value='';
+  renderDeletableList('g-log',logs.slice(0,8),l=>l.act+' — '+l.mins+' min',l=>'',l=>'var(--purple-fg)',
+    async(ni,rm)=>{const a=await dbGet('german-log',[]);const ix=a.findIndex(x=>x.date===rm.date&&x.mins===rm.mins&&x.act===rm.act);if(ix>=0){const s=[...a];s.splice(ix,1);await dbSet('german-log',s.slice(0,500));}toast('Deleted');renderGoals();});
+  await renderGermanStats();toast('🇩🇪 '+mins+' min logged ✓');
+}
+function updateGermanBar(gl){
+  const lvls=['A0','A1','A2','B1','B2'];const idx=Math.max(0,lvls.indexOf(gl));
+  const pct=Math.min(Math.round((idx/4)*100),100);
+  document.getElementById('g-bar').style.width=pct+'%';
+  document.getElementById('g-pct-lbl').textContent=idx>=4?'B2 reached! 🎉':idx>=3?'B1 done! Working toward B2':Math.round((idx/3)*100)+'% to B1';
+  document.getElementById('g-pct-sub').textContent=`Level ${idx+1} of 5`;
+}
+async function saveGermanLevel(){
+  const v=document.getElementById('german-level').value;await dbSet('german-level',v);updateGermanBar(v);toast('Level set to '+v+' ✓');
+}
+async function renderGermanStats(){
+  const logs=await dbGet('german-log',[]);
+  const now=new Date();
+  const weekStart=new Date(now);weekStart.setDate(now.getDate()-now.getDay());
+  const monthStart=new Date(now.getFullYear(),now.getMonth(),1);
+  const wkMins=logs.filter(l=>new Date(l.date)>=weekStart).reduce((s,l)=>s+(l.mins||0),0);
+  const moMins=logs.filter(l=>new Date(l.date)>=monthStart).reduce((s,l)=>s+(l.mins||0),0);
+  const totMins=logs.reduce((s,l)=>s+(l.mins||0),0);
+  const fmt2=m=>{const h=Math.floor(m/60);return h>0?h+'h '+(m%60)+'m':(m||0)+'m';};
+  const el1=document.getElementById('g-week-hrs'),el2=document.getElementById('g-month-hrs'),el3=document.getElementById('g-total-hrs');
+  if(el1)el1.textContent=fmt2(wkMins);if(el2)el2.textContent=fmt2(moMins);if(el3)el3.textContent=fmt2(totMins);
 }
 
-async function addProject(){
-  const name=document.getElementById('np-name').value.trim();
-  const status=document.getElementById('np-status').value;
-  if(!name) return;
-  const p=await dbGet('projects',[]); p.push({name,status,date:fmt(today())});
-  await dbSet('projects',p);
-  document.getElementById('np-name').value='';
-  document.getElementById('ep-proj').style.display='none';
-  await renderGoals(); toast('Project added ✓');
+// ══════════════════════ CHESS ══════════════════════
+let selResult=null;
+function selRes(r){
+  selResult=r;
+  ['win','draw','loss'].forEach(x=>document.getElementById('rb-'+x).className='rbt'+(x===r?' '+x:''));
 }
-async function removeProject(i){
-  if(!confirm('Remove project?')) return;
-  const p=await dbGet('projects',[]); p.splice(i,1);
-  await dbSet('projects',p); await renderGoals();
+async function renderChessStats(){
+  const [hist,games]=await Promise.all([dbGet('chess-ratings',{}),dbGet('chess-games',[])]);
+  const cats={Rapid:['c-rapid','c-rapid-d'],Blitz:['c-blitz','c-blitz-d'],'Puzzle rating':['c-puzzle','c-puzzle-d']};
+  Object.entries(cats).forEach(([cat,[vid,did]])=>{
+    const d=hist[cat]||{};
+    const ve=document.getElementById(vid);if(ve)ve.textContent=d.current||'—';
+    const de=document.getElementById(did);if(de&&d.current&&d.start){const df=d.current-d.start;de.textContent=(df>=0?'+':'')+df+' pts';de.style.color=df>=0?'var(--green-fg)':'var(--red-fg)';}
+  });
+  const wins=games.filter(g=>g.result==='win').length,draws=games.filter(g=>g.result==='draw').length,losses=games.filter(g=>g.result==='loss').length;
+  const we=document.getElementById('c-wins'),de=document.getElementById('c-draws'),le=document.getElementById('c-losses');
+  if(we)we.textContent=wins;if(de)de.textContent=draws;if(le)le.textContent=losses;
+  const allR=[];
+  Object.entries(hist).forEach(([cat,d])=>{if(d.history)d.history.forEach(r=>allR.push({...r,cat}));});
+  allR.sort((a,b)=>b.date.localeCompare(a.date));
+  renderDeletableList('chess-hist',allR.slice(0,10),r=>r.rating+' — '+r.cat,r=>r.platform,r=>'var(--blue-fg)',
+    async(ni,rm)=>{const h=await dbGet('chess-ratings',{});if(h[rm.cat]&&h[rm.cat].history){h[rm.cat].history=h[rm.cat].history.filter(x=>!(x.date===rm.date&&x.rating===rm.rating));if(h[rm.cat].history.length>0)h[rm.cat].current=h[rm.cat].history[h[rm.cat].history.length-1].rating;await dbSet('chess-ratings',h);}toast('Rating entry deleted');renderChessStats();});
+  renderDeletableList('chess-games-log',games.slice(0,12),
+    g=>g.result.toUpperCase()+(g.opening?' — '+g.opening:''),g=>g.mistake||'',
+    g=>g.result==='win'?'var(--green-fg)':g.result==='loss'?'var(--red-fg)':'var(--amber-fg)',
+    async(ni,rm)=>{const a=await dbGet('chess-games',[]);const ix=a.findIndex(x=>x.date===rm.date&&x.result===rm.result&&x.opening===rm.opening);
+      if(ix>=0){const s=[...a];s.splice(ix,1);await dbSet('chess-games',s.slice(0,500));}
+      toast('Game deleted',async()=>{const a=await dbGet('chess-games',[]);a.splice(ix,0,rm);await dbSet('chess-games',a.slice(0,500));renderChessStats();});renderChessStats();});
+}
+async function updateRating(){
+  const rating=parseInt(document.getElementById('c-rating-in').value)||0;
+  const plat=document.getElementById('c-plat').value;const cat=document.getElementById('c-cat').value;
+  if(!rating){toast('Enter a rating');return;}
+  const hist=await dbGet('chess-ratings',{});
+  if(!hist[cat])hist[cat]={start:rating,current:rating,history:[]};
+  else{if(!hist[cat].start)hist[cat].start=rating;hist[cat].current=rating;}
+  if(!hist[cat].history)hist[cat].history=[];
+  hist[cat].history.push({date:today(),rating,platform:plat});hist[cat].history=hist[cat].history.slice(-30);
+  await dbSet('chess-ratings',hist);document.getElementById('c-rating-in').value='';
+  await renderChessStats();toast(cat+' → '+rating+' ✓');
+}
+async function logGame(){
+  if(!selResult){toast('Select Win / Draw / Loss first');return;}
+  const op=document.getElementById('c-opening').value.trim();const les=document.getElementById('c-lesson').value.trim();
+  const games=await dbGet('chess-games',[]);games.unshift({date:today(),result:selResult,opening:op,mistake:les});
+  await dbSet('chess-games',games.slice(0,500));
+  document.getElementById('c-opening').value='';document.getElementById('c-lesson').value='';
+  selRes(null);selResult=null;await renderChessStats();toast('♟ Game saved ✓');
+}
+async function logChessStudy(){
+  const type=document.getElementById('c-stype').value;const mins=parseInt(document.getElementById('c-smins').value)||0;
+  if(!mins){toast('Enter minutes');return;}
+  const s=await dbGet('chess-study',[]);s.unshift({date:today(),type,mins});
+  await dbSet('chess-study',s.slice(0,300));document.getElementById('c-smins').value='';toast('Study session logged ✓');
 }
 
-async function logEng(){
-  const type=document.getElementById('eng-type').value;
-  const note=document.getElementById('eng-note').value.trim();
-  if(!note){toast('Add a note');return;}
-  const logs=await dbGet('eng-log',[]); logs.unshift({date:today(),type,note});
-  await dbSet('eng-log',logs.slice(0,300));
-  document.getElementById('eng-note').value='';
-  renderLogInCard('eng-log-list',logs.slice(0,5),l=>`${l.type}${l.note?' — '+l.note:''}`,null,'var(--gr)');
-  toast('Activity logged ✓');
-}
-
-async function logCareer(){
-  const type=document.getElementById('career-type').value;
-  const note=document.getElementById('career-note').value.trim();
-  if(!note){toast('Add a note');return;}
-  const logs=await dbGet('career-log',[]); logs.unshift({date:today(),type,note});
-  await dbSet('career-log',logs.slice(0,300));
-  document.getElementById('career-note').value='';
-  renderLogInCard('career-log-list',logs.slice(0,5),l=>`${l.type} — ${l.note}`,null,'var(--am)');
-  toast('Logged ✓');
-}
-
-// ════════════════════════════════════════════════════════
-// JOURNAL
-// ════════════════════════════════════════════════════════
+// ══════════════════════ JOURNAL ══════════════════════
 async function renderJournal(){
-  const entries=await dbGet('journal',[]);
-  const el=document.getElementById('journal-list');
-  el.innerHTML=entries.length?entries.map(e=>`
-    <div class="li" style="border-left:3px solid var(--am);display:block;padding:12px 14px;">
-      <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
-        <span style="font-size:13px;font-weight:700;">Reflection</span>
-        <span class="li-date">${fmt(e.date)}</span>
-      </div>
-      ${e.j1?`<div style="margin-bottom:6px;"><span style="font-size:9px;font-weight:800;color:var(--t3);text-transform:uppercase;letter-spacing:0.5px;display:block;margin-bottom:2px;">Meaningful</span><span style="font-size:13px;color:var(--t2);">${e.j1}</span></div>`:''}
-      ${e.j2?`<div style="margin-bottom:6px;"><span style="font-size:9px;font-weight:800;color:var(--t3);text-transform:uppercase;letter-spacing:0.5px;display:block;margin-bottom:2px;">Avoiding</span><span style="font-size:13px;color:var(--t2);">${e.j2}</span></div>`:''}
-      ${e.j3?`<div style="margin-bottom:6px;"><span style="font-size:9px;font-weight:800;color:var(--t3);text-transform:uppercase;letter-spacing:0.5px;display:block;margin-bottom:2px;">Next action</span><span style="font-size:13px;color:var(--t2);">${e.j3}</span></div>`:''}
-      ${e.j4?`<div><span style="font-size:9px;font-weight:800;color:var(--t3);text-transform:uppercase;letter-spacing:0.5px;display:block;margin-bottom:2px;">Kaizen</span><span style="font-size:13px;color:var(--t2);">${e.j4}</span></div>`:''}
-    </div>`).join(''):'<div style="padding:14px;color:var(--t3);font-size:13px;">No entries yet. Write your first one above.</div>';
+  const [entries,checkins]=await Promise.all([dbGet('journal',[]),dbGet('checkins',{})]);
+  // Journal entries
+  renderDeletableList('j-list',entries.slice(0,20),
+    e=>`Reflection — ${fmt(e.date)}`,e=>[e.j1,e.j2,e.j3,e.j4].filter(Boolean).join(' · ').slice(0,80)+'...',
+    e=>'var(--amber-fg)',
+    async(ni,rm)=>{const a=await dbGet('journal',[]);const ix=a.findIndex(x=>x.date===rm.date&&x.j1===rm.j1);
+      if(ix>=0){const s=[...a];s.splice(ix,1);await dbSet('journal',s.slice(0,500));}
+      toast('Entry deleted',async()=>{const a=await dbGet('journal',[]);a.splice(ix,0,rm);await dbSet('journal',a.slice(0,500));renderJournal();});renderJournal();});
 
-  // Weekly review
+  // Checkin log (deletable)
+  const ciArr=Object.entries(checkins).sort((a,b)=>b[0].localeCompare(a[0])).slice(0,10).map(([date,c])=>({...c,date}));
+  renderDeletableList('ci-log',ciArr,
+    c=>{const mi=['','😞','😔','😐','🙂','😄'];const ei=['','💤','😴','🔌','🔋','⚡'];return (c.mood?'Mood '+mi[c.mood]+' · ':'')+((c.energy?ei[c.energy]:'')||'Check-in');},
+    c=>c.note||('Wake '+c.wake+' · Sleep '+c.sleep),
+    c=>c.mood>=4?'var(--green-fg)':c.mood>=3?'var(--gold-fg)':'var(--red-fg)',
+    async(ni,rm)=>{const cis=await dbGet('checkins',{});const snap={...cis};delete snap[rm.date];await dbSet('checkins',snap);
+      toast('Check-in deleted',async()=>{const cis=await dbGet('checkins',{});cis[rm.date]=rm;await dbSet('checkins',cis);renderJournal();});renderJournal();});
+
   await renderWeeklyReview();
 }
-
 async function renderWeeklyReview(){
   const [pData,hData,qLogs,gLogs,cGames,checkins]=await Promise.all([
-    dbGet('prayers',{}),dbGet('hdata',{}),dbGet('qlog',[]),
-    dbGet('german-log',[]),dbGet('chess-games',[]),dbGet('checkins',{})
+    dbGet('prayers',{}),dbGet('hdata',{}),dbGet('qlog',[]),dbGet('german-log',[]),dbGet('chess-games',[]),dbGet('checkins',{})
   ]);
   const habits=await dbGet('habits',DEF_HABITS);
-  const days=[];
-  for(let i=6;i>=0;i--){const d=new Date();d.setDate(d.getDate()-i);days.push(d.toISOString().slice(0,10));}
-  const totalPrayers=days.reduce((s,d)=>s+PRAYERS.filter(p=>(pData[d]||{})[p]).length,0);
-  const totalHabitDays=days.filter(d=>habits.every(h=>(hData[d]||{})[h.id])).length;
-  const totalQPages=qLogs.filter(l=>days.includes(l.date)).reduce((s,l)=>s+(l.pages||0),0);
-  const totalGMins=gLogs.filter(l=>days.includes(l.date)).reduce((s,l)=>s+(l.mins||0),0);
-  const weekGames=cGames.filter(g=>days.includes(g.date));
-  const weekWins=weekGames.filter(g=>g.result==='win').length;
-  const avgMood=()=>{const ms=days.map(d=>(checkins[d]||{}).mood).filter(Boolean).map(Number);return ms.length?(ms.reduce((a,b)=>a+b,0)/ms.length).toFixed(1):'—';};
-  const el=document.getElementById('weekly-review');
-  el.innerHTML=`
-    <div style="font-size:13px;font-weight:800;color:var(--t2);margin-bottom:12px;">This week at a glance</div>
-    <div style="display:grid;gap:0;">
-      ${[
-        ['🕌 Prayers completed',totalPrayers+' / 35','var(--gob2)'],
-        ['📖 Quran pages read',totalQPages+' pages','var(--gob2)'],
-        ['✅ Perfect habit days',totalHabitDays+' / 7 days','var(--gr)'],
-        ['🇩🇪 German studied',Math.round(totalGMins/60*10)/10+' hrs','var(--pu)'],
-        ['♟ Chess games',weekGames.length+' played, '+weekWins+' wins','var(--ac)'],
-        ['😊 Avg mood',avgMood()+' / 5','var(--am)'],
-      ].map(([label,val,color])=>`
-        <div style="display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:0.5px solid var(--b);">
-          <span style="font-size:13px;color:var(--t2);">${label}</span>
-          <span style="font-size:13px;font-weight:800;color:${color};">${val}</span>
-        </div>`).join('')}
-    </div>`;
+  const days7=[];for(let i=6;i>=0;i--){const d=new Date();d.setDate(d.getDate()-i);days7.push(d.toISOString().slice(0,10));}
+  const tP=days7.reduce((s,d)=>s+PRAYERS.filter(p=>(pData[d]||{})[p]).length,0);
+  const phD=days7.filter(d=>habits.length>0&&habits.every(h=>(hData[d]||{})[h.id])).length;
+  const qPg=qLogs.filter(l=>days7.includes(l.date)).reduce((s,l)=>s+(l.pages||0),0);
+  const gMin=gLogs.filter(l=>days7.includes(l.date)).reduce((s,l)=>s+(l.mins||0),0);
+  const wG=cGames.filter(g=>days7.includes(g.date));const wW=wG.filter(g=>g.result==='win').length;
+  const mv=days7.map(d=>(checkins[d]||{}).mood).filter(Boolean).map(Number);
+  const am=mv.length?(mv.reduce((a,b)=>a+b,0)/mv.length).toFixed(1):null;
+  const rows=[
+    ['🕌 Prayers',`${tP}/35`,tP>=30?'b-go':tP>=20?'b-am':'b-re'],
+    ['📖 Quran pages',qPg+'',qPg>=35?'b-go':qPg>=14?'b-am':'b-re'],
+    ['✅ Perfect habit days',`${phD}/7`,phD>=5?'b-gr':phD>=3?'b-am':'b-re'],
+    ['🇩🇪 German',(Math.round(gMin/60*10)/10)+'h',gMin>=180?'b-gr':gMin>=60?'b-am':'b-re'],
+    ['♟ Chess',wG.length+' games · '+wW+' wins','b-bl'],
+    ['😊 Avg mood',am?am+'/5':'No data',am>=4?'b-gr':am>=3?'b-am':am?'b-re':'b-bl'],
+  ];
+  document.getElementById('weekly-review').innerHTML=`<div style="font-size:13px;font-weight:800;color:var(--t0);margin-bottom:12px;">This week at a glance</div>${rows.map(([l,v,b])=>`<div style="display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:0.5px solid var(--b0);"><span style="font-size:13px;color:var(--t1);">${l}</span><span class="badge ${b}">${v}</span></div>`).join('')}<div style="height:4px;"></div>`;
 }
-
 async function saveJournal(){
-  const j1=document.getElementById('j1').value.trim();
-  const j2=document.getElementById('j2').value.trim();
-  const j3=document.getElementById('j3').value.trim();
-  const j4=document.getElementById('j4').value.trim();
+  const j1=document.getElementById('j1').value.trim();const j2=document.getElementById('j2').value.trim();const j3=document.getElementById('j3').value.trim();const j4=document.getElementById('j4').value.trim();
   if(!j1&&!j2&&!j3){toast('Write at least one field');return;}
-  const entries=await dbGet('journal',[]); entries.unshift({date:today(),j1,j2,j3,j4});
+  const entries=await dbGet('journal',[]);entries.unshift({date:today(),j1,j2,j3,j4});
   await dbSet('journal',entries.slice(0,500));
   ['j1','j2','j3','j4'].forEach(id=>document.getElementById(id).value='');
-  toast('Journal saved ✓');
+  const btn=document.getElementById('j-btn');btn.textContent='Saved ✓';setTimeout(()=>btn.textContent='Save entry',1800);
   await renderJournal();
 }
 
-// ════════════════════════════════════════════════════════
-// SHARED HELPERS
-// ════════════════════════════════════════════════════════
-function renderLogInCard(elId,items,titleFn,subFn,colorFn){
-  const el=document.getElementById(elId);
-  if(!el) return;
-  if(!items||!items.length){el.innerHTML='<div style="padding:12px 14px;color:var(--t3);font-size:13px;">No entries yet.</div>';return;}
-  const color=typeof colorFn==='function'?null:colorFn;
-  el.innerHTML=items.map(item=>{
-    const c=typeof colorFn==='function'?colorFn(item):colorFn;
-    const sub=subFn?subFn(item):null;
-    return `<div class="li" style="border-left:3px solid ${c};">
-      <div class="li-main">
-        <div class="li-title">${titleFn(item)}</div>
-        ${sub?`<div class="li-sub">${sub}</div>`:''}
-      </div>
-      <div class="li-date">${fmt(item.date)}</div>
-    </div>`;
-  }).join('');
-}
+// ══════════════════════ RENDER MAP ══════════════════════
+const renders={today:renderToday,deen:renderDeen,goals:renderGoals,journal:renderJournal};
 
-const renders={
-  home:renderHome,
-  deen:renderDeen,
-  today:renderTodayPage,
-  goals:renderGoals,
-  journal:renderJournal
-};
-
-// ════════════════════════════════════════════════════════
-// INIT
-// ════════════════════════════════════════════════════════
-(async()=>{
-  await syncFromCloud(); // pull latest from Supabase in background
-  renderHome();
-})();
+// ══════════════════════ INIT ══════════════════════
+(async()=>{pq=LC.g('__pq',{});renderToday();pullCloud().then(()=>renders[curPage]());})();
 </script>
 </body>
 </html>
