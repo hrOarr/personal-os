@@ -691,7 +691,9 @@ async function dbSet(k,v){
 
 async function sbWrite(k,v){
   SL.className='go';
-  var r=await fetch(SB+'/rest/v1/personal_os',{
+  // Use ?on_conflict=user_id,key so PostgREST knows exactly which
+  // unique constraint to use for the upsert. This fixes the 409 error.
+  var r=await fetch(SB+'/rest/v1/personal_os?on_conflict=user_id,key',{
     method:'POST',
     headers:SBH,
     body:JSON.stringify({user_id:UID,key:k,value:v,updated_at:new Date().toISOString()})
@@ -703,9 +705,42 @@ async function sbWrite(k,v){
     setDbBar(true);
     return true;
   }
+  // If still failing, try DELETE then INSERT as fallback
+  if(r.status===409||r.status===400){
+    return await sbWriteFallback(k,v);
+  }
   _dbOk=false;
   setDbBar(false,r.status);
   throw new Error('SB '+r.status);
+}
+
+// Fallback: DELETE existing row then INSERT fresh
+async function sbWriteFallback(k,v){
+  try{
+    // Delete the existing row for this key
+    await fetch(SB+'/rest/v1/personal_os?user_id=eq.'+UID+'&key=eq.'+encodeURIComponent(k),{
+      method:'DELETE',
+      headers:SBH
+    });
+    // Insert fresh
+    var r2=await fetch(SB+'/rest/v1/personal_os',{
+      method:'POST',
+      headers:{'apikey':SBKEY,'Authorization':'Bearer '+SBKEY,'Content-Type':'application/json'},
+      body:JSON.stringify({user_id:UID,key:k,value:v,updated_at:new Date().toISOString()})
+    });
+    if(r2.ok||r2.status===201){
+      SL.className='ok';
+      setTimeout(function(){SL.className='';},600);
+      _dbOk=true;
+      setDbBar(true);
+      return true;
+    }
+    throw new Error('fallback failed '+r2.status);
+  }catch(e){
+    _dbOk=false;
+    setDbBar(false,'err');
+    throw e;
+  }
 }
 
 function setDbBar(ok,status){
