@@ -304,7 +304,8 @@ textarea{resize:none;min-height:64px;line-height:1.5;}
 
 <!-- ═══ TODAY ═══ -->
 <div id="pg-today" class="pg on">
-  <div id="offbar">⚡ Offline — data saved locally, will sync when reconnected</div>
+  <div id="offbar">⚡ Offline — data saved locally, syncing when reconnected</div>
+  <div id="dbbar" style="display:none;font-size:12px;font-weight:700;text-align:center;padding:5px 14px;position:sticky;top:0;z-index:89;background:var(--re-bg);color:var(--re-t);"></div>
   <!-- Hero -->
   <div class="hero">
     <div class="hero-date" id="h-date"></div>
@@ -629,106 +630,182 @@ const UID='main';
 const SBH={'apikey':SBKEY,'Authorization':'Bearer '+SBKEY,'Content-Type':'application/json','Prefer':'resolution=merge-duplicates'};
 
 // ════════════════════════════════════════════════════════
-// CACHE — localStorage as write-through cache only
-// Key 'personalos_X' mirrors Supabase row key X for user 'main'
+// STORAGE — localStorage is PRIMARY, Supabase is BACKUP SYNC
+// Rule: localStorage ALWAYS wins on conflict unless Supabase
+// has a newer timestamp. Data is NEVER deleted from localStorage
+// just because Supabase has fewer rows.
 // ════════════════════════════════════════════════════════
 const PREF='personalos_';
 const LC={
-  get:(k)=>{try{const v=localStorage.getItem(PREF+k);return v!=null?JSON.parse(v):null;}catch{return null;}},
-  set:(k,v)=>{try{localStorage.setItem(PREF+k,JSON.stringify(v));}catch{}},
-  del:(k)=>{try{localStorage.removeItem(PREF+k);}catch{}}
+  get:(k)=>{
+    try{const v=localStorage.getItem(PREF+k);return v!=null?JSON.parse(v):null;}
+    catch{return null;}
+  },
+  set:(k,v)=>{
+    try{localStorage.setItem(PREF+k,JSON.stringify(v));}catch{}
+  }
 };
 
-// Offline write queue
+// Write queue — everything that failed to reach Supabase
 let OQ={};
 try{OQ=JSON.parse(localStorage.getItem(PREF+'__oq')||'{}');}catch{}
 function saveOQ(){try{localStorage.setItem(PREF+'__oq',JSON.stringify(OQ));}catch{}}
 
+// Timestamp store — track when we last wrote each key locally
+// so we can compare with Supabase on pull
+const TS={
+  get:(k)=>{try{return parseInt(localStorage.getItem(PREF+'__ts_'+k)||'0');}catch{return 0;}},
+  set:(k)=>{try{localStorage.setItem(PREF+'__ts_'+k,Date.now().toString());}catch{}}
+};
+
 const SL=document.getElementById('sline');
+let _dbOk=null; // null=unknown, true=working, false=failing
 
-// ═══ CORE DB FUNCTIONS ═══
-
-// get: returns cached value instantly, then silently refreshes from Supabase in background
+// ══ READ — always synchronous from localStorage ══
 function dbGet(k,fb){
-  // Always return cached first (instant, no await needed)
   const cached=LC.get(k);
-  if(cached!==null)return cached;
-  return fb;
+  return cached!==null?cached:fb;
 }
 
-// getAsync: fetch from Supabase, update cache, return value
-async function dbGetAsync(k,fb){
-  const cached=LC.get(k);
-  if(cached!==null)return cached;
-  if(!navigator.onLine)return fb;
-  try{
-    const r=await fetch(`${SB}/rest/v1/personal_os?user_id=eq.${UID}&key=eq.${encodeURIComponent(k)}&select=value`,{headers:SBH});
-    if(r.ok){
-      const d=await r.json();
-      if(d&&d.length){LC.set(k,d[0].value);return d[0].value;}
-    }
-  }catch{}
-  return fb;
-}
-
-// set: write to cache immediately + queue Supabase write
+// ══ WRITE — localStorage first (synchronous), then Supabase async ══
 async function dbSet(k,v){
-  LC.set(k,v);  // SYNCHRONOUS — survives reload immediately
-  delete OQ[k]; saveOQ(); // Remove from offline queue if present
-  if(!navigator.onLine){OQ[k]=v;saveOQ();return;}
-  // Fire-and-forget to Supabase — don't block UI
-  sbWrite(k,v).catch(()=>{OQ[k]=v;saveOQ();});
+  // 1. Write to localStorage immediately — this is what survives reload
+  LC.set(k,v);
+  TS.set(k);
+  // 2. Remove from offline queue if it was queued
+  if(OQ[k]!==undefined){delete OQ[k];saveOQ();}
+  // 3. Try Supabase in background — never block the UI
+  if(!navigator.onLine){
+    OQ[k]=v;saveOQ();
+    return;
+  }
+  try{
+    await sbWrite(k,v);
+  }catch(e){
+    // Supabase failed — queue for retry
+    OQ[k]=v;saveOQ();
+    // Show subtle indicator
+    SL.className='';
+  }
 }
 
 async function sbWrite(k,v){
   SL.className='go';
-  const r=await fetch(`${SB}/rest/v1/personal_os`,{
-    method:'POST',headers:SBH,
+  var r=await fetch(SB+'/rest/v1/personal_os',{
+    method:'POST',
+    headers:SBH,
     body:JSON.stringify({user_id:UID,key:k,value:v,updated_at:new Date().toISOString()})
   });
-  if(r.ok){SL.className='ok';setTimeout(()=>SL.className='',500);}
-  else throw new Error('SB write '+r.status);
+  if(r.ok||r.status===201){
+    SL.className='ok';
+    setTimeout(function(){SL.className='';},600);
+    _dbOk=true;
+    setDbBar(true);
+    return true;
+  }
+  _dbOk=false;
+  setDbBar(false,r.status);
+  throw new Error('SB '+r.status);
 }
 
-// pullAll: on app open, pull all keys from Supabase and update cache
+function setDbBar(ok,status){
+  var el=document.getElementById('dbbar');if(!el)return;
+  if(ok){
+    // Show brief green confirmation then hide
+    el.style.display='block';
+    el.style.background='var(--gr-bg)';
+    el.style.color='var(--gr-t)';
+    el.textContent='✓ Saved to cloud';
+    clearTimeout(el._t);
+    el._t=setTimeout(function(){el.style.display='none';},2000);
+  } else {
+    el.style.display='block';
+    el.style.background='var(--re-bg)';
+    el.style.color='var(--re-t)';
+    el.textContent='⚠ Cloud sync failed ('+status+') — data saved locally';
+  }
+}
+
+// ══ PULL — merge Supabase into localStorage, localStorage wins on conflict ══
 async function pullAll(){
   if(!navigator.onLine)return;
   try{
-    const r=await fetch(`${SB}/rest/v1/personal_os?user_id=eq.${UID}&select=key,value`,{headers:SBH});
-    if(r.ok){
-      const rows=await r.json();
-      rows.forEach(row=>{
-        // Only update cache if Supabase value is different (or missing locally)
-        const local=LC.get(row.key);
-        if(local===null){LC.set(row.key,row.value);}
-        else{
-          // Supabase wins for conflict resolution (last-write-wins via updated_at)
-          // But we just pulled — it's the latest
+    const r=await fetch(SB+'/rest/v1/personal_os?user_id=eq.'+UID+'&select=key,value,updated_at',{headers:SBH});
+    if(!r.ok){
+      _dbOk=false;
+      // Do NOT touch localStorage — just leave it as-is
+      return;
+    }
+    const rows=await r.json();
+    if(!rows||!rows.length){
+      // Supabase is empty — this happens on first use or after RLS issues
+      // Push all our local data UP to Supabase instead of wiping local
+      pushLocalToSB();
+      return;
+    }
+    _dbOk=true;
+    rows.forEach(function(row){
+      var local=LC.get(row.key);
+      if(local===null){
+        // Key doesn't exist locally — safe to import from Supabase
+        LC.set(row.key,row.value);
+      } else {
+        // Both exist — compare timestamps
+        var localTs=TS.get(row.key);
+        var sbTs=row.updated_at?new Date(row.updated_at).getTime():0;
+        if(sbTs>localTs){
+          // Supabase is newer — use it
           LC.set(row.key,row.value);
         }
-      });
-    }
-  }catch{}
+        // else: local is newer or same — keep local (do nothing)
+      }
+    });
+  }catch(e){
+    // Network error — do nothing, keep localStorage intact
+  }
 }
 
-// Flush offline queue on reconnect
+// Push all local data up to Supabase (used when SB is empty)
+async function pushLocalToSB(){
+  const keys=[];
+  for(var i=0;i<localStorage.length;i++){
+    var k=localStorage.key(i);
+    if(k&&k.startsWith(PREF)&&!k.includes('__')){
+      keys.push(k.slice(PREF.length));
+    }
+  }
+  for(var i=0;i<keys.length;i++){
+    var k=keys[i];
+    var v=LC.get(k);
+    if(v!==null){
+      try{await sbWrite(k,v);}catch{}
+    }
+  }
+}
+
+// Flush write queue — called on reconnect
 async function flushQueue(){
-  const keys=Object.keys(OQ);
-  if(!keys.length)return;
-  for(const k of keys){
-    try{await sbWrite(k,OQ[k]);delete OQ[k];}catch{}
+  var ks=Object.keys(OQ);
+  if(!ks.length)return;
+  var ok=0;
+  for(var i=0;i<ks.length;i++){
+    try{
+      await sbWrite(ks[i],OQ[ks[i]]);
+      delete OQ[ks[i]];
+      ok++;
+    }catch{}
   }
   saveOQ();
-  if(!Object.keys(OQ).length)toast('✓ Synced to cloud');
+  if(ok>0)toast('Synced '+ok+' update'+(ok>1?'s':'')+' to cloud ✓');
 }
 
-window.addEventListener('online',async()=>{
+window.addEventListener('online',async function(){
   document.body.classList.remove('offline');
   await flushQueue();
   await pullAll();
   renders[curPage]();
 });
-window.addEventListener('offline',()=>document.body.classList.add('offline'));
+window.addEventListener('offline',function(){document.body.classList.add('offline');});
 if(!navigator.onLine)document.body.classList.add('offline');
 
 // ════════════════════════════════════════════════════════
@@ -1724,25 +1801,33 @@ function launchConfetti(){
 // ════════════════════════════════════════════════════════
 const renders={today:renderToday,routine:renderRoutine,deen:renderDeen,goals:renderGoals,journal:renderJournal};
 
-(async()=>{
+(async function(){
   // Migrate old prefix data (one-time)
-  ['pos3_','pos4_','pos5_','pos6_','pos7_'].forEach(op=>{
-    for(let i=localStorage.length-1;i>=0;i--){
-      const k=localStorage.key(i);
-      if(k&&k.startsWith(op)){
-        const nk=PREF+k.slice(op.length);
-        if(!localStorage.getItem(nk))localStorage.setItem(nk,localStorage.getItem(k));
+  var oldPrefixes=['pos3_','pos4_','pos5_','pos6_','pos7_'];
+  for(var pi=0;pi<oldPrefixes.length;pi++){
+    var op=oldPrefixes[pi];
+    for(var li=localStorage.length-1;li>=0;li--){
+      var lk=localStorage.key(li);
+      if(lk&&lk.startsWith(op)){
+        var nk=PREF+lk.slice(op.length);
+        if(!localStorage.getItem(nk))localStorage.setItem(nk,localStorage.getItem(lk));
       }
     }
-  });
+  }
 
-  // Render immediately from localStorage cache
+  // 1. Render IMMEDIATELY from localStorage — instant, no network wait
   renderToday();
 
-  // Pull latest from Supabase in background — update cache then re-render
+  // 2. Flush any pending offline queue first
   if(navigator.onLine){
-    pullAll().then(()=>{renders[curPage]();});
-    flushQueue();
+    await flushQueue();
+  }
+
+  // 3. Then sync with Supabase — but our new pullAll never deletes local data
+  if(navigator.onLine){
+    await pullAll();
+    // Re-render with any updates from Supabase
+    renders[curPage]();
   }
 })();
 </script>
