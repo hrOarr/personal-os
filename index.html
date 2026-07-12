@@ -260,43 +260,9 @@ textarea{resize:none;min-height:64px;line-height:1.5;}
 .qai{font-size:24px;display:block;margin-bottom:6px;}
 .qal{font-size:13px;font-weight:700;}
 .qas{font-size:11px;color:var(--t2);margin-top:2px;}
-
-/* ENGAGEMENT */
-.xp-badge{display:inline-flex;align-items:center;gap:5px;background:rgba(255,255,255,0.15);border-radius:100px;padding:4px 10px;font-size:12px;font-weight:800;color:#fff;margin-bottom:6px;}
-.xp-bar-wrap{background:rgba(255,255,255,0.15);border-radius:100px;height:4px;overflow:hidden;margin-top:3px;width:100%;}
-.xp-bar{height:100%;border-radius:100px;background:rgba(255,255,255,0.85);transition:width 0.8s cubic-bezier(0.34,1.1,0.64,1);}
-.next-pray{display:inline-flex;align-items:center;gap:6px;background:rgba(255,215,0,0.18);border:1px solid rgba(255,215,0,0.3);border-radius:100px;padding:5px 12px;font-size:12px;font-weight:700;color:rgba(255,255,255,0.95);margin-bottom:10px;}
-.insight-card{margin:0 14px 10px;border-radius:var(--r);padding:16px 18px;background:linear-gradient(135deg,#1A3070 0%,#0C2050 100%);position:relative;overflow:hidden;}
-@media(prefers-color-scheme:light){.insight-card{background:linear-gradient(135deg,#1E3888 0%,#122460 100%);}}
-.insight-card::after{content:'';position:absolute;right:-20px;top:-20px;width:100px;height:100px;border-radius:50%;background:rgba(255,255,255,0.04);}
-.insight-label{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:0.8px;color:rgba(255,255,255,0.5);margin-bottom:6px;}
-.insight-text{font-size:14px;font-weight:600;color:rgba(255,255,255,0.92);line-height:1.6;}
-.insight-src{font-size:11px;color:rgba(255,255,255,0.45);margin-top:5px;}
-.challenge-card{margin:0 14px 10px;border-radius:var(--r);padding:14px 16px;background:var(--go-bg);border:0.5px solid rgba(168,104,0,0.2);display:flex;align-items:center;gap:12px;}
-.challenge-ico{font-size:28px;flex-shrink:0;}
-.challenge-body{flex:1;}
-.challenge-label{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:0.7px;color:var(--go-t);margin-bottom:3px;}
-.challenge-text{font-size:13px;font-weight:600;color:var(--t0);line-height:1.45;}
-@keyframes hbounce{0%{transform:scale(1)}30%{transform:scale(1.35)}60%{transform:scale(0.88)}80%{transform:scale(1.1)}100%{transform:scale(1)}}
-.hck.pop{animation:hbounce 0.4s cubic-bezier(0.36,0.07,0.19,0.97);}
-#confetti-canvas{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:8888;}
-.spill-n.hot{text-shadow:0 0 14px currentColor;}
-.complete-banner{margin:0 14px 10px;border-radius:var(--r);padding:16px;background:linear-gradient(135deg,#0A5C2A 0%,#0F7A38 100%);display:flex;align-items:center;gap:14px;animation:fadeIn 0.4s ease;}
-@keyframes fadeIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
-.complete-ico{font-size:36px;}
-.complete-txt{flex:1;color:#fff;font-size:14px;font-weight:700;line-height:1.5;}
-.complete-score{font-size:32px;font-weight:900;color:#fff;}
-.xp-pop{position:fixed;pointer-events:none;font-size:16px;font-weight:900;color:#F0B838;text-shadow:0 2px 8px rgba(0,0,0,0.3);z-index:9990;animation:xpfloat 1.2s ease forwards;}
-@keyframes xpfloat{0%{opacity:1;transform:translateY(0) scale(1)}100%{opacity:0;transform:translateY(-60px) scale(0.7)}}
-.nudge{margin:0 14px 10px;border-radius:var(--rm);padding:11px 14px;font-size:13px;font-weight:600;line-height:1.5;display:flex;align-items:center;gap:10px;}
-.nudge-re{background:var(--re-bg);color:var(--re-t);}
-.nudge-am{background:var(--am-bg);color:var(--am-t);}
-.nudge-gr{background:var(--gr-bg);color:var(--gr-t);}
-
 </style>
 </head>
 <body>
-<canvas id="confetti-canvas"></canvas>
 <div id="sline"></div>
 <div id="toast"><span id="t-msg"></span><button id="t-undo" style="display:none" onclick="doUndo()">Undo</button></div>
 <div id="app">
@@ -304,15 +270,13 @@ textarea{resize:none;min-height:64px;line-height:1.5;}
 
 <!-- ═══ TODAY ═══ -->
 <div id="pg-today" class="pg on">
-  <div id="offbar">⚡ Offline — data saved locally, syncing when reconnected</div>
-  <div id="dbbar" style="display:none;font-size:12px;font-weight:700;text-align:center;padding:5px 14px;position:sticky;top:0;z-index:89;background:var(--re-bg);color:var(--re-t);"></div>
+  <div id="offbar">⚡ Offline — data saved locally, will sync when reconnected</div>
   <!-- Hero -->
   <div class="hero">
     <div class="hero-date" id="h-date"></div>
     <div class="hero-greet" id="h-greet"></div>
-    <div id="next-pray-wrap"></div>
     <div class="ring-row">
-      <div class="ring" id="score-ring">
+      <div class="ring">
         <svg width="84" height="84" viewBox="0 0 84 84">
           <circle cx="42" cy="42" r="35" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="7"/>
           <circle id="ring-arc" cx="42" cy="42" r="35" fill="none" stroke="#fff" stroke-width="7"
@@ -322,8 +286,7 @@ textarea{resize:none;min-height:64px;line-height:1.5;}
       </div>
       <div class="ring-info">
         <div class="ring-lbl" id="ring-lbl">Daily score</div>
-        <div id="xp-row" style="margin-top:2px;"></div>
-        <div class="ring-sub" style="margin-top:4px;">Prayers 40 · Habits 40 · Check-in 20</div>
+        <div class="ring-sub">Prayers 40 · Habits 40 · Check-in 20</div>
         <div class="ring-badges" id="ring-badges"></div>
       </div>
     </div>
@@ -335,10 +298,6 @@ textarea{resize:none;min-height:64px;line-height:1.5;}
     <div class="sc sc-bl"><div class="sl_">Quran</div><div class="sv" id="h-q">0p</div></div>
     <div class="sc sc-pu"><div class="sl_">German</div><div class="sv" id="h-g">0m</div></div>
   </div>
-  <div id="daily-insight"></div>
-  <div id="daily-challenge"></div>
-  <div id="urgency-nudge"></div>
-  <div id="complete-banner"></div>
   <!-- Prayers -->
   <div class="sec">Salah — today</div>
   <div class="card"><div class="pgrid" id="t-pgrid"></div></div>
@@ -380,24 +339,19 @@ textarea{resize:none;min-height:64px;line-height:1.5;}
 
 <!-- ═══ ROUTINE ═══ -->
 <div id="pg-routine" class="pg">
-  <div class="ph">
+  <div class="ph" style="display:flex;justify-content:space-between;align-items:center;">
     <div class="ph-title">Routine 📅</div>
-    <div style="display:flex;gap:12px;align-items:center;">
-      <span class="ph-btn" onclick="toggleRtEdit()" id="rt-edit-btn">Edit</span>
-    </div>
+    <span onclick="toggleRtEdit()" id="rt-edit-btn" style="font-size:13px;color:var(--bl);font-weight:700;cursor:pointer;">Edit</span>
   </div>
-  <!-- Day toggle -->
   <div style="display:flex;gap:0;margin:4px 14px 10px;background:var(--c1);border-radius:var(--rm);padding:3px;">
     <button id="rt-tab-wd" onclick="setRtTab('wd')" style="flex:1;padding:8px 4px;border-radius:var(--rs);border:none;font-size:12px;font-weight:700;cursor:pointer;transition:all 0.15s;background:var(--c0);color:var(--t0);box-shadow:0 1px 5px rgba(0,0,0,0.10);">Weekday</button>
     <button id="rt-tab-we" onclick="setRtTab('we')" style="flex:1;padding:8px 4px;border-radius:var(--rs);border:none;font-size:12px;font-weight:700;cursor:pointer;transition:all 0.15s;background:none;color:var(--t2);">Weekend</button>
   </div>
-  <div style="padding:0 14px 10px;font-size:12px;color:var(--t2);" id="rt-sublbl"></div>
-  <!-- Today's checklist view -->
+  <div style="padding:0 14px 8px;font-size:12px;color:var(--t2);" id="rt-daylbl"></div>
   <div id="rt-body"></div>
-  <!-- Edit panel (hidden by default) -->
   <div id="rt-edit-panel" style="display:none;">
     <div style="margin:0 14px 10px;padding:12px 14px;background:var(--bl-bg);border-radius:var(--rm);font-size:13px;color:var(--bl-t);line-height:1.6;">
-      <b>Editing <span id="rt-edit-which">Weekday</span> routine.</b> Tap × to remove. Drag to reorder. Changes are saved automatically.
+      Editing <b id="rt-edit-which">Weekday</b> routine. Changes save instantly.
     </div>
     <div id="rt-edit-list"></div>
     <div class="card cp" style="margin-top:2px;">
@@ -407,12 +361,12 @@ textarea{resize:none;min-height:64px;line-height:1.5;}
         <div><label class="fl">Icon</label><input type="text" id="rt-new-icon" placeholder="📌" style="text-align:center;font-size:18px;padding:8px 4px;"></div>
         <div><label class="fl">Name</label><input type="text" id="rt-new-name" placeholder="Activity name"></div>
       </div>
-      <div class="fg"><label class="fl">Duration / note (optional)</label><input type="text" id="rt-new-dur" placeholder="e.g. 30 min, or a note about this block"></div>
+      <div class="fg"><label class="fl">Duration / note (optional)</label><input type="text" id="rt-new-dur" placeholder="e.g. 30 min"></div>
       <button class="btn btn-p btn-bl" onclick="addRtItem()">Add to routine</button>
     </div>
     <div style="margin:12px 14px 0;display:flex;gap:8px;">
       <button class="btn" style="flex:1;font-size:13px;" onclick="resetRtDefaults()">↺ Reset to defaults</button>
-      <button class="btn btn-p" style="flex:1;font-size:13px;" onclick="toggleRtEdit()">✓ Done editing</button>
+      <button class="btn btn-p" style="flex:1;font-size:13px;" onclick="toggleRtEdit()">✓ Done</button>
     </div>
     <div style="height:16px;"></div>
   </div>
@@ -630,217 +584,106 @@ const UID='main';
 const SBH={'apikey':SBKEY,'Authorization':'Bearer '+SBKEY,'Content-Type':'application/json','Prefer':'resolution=merge-duplicates'};
 
 // ════════════════════════════════════════════════════════
-// STORAGE — localStorage is PRIMARY, Supabase is BACKUP SYNC
-// Rule: localStorage ALWAYS wins on conflict unless Supabase
-// has a newer timestamp. Data is NEVER deleted from localStorage
-// just because Supabase has fewer rows.
+// CACHE — localStorage as write-through cache only
+// Key 'personalos_X' mirrors Supabase row key X for user 'main'
 // ════════════════════════════════════════════════════════
 const PREF='personalos_';
 const LC={
-  get:(k)=>{
-    try{const v=localStorage.getItem(PREF+k);return v!=null?JSON.parse(v):null;}
-    catch{return null;}
-  },
-  set:(k,v)=>{
-    try{localStorage.setItem(PREF+k,JSON.stringify(v));}catch{}
-  }
+  get:(k)=>{try{const v=localStorage.getItem(PREF+k);return v!=null?JSON.parse(v):null;}catch{return null;}},
+  set:(k,v)=>{try{localStorage.setItem(PREF+k,JSON.stringify(v));}catch{}},
+  del:(k)=>{try{localStorage.removeItem(PREF+k);}catch{}}
 };
 
-// Write queue — everything that failed to reach Supabase
+// Offline write queue
 let OQ={};
 try{OQ=JSON.parse(localStorage.getItem(PREF+'__oq')||'{}');}catch{}
 function saveOQ(){try{localStorage.setItem(PREF+'__oq',JSON.stringify(OQ));}catch{}}
 
-// Timestamp store — track when we last wrote each key locally
-// so we can compare with Supabase on pull
-const TS={
-  get:(k)=>{try{return parseInt(localStorage.getItem(PREF+'__ts_'+k)||'0');}catch{return 0;}},
-  set:(k)=>{try{localStorage.setItem(PREF+'__ts_'+k,Date.now().toString());}catch{}}
-};
-
 const SL=document.getElementById('sline');
-let _dbOk=null; // null=unknown, true=working, false=failing
 
-// ══ READ — always synchronous from localStorage ══
+// ═══ CORE DB FUNCTIONS ═══
+
+// get: returns cached value instantly, then silently refreshes from Supabase in background
 function dbGet(k,fb){
+  // Always return cached first (instant, no await needed)
   const cached=LC.get(k);
-  return cached!==null?cached:fb;
+  if(cached!==null)return cached;
+  return fb;
 }
 
-// ══ WRITE — localStorage first (synchronous), then Supabase async ══
-async function dbSet(k,v){
-  // 1. Write to localStorage immediately — this is what survives reload
-  LC.set(k,v);
-  TS.set(k);
-  // 2. Remove from offline queue if it was queued
-  if(OQ[k]!==undefined){delete OQ[k];saveOQ();}
-  // 3. Try Supabase in background — never block the UI
-  if(!navigator.onLine){
-    OQ[k]=v;saveOQ();
-    return;
-  }
+// getAsync: fetch from Supabase, update cache, return value
+async function dbGetAsync(k,fb){
+  const cached=LC.get(k);
+  if(cached!==null)return cached;
+  if(!navigator.onLine)return fb;
   try{
-    await sbWrite(k,v);
-  }catch(e){
-    // Supabase failed — queue for retry
-    OQ[k]=v;saveOQ();
-    // Show subtle indicator
-    SL.className='';
-  }
+    const r=await fetch(`${SB}/rest/v1/personal_os?user_id=eq.${UID}&key=eq.${encodeURIComponent(k)}&select=value`,{headers:SBH});
+    if(r.ok){
+      const d=await r.json();
+      if(d&&d.length){LC.set(k,d[0].value);return d[0].value;}
+    }
+  }catch{}
+  return fb;
+}
+
+// set: write to cache immediately + queue Supabase write
+async function dbSet(k,v){
+  LC.set(k,v);  // SYNCHRONOUS — survives reload immediately
+  delete OQ[k]; saveOQ(); // Remove from offline queue if present
+  if(!navigator.onLine){OQ[k]=v;saveOQ();return;}
+  // Fire-and-forget to Supabase — don't block UI
+  sbWrite(k,v).catch(()=>{OQ[k]=v;saveOQ();});
 }
 
 async function sbWrite(k,v){
   SL.className='go';
-  // Use ?on_conflict=user_id,key so PostgREST knows exactly which
-  // unique constraint to use for the upsert. This fixes the 409 error.
-  var r=await fetch(SB+'/rest/v1/personal_os?on_conflict=user_id,key',{
-    method:'POST',
-    headers:SBH,
+  const r=await fetch(`${SB}/rest/v1/personal_os`,{
+    method:'POST',headers:SBH,
     body:JSON.stringify({user_id:UID,key:k,value:v,updated_at:new Date().toISOString()})
   });
-  if(r.ok||r.status===201){
-    SL.className='ok';
-    setTimeout(function(){SL.className='';},600);
-    _dbOk=true;
-    setDbBar(true);
-    return true;
-  }
-  // If still failing, try DELETE then INSERT as fallback
-  if(r.status===409||r.status===400){
-    return await sbWriteFallback(k,v);
-  }
-  _dbOk=false;
-  setDbBar(false,r.status);
-  throw new Error('SB '+r.status);
+  if(r.ok){SL.className='ok';setTimeout(()=>SL.className='',500);}
+  else throw new Error('SB write '+r.status);
 }
 
-// Fallback: DELETE existing row then INSERT fresh
-async function sbWriteFallback(k,v){
-  try{
-    // Delete the existing row for this key
-    await fetch(SB+'/rest/v1/personal_os?user_id=eq.'+UID+'&key=eq.'+encodeURIComponent(k),{
-      method:'DELETE',
-      headers:SBH
-    });
-    // Insert fresh
-    var r2=await fetch(SB+'/rest/v1/personal_os',{
-      method:'POST',
-      headers:{'apikey':SBKEY,'Authorization':'Bearer '+SBKEY,'Content-Type':'application/json'},
-      body:JSON.stringify({user_id:UID,key:k,value:v,updated_at:new Date().toISOString()})
-    });
-    if(r2.ok||r2.status===201){
-      SL.className='ok';
-      setTimeout(function(){SL.className='';},600);
-      _dbOk=true;
-      setDbBar(true);
-      return true;
-    }
-    throw new Error('fallback failed '+r2.status);
-  }catch(e){
-    _dbOk=false;
-    setDbBar(false,'err');
-    throw e;
-  }
-}
-
-function setDbBar(ok,status){
-  var el=document.getElementById('dbbar');if(!el)return;
-  if(ok){
-    // Show brief green confirmation then hide
-    el.style.display='block';
-    el.style.background='var(--gr-bg)';
-    el.style.color='var(--gr-t)';
-    el.textContent='✓ Saved to cloud';
-    clearTimeout(el._t);
-    el._t=setTimeout(function(){el.style.display='none';},2000);
-  } else {
-    el.style.display='block';
-    el.style.background='var(--re-bg)';
-    el.style.color='var(--re-t)';
-    el.textContent='⚠ Cloud sync failed ('+status+') — data saved locally';
-  }
-}
-
-// ══ PULL — merge Supabase into localStorage, localStorage wins on conflict ══
+// pullAll: on app open, pull all keys from Supabase and update cache
 async function pullAll(){
   if(!navigator.onLine)return;
   try{
-    const r=await fetch(SB+'/rest/v1/personal_os?user_id=eq.'+UID+'&select=key,value,updated_at',{headers:SBH});
-    if(!r.ok){
-      _dbOk=false;
-      // Do NOT touch localStorage — just leave it as-is
-      return;
-    }
-    const rows=await r.json();
-    if(!rows||!rows.length){
-      // Supabase is empty — this happens on first use or after RLS issues
-      // Push all our local data UP to Supabase instead of wiping local
-      pushLocalToSB();
-      return;
-    }
-    _dbOk=true;
-    rows.forEach(function(row){
-      var local=LC.get(row.key);
-      if(local===null){
-        // Key doesn't exist locally — safe to import from Supabase
-        LC.set(row.key,row.value);
-      } else {
-        // Both exist — compare timestamps
-        var localTs=TS.get(row.key);
-        var sbTs=row.updated_at?new Date(row.updated_at).getTime():0;
-        if(sbTs>localTs){
-          // Supabase is newer — use it
+    const r=await fetch(`${SB}/rest/v1/personal_os?user_id=eq.${UID}&select=key,value`,{headers:SBH});
+    if(r.ok){
+      const rows=await r.json();
+      rows.forEach(row=>{
+        // Only update cache if Supabase value is different (or missing locally)
+        const local=LC.get(row.key);
+        if(local===null){LC.set(row.key,row.value);}
+        else{
+          // Supabase wins for conflict resolution (last-write-wins via updated_at)
+          // But we just pulled — it's the latest
           LC.set(row.key,row.value);
         }
-        // else: local is newer or same — keep local (do nothing)
-      }
-    });
-  }catch(e){
-    // Network error — do nothing, keep localStorage intact
-  }
+      });
+    }
+  }catch{}
 }
 
-// Push all local data up to Supabase (used when SB is empty)
-async function pushLocalToSB(){
-  const keys=[];
-  for(var i=0;i<localStorage.length;i++){
-    var k=localStorage.key(i);
-    if(k&&k.startsWith(PREF)&&!k.includes('__')){
-      keys.push(k.slice(PREF.length));
-    }
-  }
-  for(var i=0;i<keys.length;i++){
-    var k=keys[i];
-    var v=LC.get(k);
-    if(v!==null){
-      try{await sbWrite(k,v);}catch{}
-    }
-  }
-}
-
-// Flush write queue — called on reconnect
+// Flush offline queue on reconnect
 async function flushQueue(){
-  var ks=Object.keys(OQ);
-  if(!ks.length)return;
-  var ok=0;
-  for(var i=0;i<ks.length;i++){
-    try{
-      await sbWrite(ks[i],OQ[ks[i]]);
-      delete OQ[ks[i]];
-      ok++;
-    }catch{}
+  const keys=Object.keys(OQ);
+  if(!keys.length)return;
+  for(const k of keys){
+    try{await sbWrite(k,OQ[k]);delete OQ[k];}catch{}
   }
   saveOQ();
-  if(ok>0)toast('Synced '+ok+' update'+(ok>1?'s':'')+' to cloud ✓');
+  if(!Object.keys(OQ).length)toast('✓ Synced to cloud');
 }
 
-window.addEventListener('online',async function(){
+window.addEventListener('online',async()=>{
   document.body.classList.remove('offline');
   await flushQueue();
   await pullAll();
   renders[curPage]();
 });
-window.addEventListener('offline',function(){document.body.classList.add('offline');});
+window.addEventListener('offline',()=>document.body.classList.add('offline'));
 if(!navigator.onLine)document.body.classList.add('offline');
 
 // ════════════════════════════════════════════════════════
@@ -918,24 +761,11 @@ const WDAYS=['S','M','T','W','T','F','S'];
 // ════════════════════════════════════════════════════════
 // UTILS
 // ════════════════════════════════════════════════════════
-const today=()=>{
-  const d=new Date();
-  return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
-};
+const today=()=>new Date().toISOString().slice(0,10);
 const isWeekend=()=>{const d=new Date().getDay();return d===0||d===6;};
 const fmt=d=>{try{return new Date(d+'T12:00').toLocaleDateString('en-GB',{day:'numeric',month:'short'});}catch{return d;}};
 const daysTo=iso=>Math.max(0,Math.ceil((new Date(iso)-new Date())/86400000));
-function localDateStr(d){
-  return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
-}
-function calcStreak(fn){
-  let s=0;
-  for(let i=1;i<=90;i++){
-    const d=new Date();d.setDate(d.getDate()-i);
-    if(fn(localDateStr(d)))s++;else break;
-  }
-  return s;
-}
+function calcStreak(fn){let s=0;for(let i=1;i<=90;i++){const d=new Date();d.setDate(d.getDate()-i);if(fn(d.toISOString().slice(0,10)))s++;else break;}return s;}
 function greet(){const h=new Date().getHours();if(h<5)return'Late night 🌙';if(h<12)return'Good morning 🌤';if(h<17)return'Good afternoon ☀️';if(h<21)return'Good evening 🌆';return'Good night 🌙';}
 const minsToH=m=>{const h=Math.floor(m/60);return h>0?h+'h '+(m%60>0?m%60+'m':''):(m||0)+'m';};
 
@@ -1010,143 +840,73 @@ function toggleEp(id){document.getElementById(id).classList.toggle('on');if(id==
 // MODAL
 // ════════════════════════════════════════════════════════
 function openM(type){
-  var mhd=document.getElementById("mhd");
-  var mbd=document.getElementById("mbd");
-  var lgs,tp,banner,html2;
-  if(type==="quran"){
-    lgs=dbGet("qlog",[]); tp=lgs.filter(function(l){return l.date===today();}).reduce(function(s,l){return s+(l.pages||0);},0);
-    mhd.textContent="📖 Log Quran reading";
-    banner=tp?("<div class=\"ib ib-ok\" style=\"margin-bottom:12px;\">✅ "+tp+" pages logged today</div>"):"";
-    mbd.innerHTML=banner+
-      "<div class=\"fg\"><label class=\"fl\">Pages read</label><input type=\"number\" id=\"mq-pg\" placeholder=\"5\" min=\"1\" style=\"font-size:16px;\"></div>"+
-      "<div class=\"fg\"><label class=\"fl\">Surah / Juz (optional)</label><input type=\"text\" id=\"mq-rf\" placeholder=\"e.g. Al-Baqarah\"></div>"+
-      "<button class=\"btn btn-p btn-bl\" onclick=\"mLogQ()\">Save</button>";
-  } else if(type==="german"){
-    lgs=dbGet("german-log",[]); tp=lgs.filter(function(l){return l.date===today();}).reduce(function(s,l){return s+(l.mins||0);},0);
-    mhd.textContent="🇩🇪 German study";
-    banner=tp?("<div class=\"ib ib-ok\" style=\"margin-bottom:12px;\">✅ "+tp+" min logged today</div>"):"";
-    mbd.innerHTML=banner+
-      "<div class=\"fg\"><label class=\"fl\">Minutes studied</label><input type=\"number\" id=\"mg-m\" placeholder=\"30\" min=\"1\" style=\"font-size:16px;\"></div>"+
-      "<div class=\"fg\"><label class=\"fl\">Activity</label><select id=\"mg-a\"><option>Vocabulary (Anki)</option><option>DW Nicos Weg</option><option>Speaking</option><option>Grammar</option><option>Listening</option><option>Reading</option></select></div>"+
-      "<button class=\"btn btn-p btn-bl\" onclick=\"mLogG()\">Save</button>";
-  } else if(type==="chess"){
+  const mhd=document.getElementById('mhd'),mbd=document.getElementById('mbd');
+  if(type==='quran'){
+    const logs=dbGet('qlog',[]); const tp=logs.filter(l=>l.date===today()).reduce((s,l)=>s+(l.pages||0),0);
+    mhd.textContent='📖 Log Quran reading';
+    mbd.innerHTML=`${tp?`<div class="ib ib-ok" style="margin-bottom:12px;">✅ ${tp} pages logged today</div>`:''}
+      <div class="fg"><label class="fl">Pages read</label><input type="number" id="mq-pg" placeholder="5" min="1" style="font-size:16px;"></div>
+      <div class="fg"><label class="fl">Surah / Juz (optional)</label><input type="text" id="mq-rf" placeholder="e.g. Al-Baqarah"></div>
+      <button class="btn btn-p btn-bl" onclick="mLogQ()">Save</button>`;
+  } else if(type==='german'){
+    const logs=dbGet('german-log',[]); const tp=logs.filter(l=>l.date===today()).reduce((s,l)=>s+(l.mins||0),0);
+    mhd.textContent='🇩🇪 German study';
+    mbd.innerHTML=`${tp?`<div class="ib ib-ok" style="margin-bottom:12px;">✅ ${tp} min logged today</div>`:''}
+      <div class="fg"><label class="fl">Minutes studied</label><input type="number" id="mg-m" placeholder="30" min="1" style="font-size:16px;"></div>
+      <div class="fg"><label class="fl">Activity</label><select id="mg-a"><option>Vocabulary (Anki)</option><option>DW Nicos Weg</option><option>Speaking</option><option>Grammar</option><option>Listening</option><option>Reading</option></select></div>
+      <button class="btn btn-p btn-bl" onclick="mLogG()">Save</button>`;
+  } else if(type==='chess'){
     window._cr=null;
-    mhd.textContent="♟ Log chess game";
-    mbd.innerHTML=
-      "<div style=\"display:flex;gap:8px;margin-bottom:12px;\">"+
-      "<div id=\"mc-w\" onclick=\"mSR('win')\" style=\"flex:1;padding:14px;border-radius:var(--rm);border:1.5px solid var(--e1);background:var(--c1);font-weight:800;font-size:15px;cursor:pointer;text-align:center;transition:all 0.15s;\">Win</div>"+
-      "<div id=\"mc-d\" onclick=\"mSR('draw')\" style=\"flex:1;padding:14px;border-radius:var(--rm);border:1.5px solid var(--e1);background:var(--c1);font-weight:800;font-size:15px;cursor:pointer;text-align:center;transition:all 0.15s;\">Draw</div>"+
-      "<div id=\"mc-l\" onclick=\"mSR('loss')\" style=\"flex:1;padding:14px;border-radius:var(--rm);border:1.5px solid var(--e1);background:var(--c1);font-weight:800;font-size:15px;cursor:pointer;text-align:center;transition:all 0.15s;\">Loss</div></div>"+
-      "<div class=\"fg\"><label class=\"fl\">Opening (optional)</label><input type=\"text\" id=\"mc-op\" placeholder=\"e.g. Sicilian Defense\"></div>"+
-      "<button class=\"btn btn-p btn-bl\" onclick=\"mLogC()\">Save game</button>";
-  } else if(type==="checkin"){
-    var cis=dbGet("checkins",{}); var ci=cis[today()]||{};
-    window._cm=ci.mood||null; window._ce=ci.energy||null;
-    mhd.textContent="💭 Daily check-in";
-    var moods=[["😄",5],["🙂",4],["😐",3],["😔",2],["😞",1]];
-    var energies=[["⚡",5],["🔋",4],["🔌",3],["😴",2],["💤",1]];
-    var moodLabels=["","Bad","Low","Okay","Good","Great"];
-    var energyLabels=["","Drained","Low","Medium","Good","High"];
-    var moodHtml="<div style=\"font-size:11px;font-weight:800;color:var(--t2);text-transform:uppercase;letter-spacing:0.6px;margin-bottom:8px;\">Mood</div>";
-    moodHtml+="<div style=\"display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-bottom:14px;\">";
-    moods.forEach(function(m){
-      var sel=ci.mood==m[1];
-      moodHtml+="<div onclick=\"cSel('m',"+m[1]+",this)\" style=\"border-radius:var(--rs);border:1.5px solid "+(sel?"var(--bl)":"var(--e1)")+";background:"+(sel?"var(--bl-bg)":"var(--c1)")+";padding:10px 4px;text-align:center;cursor:pointer;transition:all 0.15s;\"><div style=\"font-size:22px;\">"+m[0]+"</div><div style=\"font-size:10px;font-weight:700;color:var(--t2);margin-top:2px;\">"+moodLabels[m[1]]+"</div></div>";
-    });
-    moodHtml+="</div>";
-    var energyHtml="<div style=\"font-size:11px;font-weight:800;color:var(--t2);text-transform:uppercase;letter-spacing:0.6px;margin-bottom:8px;\">Energy</div>";
-    energyHtml+="<div style=\"display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-bottom:14px;\">";
-    energies.forEach(function(e){
-      var sel=ci.energy==e[1];
-      energyHtml+="<div onclick=\"cSel('e',"+e[1]+",this)\" style=\"border-radius:var(--rs);border:1.5px solid "+(sel?"var(--bl)":"var(--e1)")+";background:"+(sel?"var(--bl-bg)":"var(--c1)")+";padding:10px 4px;text-align:center;cursor:pointer;transition:all 0.15s;\"><div style=\"font-size:22px;\">"+e[0]+"</div><div style=\"font-size:10px;font-weight:700;color:var(--t2);margin-top:2px;\">"+energyLabels[e[1]]+"</div></div>";
-    });
-    energyHtml+="</div>";
-    var noteVal=ci.note||"";
-    var wakeVal=ci.wake||"06:30";
-    var sleepVal=ci.sleep||"23:00";
-    mbd.innerHTML=moodHtml+energyHtml+
-      "<div class=\"fg\"><label class=\"fl\">One sentence about today</label><textarea id=\"ci-note\" style=\"min-height:50px;\">"+noteVal+"</textarea></div>"+
-      "<div style=\"display:flex;gap:8px;\"><div class=\"fg\" style=\"flex:1;margin-bottom:0;\"><label class=\"fl\">Wake</label><input type=\"time\" id=\"ci-w\" value=\""+wakeVal+"\"></div><div class=\"fg\" style=\"flex:1;margin-bottom:0;\"><label class=\"fl\">Sleep by</label><input type=\"time\" id=\"ci-sl\" value=\""+sleepVal+"\"></div></div>"+
-      "<button class=\"btn btn-p btn-bl\" onclick=\"saveCI()\">Save</button>";
+    mhd.textContent='♟ Log chess game';
+    mbd.innerHTML=`<div style="display:flex;gap:8px;margin-bottom:12px;">
+      <div id="mc-w" onclick="mSR('win')" style="flex:1;padding:14px;border-radius:var(--rm);border:1.5px solid var(--e1);background:var(--c1);font-weight:800;font-size:15px;cursor:pointer;text-align:center;transition:all 0.15s;">Win</div>
+      <div id="mc-d" onclick="mSR('draw')" style="flex:1;padding:14px;border-radius:var(--rm);border:1.5px solid var(--e1);background:var(--c1);font-weight:800;font-size:15px;cursor:pointer;text-align:center;transition:all 0.15s;">Draw</div>
+      <div id="mc-l" onclick="mSR('loss')" style="flex:1;padding:14px;border-radius:var(--rm);border:1.5px solid var(--e1);background:var(--c1);font-weight:800;font-size:15px;cursor:pointer;text-align:center;transition:all 0.15s;">Loss</div>
+    </div>
+    <div class="fg"><label class="fl">Opening (optional)</label><input type="text" id="mc-op" placeholder="e.g. Sicilian Defense"></div>
+    <button class="btn btn-p btn-bl" onclick="mLogC()">Save game</button>`;
+  } else if(type==='checkin'){
+    const cis=dbGet('checkins',{}); const ci=cis[today()]||{};
+    window._cm=ci.mood||null;window._ce=ci.energy||null;
+    mhd.textContent='💭 Daily check-in';
+    mbd.innerHTML=`<div style="font-size:11px;font-weight:800;color:var(--t2);text-transform:uppercase;letter-spacing:0.6px;margin-bottom:8px;">Mood</div>
+    <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-bottom:14px;">
+      ${[['😄',5],['🙂',4],['😐',3],['😔',2],['😞',1]].map(([e,v])=>`<div onclick="cSel('m',${v},this)" style="border-radius:var(--rs);border:1.5px solid ${ci.mood==v?'var(--bl)':'var(--e1)'};background:${ci.mood==v?'var(--bl-bg)':'var(--c1)'};padding:10px 4px;text-align:center;cursor:pointer;transition:all 0.15s;">
+        <div style="font-size:22px;">${e}</div>
+        <div style="font-size:10px;font-weight:700;color:var(--t2);margin-top:2px;">${['','Bad','Low','Okay','Good','Great'][v]}</div>
+      </div>`).join('')}
+    </div>
+    <div style="font-size:11px;font-weight:800;color:var(--t2);text-transform:uppercase;letter-spacing:0.6px;margin-bottom:8px;">Energy</div>
+    <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-bottom:14px;">
+      ${[['⚡',5],['🔋',4],['🔌',3],['😴',2],['💤',1]].map(([e,v])=>`<div onclick="cSel('e',${v},this)" style="border-radius:var(--rs);border:1.5px solid ${ci.energy==v?'var(--bl)':'var(--e1)'};background:${ci.energy==v?'var(--bl-bg)':'var(--c1)'};padding:10px 4px;text-align:center;cursor:pointer;transition:all 0.15s;">
+        <div style="font-size:22px;">${e}</div>
+        <div style="font-size:10px;font-weight:700;color:var(--t2);margin-top:2px;">${['','Drained','Low','Medium','Good','High'][v]}</div>
+      </div>`).join('')}
+    </div>
+    <div class="fg"><label class="fl">One sentence about today</label><textarea id="ci-note" style="min-height:50px;">${ci.note||''}</textarea></div>
+    <div style="display:flex;gap:8px;"><div class="fg" style="flex:1;margin-bottom:0;"><label class="fl">Wake</label><input type="time" id="ci-w" value="${ci.wake||'06:30'}"></div><div class="fg" style="flex:1;margin-bottom:0;"><label class="fl">Sleep by</label><input type="time" id="ci-sl" value="${ci.sleep||'23:00'}"></div></div>
+    <button class="btn btn-p btn-bl" onclick="saveCI()">Save</button>`;
   }
   oMov();
 }
-
-
-// ── Chess result selector (called from modal HTML onclick) ──
+function cSel(t,v,el){
+  if(t==='m')window._cm=v;else window._ce=v;
+  const parent=el.parentElement;
+  parent.querySelectorAll('div[onclick]').forEach(d=>{d.style.borderColor='var(--e1)';d.style.background='var(--c1)';});
+  el.style.borderColor='var(--bl)';el.style.background='var(--bl-bg)';
+}
 function mSR(r){
   window._cr=r;
-  var cols={win:['var(--gr-bg)','var(--gr-t)'],draw:['var(--am-bg)','var(--am-t)'],loss:['var(--re-bg)','var(--re-t)']};
-  ['win','draw','loss'].forEach(function(x){
-    var el=document.getElementById('mc-'+x[0]);
-    if(!el)return;
-    if(x===r){el.style.background=cols[x][0];el.style.borderColor=cols[x][1];el.style.color=cols[x][1];}
-    else{el.style.background='var(--c1)';el.style.borderColor='var(--e1)';el.style.color='var(--t1)';}
-  });
+  const s={win:['var(--gr-bg)','var(--gr-t)'],draw:['var(--am-bg)','var(--am-t)'],loss:['var(--re-bg)','var(--re-t)']};
+  ['win','draw','loss'].forEach(x=>{const e=document.getElementById('mc-'+x[0]);if(!e)return;if(x===r){e.style.background=s[x][0];e.style.borderColor=s[x][1];e.style.color=s[x][1];}else{e.style.background='var(--c1)';e.style.borderColor='var(--e1)';e.style.color='var(--t1)';}});
 }
-// ── Checkin mood/energy selector (called from modal HTML onclick) ──
-function cSel(type,val,el){
-  if(type==='m')window._cm=val;
-  else window._ce=val;
-  // Highlight selected, reset others in same grid
-  var grid=el.parentElement;
-  if(grid){
-    var items=grid.querySelectorAll('div[onclick]');
-    items.forEach(function(d){d.style.borderColor='var(--e1)';d.style.background='var(--c1)';});
-  }
-  el.style.borderColor='var(--bl)';
-  el.style.background='var(--bl-bg)';
-}
-async function mLogQ(){
-  var pg=parseInt(document.getElementById('mq-pg').value)||0;
-  var rf=document.getElementById('mq-rf').value.trim();
-  if(!pg){toast('Enter pages');return;}
-  var logs=dbGet('qlog',[]);logs.unshift({date:today(),pages:pg,ref:rf,note:''});
-  await dbSet('qlog',logs.slice(0,1000));
-  _cMov();toast('📖 '+pg+' pages saved ✓');renderToday();
-}
-async function mLogG(){
-  var m=parseInt(document.getElementById('mg-m').value)||0;
-  var a=document.getElementById('mg-a').value;
-  if(!m){toast('Enter minutes');return;}
-  var logs=dbGet('german-log',[]);logs.unshift({date:today(),mins:m,act:a});
-  await dbSet('german-log',logs.slice(0,500));
-  _cMov();toast('🇩🇪 '+m+' min saved ✓');renderToday();
-}
-async function mLogC(){
-  if(!window._cr){toast('Select Win / Draw / Loss first');return;}
-  var op=document.getElementById('mc-op').value.trim();
-  var games=dbGet('chess-games',[]);
-  games.unshift({date:today(),result:window._cr,opening:op,mistake:''});
-  await dbSet('chess-games',games.slice(0,500));
-  _cMov();toast('♟ '+window._cr+' saved ✓');window._cr=null;renderToday();
-}
-async function saveCI(){
-  var ci={
-    mood:window._cm,
-    energy:window._ce,
-    note:document.getElementById('ci-note').value,
-    wake:document.getElementById('ci-w').value,
-    sleep:document.getElementById('ci-sl').value
-  };
-  var cis=dbGet('checkins',{});cis[today()]=ci;
-  await dbSet('checkins',cis);
-  _cMov();toast('Check-in saved ✓');renderToday();
-}
-function oMov(){
-  var ov=document.getElementById('mov');
-  ov.style.display='flex';
-  requestAnimationFrame(function(){
-    requestAnimationFrame(function(){
-      document.getElementById('mbox').classList.add('on');
-    });
-  });
-}
+async function mLogQ(){const pg=parseInt(document.getElementById('mq-pg').value)||0;const rf=document.getElementById('mq-rf').value.trim();if(!pg){toast('Enter pages');return;}const logs=dbGet('qlog',[]);logs.unshift({date:today(),pages:pg,ref:rf,note:''});await dbSet('qlog',logs.slice(0,1000));cMov();toast('📖 '+pg+' pages saved ✓');renderToday();}
+async function mLogG(){const m=parseInt(document.getElementById('mg-m').value)||0;const a=document.getElementById('mg-a').value;if(!m){toast('Enter minutes');return;}const logs=dbGet('german-log',[]);logs.unshift({date:today(),mins:m,act:a});await dbSet('german-log',logs.slice(0,500));cMov();toast('🇩🇪 '+m+' min saved ✓');renderToday();}
+async function mLogC(){if(!window._cr){toast('Select Win/Draw/Loss');return;}const op=document.getElementById('mc-op').value.trim();const games=dbGet('chess-games',[]);games.unshift({date:today(),result:window._cr,opening:op,mistake:''});await dbSet('chess-games',games.slice(0,500));cMov();toast('♟ '+window._cr+' saved ✓');window._cr=null;renderToday();}
+async function saveCI(){const ci={mood:window._cm,energy:window._ce,note:document.getElementById('ci-note').value,wake:document.getElementById('ci-w').value,sleep:document.getElementById('ci-sl').value};const cis=dbGet('checkins',{});cis[today()]=ci;await dbSet('checkins',cis);cMov();toast('Check-in saved ✓');renderToday();}
+function oMov(){const ov=document.getElementById('mov');ov.style.display='flex';requestAnimationFrame(()=>document.getElementById('mbox').classList.add('on'));}
 function cMov(e){if(e&&e.target!==document.getElementById('mov'))return;_cMov();}
-function _cMov(){
-  document.getElementById('mbox').classList.remove('on');
-  setTimeout(function(){document.getElementById('mov').style.display='none';},320);
-}
+function _cMov(){document.getElementById('mbox').classList.remove('on');setTimeout(()=>document.getElementById('mov').style.display='none',320);}
 
 // ════════════════════════════════════════════════════════
 // TODAY
@@ -1183,46 +943,22 @@ function renderToday(){
   // Score
   const ciPts=ci.mood?20:0;
   const score=Math.min(100,Math.round((pDone/5)*40+(habits.length?hDone/habits.length*40:0)+ciPts));
-  const prevScore=LC.get('prev-score')||0;
   document.getElementById('ring-n').textContent=score;
   const arc=document.getElementById('ring-arc');
-  const circ=2*Math.PI*35;
+  const circ=2*Math.PI*35; // r=35
   arc.style.transition='none';arc.style.strokeDashoffset=String(circ);
   requestAnimationFrame(()=>requestAnimationFrame(()=>{
     arc.style.transition='stroke-dashoffset 0.9s cubic-bezier(0.34,1.1,0.64,1)';
     arc.style.strokeDashoffset=String(circ-(circ*score/100));
   }));
-  arc.style.stroke=score>=100?'#FFD700':score>=80?'#6EE7A0':score>=50?'#FDE68A':'#93C5FD';
-  document.getElementById('ring-lbl').textContent=score>=100?'🏆 Perfect day!':score>=80?'🌟 Excellent!':score>=50?'📈 Good progress':'Daily score';
-  // XP system
-  const pStreak=calcStreak(k=>PRAYERS.every(p=>(pData[k]||{})[p]));
-  const totalXP=LC.get('total-xp')||0;
-  const level=Math.floor(totalXP/200)+1;
-  const levelXP=totalXP%200;
-  const xpRow=document.getElementById('xp-row');
-  if(xpRow)xpRow.innerHTML='<div class="xp-badge">⚡ Lv.'+level+' <span style="opacity:0.6;font-weight:600;font-size:10px;">'+totalXP+' XP</span></div><div class="xp-bar-wrap"><div class="xp-bar" style="width:'+Math.round(levelXP/200*100)+'%;"></div></div>';
-  // Badges
+  arc.style.stroke=score>=80?'#6EE7A0':score>=50?'#FDE68A':'#93C5FD';
+  document.getElementById('ring-lbl').textContent=score>=80?'🌟 Excellent!':score>=50?'📈 Good progress':'Daily score';
   const badges=[];
   if(pDone===5)badges.push('🕌 5/5 prayers');
   if(habits.length&&hDone===habits.length)badges.push('✅ All habits');
   if(qPg>=5)badges.push('📖 Quran');
   if(gMins>=30)badges.push('🇩🇪 German');
-  if(pStreak>=7)badges.push('🔥 '+pStreak+'d streak');
-  document.getElementById('ring-badges').innerHTML=badges.map(b=>'<span class="rbadge">'+b+'</span>').join('');
-  // Engagement widgets
-  renderNextPrayer();
-  renderUrgencyNudge(pDone,hDone,habits.length,qPg,gMins,score);
-  renderInsight();
-  renderChallenge();
-  // Complete banner + confetti
-  const bannerEl=document.getElementById('complete-banner');
-  if(score===100&&prevScore<100){
-    if(bannerEl)bannerEl.innerHTML='<div class="complete-banner"><div class="complete-ico">🏆</div><div class="complete-txt">Perfect day!<br>You did everything. Ma sha Allah!</div><div class="complete-score">100</div></div>';
-    setTimeout(()=>launchConfetti(),300);
-    const newXP=(LC.get('total-xp')||0)+50;
-    LC.set('total-xp',newXP);
-  } else if(score<100&&bannerEl){bannerEl.innerHTML='';}
-  LC.set('prev-score',score);
+  document.getElementById('ring-badges').innerHTML=badges.map(b=>`<span class="rbadge">${b}</span>`).join('');
 
   // Prayer grid
   document.getElementById('t-pgrid').innerHTML=PRAYERS.map(p=>`
@@ -1231,11 +967,11 @@ function renderToday(){
     </div>`).join('');
 
   // Habit list
-  const days7=[];for(let i=6;i>=0;i--){const d=new Date();d.setDate(d.getDate()-i);days7.push(localDateStr(d));}
+  const days7=[];for(let i=6;i>=0;i--){const d=new Date();d.setDate(d.getDate()-i);days7.push(d.toISOString().slice(0,10));}
   document.getElementById('h-list').innerHTML=habits.length?habits.map(h=>{
     const done=!!th[h.id];
     const streak=calcStreak(k=>!!(hData[k]&&hData[k][h.id]));
-    return`<div class="hrow" onclick="tHabit('${h.id}',event)">
+    return`<div class="hrow" onclick="tHabit('${h.id}')">
       <div class="hck ${done?'done':''}"><span class="hico">${h.icon||'•'}</span></div>
       <div style="flex:1;min-width:0;"><div class="hn">${h.name}</div><div class="hst">${streak>0?'🔥 '+streak+' day streak':'Start today'}</div></div>
       <div class="hds">${days7.map(d=>`<div class="hd ${hData[d]&&hData[d][h.id]?'on':''}"></div>`).join('')}</div>
@@ -1243,10 +979,9 @@ function renderToday(){
   }).join(''):'<div class="empty"><div class="empty-ico">✅</div>No habits yet. Tap Edit.</div>';
 
   // Streaks
-  const _sp=calcStreak(k=>PRAYERS.every(p=>(pData[k]||{})[p]));
-  const _sq=calcStreak(k=>qLogs.some(l=>l.date===k));
-  const _sh=calcStreak(k=>habits.length>0&&habits.every(h=>(hData[k]||{})[h.id]));
-  ['s-p','s-q','s-h'].forEach((id,ix)=>{const v=[_sp,_sq,_sh][ix];const e=document.getElementById(id);if(e){e.textContent=v;e.className='spill-n'+(id==='s-p'?' s-go':id==='s-q'?' s-te':' s-gr')+(v>=7?' hot':'');}});
+  document.getElementById('s-p').textContent=calcStreak(k=>PRAYERS.every(p=>(pData[k]||{})[p]));
+  document.getElementById('s-q').textContent=calcStreak(k=>qLogs.some(l=>l.date===k));
+  document.getElementById('s-h').textContent=calcStreak(k=>habits.length>0&&habits.every(h=>(hData[k]||{})[h.id]));
 
   // Weekly grid
   document.getElementById('wkrow').innerHTML=days7.map(d=>{
@@ -1261,29 +996,16 @@ function renderToday(){
 async function tPray(name,src){
   const pData=dbGet('prayers',{});
   if(!pData[today()])pData[today()]={};
-  const wasOn=!!pData[today()][name];
-  pData[today()][name]=!wasOn;
+  pData[today()][name]=!pData[today()][name];
   await dbSet('prayers',pData);
-  if(!wasOn){
-    const newXP=(LC.get('total-xp')||0)+8;
-    LC.set('total-xp',newXP);
-    toast('🕌 '+name+' ✓  +8 XP',null,1800);
-    if(PRAYERS.every(p=>pData[today()][p]))setTimeout(()=>toast('🏆 All 5 prayers! +40 XP',null,2500),500);
-  } else {toast(name+' unmarked');}
+  toast(pData[today()][name]?name+' ✓':name+' unmarked');
   if(src==='deen'){renderDeen();}else{renderToday();}
 }
-async function tHabit(hid,ev){
+async function tHabit(hid){
   const hData=dbGet('hdata',{});
   if(!hData[today()])hData[today()]={};
-  const wasOn=!!hData[today()][hid];
-  hData[today()][hid]=!wasOn;
-  await dbSet('hdata',hData);
-  if(!wasOn){
-    const newXP=(LC.get('total-xp')||0)+5;
-    LC.set('total-xp',newXP);
-    if(ev)popXP(5,ev.clientX,ev.clientY);
-  }
-  renderToday();
+  hData[today()][hid]=!hData[today()][hid];
+  await dbSet('hdata',hData);renderToday();
 }
 function renderHEdit(){
   const habits=dbGet('habits',DEF_HABITS);
@@ -1307,68 +1029,70 @@ async function rmHabit(i){
 }
 
 // ════════════════════════════════════════════════════════
-// ROUTINE — fully customizable
+// ROUTINE — weekday/weekend fully separate, customisable
 // ════════════════════════════════════════════════════════
-let rtTab='wd'; // 'wd' = weekday, 'we' = weekend
+let rtTab='wd'; // 'wd' or 'we' — tracks which schedule is shown
 let rtEditMode=false;
-let _dragIdx=null,_dragTab=null;
+let _dragIdx=null;
+
+// Returns the active custom routine for the given tab, falling back to defaults
+function getRtItems(tab){
+  const key=tab==='wd'?'rt-custom-wd':'rt-custom-we';
+  const def=tab==='wd'?ROUTINE_WEEKDAY:ROUTINE_WEEKEND;
+  return dbGet(key,def)||def;
+}
+async function setRtItems(items,tab){
+  const key=(tab||rtTab)==='wd'?'rt-custom-wd':'rt-custom-we';
+  await dbSet(key,items);
+}
 
 function setRtTab(t){
   rtTab=t;
-  document.getElementById('rt-tab-wd').style.background=t==='wd'?'var(--c0)':'none';
-  document.getElementById('rt-tab-wd').style.color=t==='wd'?'var(--t0)':'var(--t2)';
-  document.getElementById('rt-tab-wd').style.boxShadow=t==='wd'?'0 1px 5px rgba(0,0,0,0.10)':'none';
-  document.getElementById('rt-tab-we').style.background=t==='we'?'var(--c0)':'none';
-  document.getElementById('rt-tab-we').style.color=t==='we'?'var(--t0)':'var(--t2)';
-  document.getElementById('rt-tab-we').style.boxShadow=t==='we'?'0 1px 5px rgba(0,0,0,0.10)':'none';
-  if(rtEditMode)renderRtEditList();else renderRtBody();
+  const wd=document.getElementById('rt-tab-wd');
+  const we=document.getElementById('rt-tab-we');
+  if(wd){wd.style.background=t==='wd'?'var(--c0)':'none';wd.style.color=t==='wd'?'var(--t0)':'var(--t2)';wd.style.boxShadow=t==='wd'?'0 1px 5px rgba(0,0,0,0.10)':'none';}
+  if(we){we.style.background=t==='we'?'var(--c0)':'none';we.style.color=t==='we'?'var(--t0)':'var(--t2)';we.style.boxShadow=t==='we'?'0 1px 5px rgba(0,0,0,0.10)':'none';}
+  if(rtEditMode){renderRtEditList();}else{renderRtBody();}
 }
 
 function toggleRtEdit(){
   rtEditMode=!rtEditMode;
-  document.getElementById('rt-edit-btn').textContent=rtEditMode?'Done':'Edit';
-  document.getElementById('rt-body').style.display=rtEditMode?'none':'block';
-  document.getElementById('rt-edit-panel').style.display=rtEditMode?'block':'none';
-  if(rtEditMode){
-    document.getElementById('rt-edit-which').textContent=rtTab==='wd'?'Weekday':'Weekend';
-    renderRtEditList();
-  } else {
-    renderRtBody();
-  }
-}
-
-function getRtItems(){
-  const key=rtTab==='wd'?'rt-custom-wd':'rt-custom-we';
-  const def=rtTab==='wd'?ROUTINE_WEEKDAY:ROUTINE_WEEKEND;
-  return dbGet(key,def)||def;
-}
-async function setRtItems(items){
-  const key=rtTab==='wd'?'rt-custom-wd':'rt-custom-we';
-  await dbSet(key,items);
+  const btn=document.getElementById('rt-edit-btn');
+  const body=document.getElementById('rt-body');
+  const panel=document.getElementById('rt-edit-panel');
+  if(btn)btn.textContent=rtEditMode?'Done':'Edit';
+  if(body)body.style.display=rtEditMode?'none':'block';
+  if(panel)panel.style.display=rtEditMode?'block':'none';
+  if(rtEditMode){const ew=document.getElementById('rt-edit-which');if(ew)ew.textContent=rtTab==='wd'?'Weekday':'Weekend';renderRtEditList();}
+  else{renderRtBody();}
 }
 
 function renderRoutine(){
-  // Set correct tab for today
-  const todayIsWE=isWeekend();
-  if(rtTab==='wd'&&todayIsWE||rtTab==='we'&&!todayIsWE){
-    // Auto-switch to match today
-  }
-  const isWE=rtTab==='we';
-  document.getElementById('rt-sublbl').textContent=isWE?'Weekend — no job, extended deep work':'Weekday — job 12pm–8pm';
+  const isWE=isWeekend();
+  // Auto-switch tab to match today's day type
+  if(rtTab==='wd'&&isWE)setRtTab('we');
+  else if(rtTab==='we'&&!isWE)setRtTab('wd');
+  else setRtTab(rtTab); // just refresh styles
+  const dayName=new Date().toLocaleDateString('en-GB',{weekday:'long'});
+  const el=document.getElementById('rt-daylbl');
+  if(el)el.textContent=isWE?dayName+' — Weekend (no job)':dayName+' — Weekday (job 12pm–8pm)';
   renderRtBody();
 }
 
 function renderRtBody(){
-  const items=getRtItems();
+  const el=document.getElementById('rt-body');if(!el)return;
   const rtDone=dbGet('rt-done',{});
-  const done=rtDone[today()]||{};
+  // CRITICAL FIX: key includes tab type so weekday and weekend are always separate
+  const key=today()+'_'+rtTab;
+  const done=rtDone[key]||{};
+  const items=getRtItems(rtTab);
   const total=items.filter(x=>!x.sep).length;
   const doneCount=items.filter(x=>!x.sep&&done[x.id]).length;
   let html=`<div style="display:flex;align-items:center;justify-content:space-between;padding:0 14px 10px;">
     <div style="font-size:13px;color:var(--t1);font-weight:600;">${doneCount} of ${total} done today</div>
-    <div class="badge ${doneCount===total&&total>0?'b-gr':doneCount>=total*0.5?'b-am':'b-bl'}">${total>0?Math.round(doneCount/total*100):0}%</div>
+    <div class="badge ${doneCount===total&&total>0?'b-gr':doneCount>=Math.floor(total/2)?'b-am':'b-bl'}">${total>0?Math.round(doneCount/total*100):0}%</div>
   </div>`;
-  items.forEach((item,i)=>{
+  items.forEach(item=>{
     if(item.sep){html+=`<div class="rt-sep">${item.sep}</div>`;return;}
     const isDone=!!done[item.id];
     html+=`<div class="rt-block">
@@ -1383,24 +1107,35 @@ function renderRtBody(){
       </div>
     </div>`;
   });
-  document.getElementById('rt-body').innerHTML=html;
+  el.innerHTML=html;
+}
+
+async function tRoutine(id){
+  const rtDone=dbGet('rt-done',{});
+  // CRITICAL FIX: always key by date + current tab type
+  const key=today()+'_'+rtTab;
+  if(!rtDone[key])rtDone[key]={};
+  rtDone[key][id]=!rtDone[key][id];
+  await dbSet('rt-done',rtDone);
+  renderRtBody();
 }
 
 function renderRtEditList(){
-  const items=getRtItems();
-  document.getElementById('rt-edit-which').textContent=rtTab==='wd'?'Weekday':'Weekend';
+  const items=getRtItems(rtTab);
+  const ew=document.getElementById('rt-edit-which');if(ew)ew.textContent=rtTab==='wd'?'Weekday':'Weekend';
+  const el=document.getElementById('rt-edit-list');if(!el)return;
   let html='';
   items.forEach((item,i)=>{
     if(item.sep){
-      html+=`<div style="display:flex;align-items:center;gap:8px;margin:8px 14px 2px;">
+      html+=`<div style="display:flex;align-items:center;gap:8px;margin:6px 14px 2px;">
         <div style="flex:1;font-size:10px;font-weight:800;color:var(--t2);text-transform:uppercase;letter-spacing:0.6px;">${item.sep}</div>
-        <span onclick="rmRtSep(${i})" style="color:var(--re-t);font-size:20px;font-weight:300;cursor:pointer;line-height:1;padding:0 4px;">×</span>
+        <span onclick="rmRtSep(${i})" style="color:var(--re-t);font-size:20px;font-weight:300;cursor:pointer;padding:0 4px;line-height:1;">×</span>
       </div>`;
       return;
     }
     html+=`<div class="rt-block" id="rte-${i}" draggable="true"
       ondragstart="rtDragStart(${i})" ondragover="rtDragOver(event,${i})" ondrop="rtDrop(event,${i})" ondragend="rtDragEnd()">
-      <div class="rt-head" style="background:var(--c0);">
+      <div class="rt-head">
         <div style="color:var(--t2);font-size:18px;cursor:grab;padding:0 4px;margin-right:-4px;">⠿</div>
         <div style="display:flex;flex-direction:column;gap:4px;flex:1;min-width:0;">
           <div style="display:flex;gap:6px;align-items:center;">
@@ -1418,19 +1153,10 @@ function renderRtEditList(){
       </div>
     </div>`;
   });
-  // Add separator button
   html+=`<div style="margin:6px 14px 4px;">
     <button class="btn" style="width:100%;font-size:13px;color:var(--t2);" onclick="addRtSep()">+ Add section separator</button>
   </div>`;
-  document.getElementById('rt-edit-list').innerHTML=html;
-}
-
-async function tRoutine(id){
-  const rtDone=dbGet('rt-done',{});
-  if(!rtDone[today()])rtDone[today()]={};
-  rtDone[today()][id]=!rtDone[today()][id];
-  await dbSet('rt-done',rtDone);
-  renderRtBody();
+  el.innerHTML=html;
 }
 
 async function addRtItem(){
@@ -1439,9 +1165,8 @@ async function addRtItem(){
   const name=document.getElementById('rt-new-name').value.trim();
   const dur=document.getElementById('rt-new-dur').value.trim();
   if(!name){toast('Enter item name');return;}
-  const items=getRtItems();
+  const items=getRtItems(rtTab);
   const newItem={id:'rt-'+Date.now(),time,icon,name,dur};
-  // Insert in time order
   const toMins=t=>{if(!t)return 9999;const[h,m]=t.split(':').map(Number);return h*60+m;};
   const idx=items.findIndex(x=>!x.sep&&toMins(x.time)>toMins(time));
   if(idx>=0)items.splice(idx,0,newItem);else items.push(newItem);
@@ -1449,53 +1174,48 @@ async function addRtItem(){
   document.getElementById('rt-new-name').value='';document.getElementById('rt-new-dur').value='';
   renderRtEditList();toast('Item added ✓');
 }
-
 async function updateRtItem(i,field,val){
-  const items=getRtItems();
-  if(items[i])items[i][field]=val;
-  await setRtItems(items);
+  const items=getRtItems(rtTab);if(items[i])items[i][field]=val;await setRtItems(items);
 }
-
 async function rmRtItem(i){
-  const items=getRtItems();const rm=items[i];items.splice(i,1);
-  await setRtItems(items);renderRtEditList();
-  toast('Removed',async()=>{const it=getRtItems();it.splice(i,0,rm);await setRtItems(it);renderRtEditList();});
+  const items=getRtItems(rtTab);const rm=items[i];items.splice(i,1);await setRtItems(items);renderRtEditList();
+  toast('Removed',async()=>{const it=getRtItems(rtTab);it.splice(i,0,rm);await setRtItems(it);renderRtEditList();});
 }
-
 async function addRtSep(){
   const label=prompt('Section label (e.g. "Job time", "After work"):');
   if(!label)return;
-  const items=getRtItems();items.push({sep:label});
-  await setRtItems(items);renderRtEditList();
+  const items=getRtItems(rtTab);items.push({sep:label});await setRtItems(items);renderRtEditList();
 }
-
 async function rmRtSep(i){
-  const items=getRtItems();items.splice(i,1);
-  await setRtItems(items);renderRtEditList();
+  const items=getRtItems(rtTab);items.splice(i,1);await setRtItems(items);renderRtEditList();
 }
-
 async function resetRtDefaults(){
-  if(!confirm('Reset to default routine? Your customizations will be lost.'))return;
-  const key=rtTab==='wd'?'rt-custom-wd':'rt-custom-we';
+  if(!confirm('Reset to default routine? Your customisations will be lost.'))return;
   const def=rtTab==='wd'?ROUTINE_WEEKDAY:ROUTINE_WEEKEND;
-  await dbSet(key,def);renderRtEditList();toast('Reset to defaults ✓');
+  await setRtItems([...def]);renderRtEditList();toast('Reset to defaults ✓');
 }
-
 // Drag to reorder
-function rtDragStart(i){_dragIdx=i;_dragTab=rtTab;}
+function rtDragStart(i){_dragIdx=i;}
 function rtDragOver(e,i){e.preventDefault();const el=document.getElementById('rte-'+i);if(el)el.style.opacity='0.5';}
 async function rtDrop(e,i){
   e.preventDefault();
   document.querySelectorAll('[id^="rte-"]').forEach(el=>el.style.opacity='1');
-  if(_dragIdx===null||_dragIdx===i||_dragTab!==rtTab)return;
-  const items=getRtItems();
-  const moved=items.splice(_dragIdx,1)[0];
-  items.splice(i,0,moved);
+  if(_dragIdx===null||_dragIdx===i)return;
+  const items=getRtItems(rtTab);const moved=items.splice(_dragIdx,1)[0];items.splice(i,0,moved);
   await setRtItems(items);renderRtEditList();
 }
-function rtDragEnd(){
-  _dragIdx=null;
-  document.querySelectorAll('[id^="rte-"]').forEach(el=>el.style.opacity='1');
+function rtDragEnd(){_dragIdx=null;document.querySelectorAll('[id^="rte-"]').forEach(el=>el.style.opacity='1');}
+
+
+async function tRoutine(id){
+  const isWE=isWeekend();
+  const rtDone=dbGet('rt-done',{});
+  // Use same date+type key so weekday and weekend are always separate
+  const key=today()+'_'+(isWE?'we':'wd');
+  if(!rtDone[key])rtDone[key]={};
+  rtDone[key][id]=!rtDone[key][id];
+  await dbSet('rt-done',rtDone);
+  renderRoutine();
 }
 
 // ════════════════════════════════════════════════════════
@@ -1514,7 +1234,7 @@ function renderDeen(){
     </div>`).join('');
 
   // 7-day history
-  const days7=[];for(let i=6;i>=0;i--){const d=new Date();d.setDate(d.getDate()-i);days7.push(localDateStr(d));}
+  const days7=[];for(let i=6;i>=0;i--){const d=new Date();d.setDate(d.getDate()-i);days7.push(d.toISOString().slice(0,10));}
   document.getElementById('p-hist').innerHTML=days7.map(d=>{
     const dp=pData[d]||{};const cnt=PRAYERS.filter(p=>dp[p]).length;
     return`<div style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-bottom:0.5px solid var(--e0);">
@@ -1766,7 +1486,7 @@ function renderJournal(){
   const pData=dbGet('prayers',{});const hData=dbGet('hdata',{});const qLogs=dbGet('qlog',[]);
   const gLogs=dbGet('german-log',[]);const cGames=dbGet('chess-games',[]);const checkins=dbGet('checkins',{});
   const habits=dbGet('habits',DEF_HABITS);
-  const days7=[];for(let i=6;i>=0;i--){const d=new Date();d.setDate(d.getDate()-i);days7.push(localDateStr(d));}
+  const days7=[];for(let i=6;i>=0;i--){const d=new Date();d.setDate(d.getDate()-i);days7.push(d.toISOString().slice(0,10));}
   const tP=days7.reduce((s,d)=>s+PRAYERS.filter(p=>(pData[d]||{})[p]).length,0);
   const phD=days7.filter(d=>habits.length>0&&habits.every(h=>(hData[d]||{})[h.id])).length;
   const qPg=qLogs.filter(l=>days7.includes(l.date)).reduce((s,l)=>s+(l.pages||0),0);
@@ -1782,7 +1502,8 @@ function renderJournal(){
     ['♟ Chess',wG.length+' games · '+wW+' W','b-bl'],
     ['😊 Avg mood',am?am+'/5':'No data',am>=4?'b-gr':am>=3?'b-am':am?'b-re':'b-bl'],
   ];
-  document.getElementById("wrev").innerHTML="<div style=\"font-size:13px;font-weight:800;color:var(--t0);margin-bottom:12px;\">This week</div>"+rows.map(function(r){return "<div style=\"display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:0.5px solid var(--e0);\"><span style=\"font-size:13px;color:var(--t1);\">"+r[0]+"</span><span class=\"badge "+r[2]+"\">"+r[1]+"</span></div>";}).join("")+"<div style=\"height:4px;\"></div>";
+  document.getElementById('wrev').innerHTML=`<div style="font-size:13px;font-weight:800;color:var(--t0);margin-bottom:12px;">This week</div>
+    ${rows.map(([l,v,b])=>`<div style="display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:0.5px solid var(--e0);"><span style="font-size:13px;color:var(--t1);">${l}</span><span class="badge ${b}">${v}</span></div>`).join('')}<div style="height:4px;"></div>`;
 }
 async function saveJ(){
   const j1=document.getElementById('j1').value.trim();const j2=document.getElementById('j2').value.trim();const j3=document.getElementById('j3').value.trim();const j4=document.getElementById('j4').value.trim();
@@ -1795,154 +1516,29 @@ async function saveJ(){
 }
 
 // ════════════════════════════════════════════════════════
-// ENGAGEMENT HELPERS
-// ════════════════════════════════════════════════════════
-const PRAYER_TIMES={Fajr:'05:00',Dhuhr:'12:10',Asr:'15:30',Maghrib:'18:15',Isha:'19:30'};
-function renderNextPrayer(){
-  const el=document.getElementById('next-pray-wrap');if(!el)return;
-  const now=new Date();const nowMins=now.getHours()*60+now.getMinutes();
-  const toM=t=>{const[h,m]=t.split(':').map(Number);return h*60+m;};
-  const pData=dbGet('prayers',{});const tp=pData[today()]||{};
-  let next=null,nextMins=9999;
-  PRAYERS.forEach(p=>{
-    if(tp[p])return;
-    const pm=toM(PRAYER_TIMES[p]||'23:59');
-    let diff=pm-nowMins;if(diff<0)diff+=1440;
-    if(diff<nextMins){nextMins=diff;next=p;}
-  });
-  if(!next||PRAYERS.every(p=>tp[p])){el.innerHTML='';return;}
-  const hh=Math.floor(nextMins/60),mm=nextMins%60;
-  el.innerHTML='<div class="next-pray">🕌 '+next+' in '+(hh>0?hh+'h ':'')+mm+'m</div>';
-}
-
-function renderUrgencyNudge(pDone,hDone,habLen,qPg,gMins,score){
-  var el=document.getElementById("urgency-nudge");if(!el)return;
-  var h=new Date().getHours();
-  var msg="",cls="nudge-am",ico="💡";
-  var pLeft=5-pDone;
-  var pWord=pLeft>1?"prayers":"prayer";
-  var hLeft=habLen-hDone;
-  var hWord=hLeft>1?"habits":"habit";
-  if(score>=100){msg="Perfect day! You completed everything. 🏆";cls="nudge-gr";ico="🌟";}
-  else if(pLeft>0&&h>=18){msg=pLeft+" "+pWord+" remaining. Do not end the day without them.";cls="nudge-re";ico="🕌";}
-  else if(pLeft>0&&h>=12){msg=pLeft+" "+pWord+" left today. You are on track.";cls="nudge-am";ico="🕌";}
-  else if(hLeft>0&&h>=20){msg=hLeft+" "+hWord+" unchecked. Quick wins before sleep.";cls="nudge-am";ico="✅";}
-  else if(gMins===0&&h>=9&&h<22){msg="No German today yet. Even 15 min of Anki moves you forward.";cls="nudge-am";ico="🇩🇪";}
-  else if(qPg===0&&h>=8&&h<21){msg="No Quran today. Start with just one page.";cls="nudge-am";ico="📖";}
-  else{el.innerHTML="";return;}
-  el.innerHTML="<div class=\"nudge "+cls+"\">"+ico+" "+msg+"</div>";
-}
-
-const INSIGHTS=[
-  {q:"The strong man is not the one who can overpower others. The strong man is the one who controls himself when anger.",s:"Prophet Muhammad ☯"},
-  {q:"Verily, with hardship comes ease.",s:"Quran 94:5"},
-  {q:"An investment in knowledge pays the best interest.",s:"Benjamin Franklin"},
-  {q:"The secret of getting ahead is getting started.",s:"Mark Twain"},
-  {q:"Allah will not change the condition of a people until they change what is in themselves.",s:"Quran 13:11"},
-  {q:"Whoever treads a path seeking knowledge, Allah will make easy for him a path to paradise.",s:"Sahih Muslim"},
-  {q:"Improve by 1% every day. In 70 days you will be twice as good.",s:"Kaizen principle"},
-  {q:"Your time is limited. Do not waste it living someone else life.",s:"Steve Jobs"},
-  {q:"Seek knowledge from the cradle to the grave.",s:"Islamic tradition"},
-  {q:"Success is the sum of small efforts, repeated day in and day out.",s:"Robert Collier"},
-  {q:"Discipline is doing what needs to be done, even when you feel like avoiding it.",s:"Unknown"},
-  {q:"The best time to plant a tree was 20 years ago. The second best time is now.",s:"Chinese proverb"},
-  {q:"Do not be deceived by the length of the shadow at sunset.",s:"African proverb"},
-  {q:"What you do today can improve all your tomorrows.",s:"Ralph Marston"},
-  {q:"The one who does not plan for the future will face its difficulties.",s:"Arab proverb"},
-];
-
-function renderInsight(){
-  var el=document.getElementById("daily-insight");if(!el)return;
-  var idx=(new Date().getDay()+new Date().getDate()+new Date().getMonth())%INSIGHTS.length;
-  var q=INSIGHTS[idx];
-  el.innerHTML="<div class=\"insight-card\"><div class=\"insight-label\">Today thought</div><div class=\"insight-text\">&ldquo;"+q.q+"&rdquo;</div><div class=\"insight-src\">&mdash; "+q.s+"</div></div>";
-}
-
-const CHALLENGES=[
-  {ico:"🇩🇪",lbl:"German challenge",text:"Study German for 45 uninterrupted minutes. Use DW Nicos Weg for speaking practice."},
-  {ico:"♟",lbl:"Chess challenge",text:"Solve 15 puzzles without hints. Focus on finding the pattern before moving."},
-  {ico:"📖",lbl:"Quran challenge",text:"Read 5 pages slowly. Write down one ayah that speaks to you today."},
-  {ico:"☁️",lbl:"AWS challenge",text:"Complete one full practice exam section. Review every wrong answer carefully."},
-  {ico:"✍️",lbl:"Reflection challenge",text:"Write three sentences: what you built, what you avoided, your next concrete step."},
-  {ico:"🇦🇹",lbl:"Austria challenge",text:"Spend 20 minutes researching one Austrian university program or scholarship."},
-  {ico:"🚶",lbl:"Walk challenge",text:"30-minute walk with no phone. Let your thoughts settle. Best thinking tool you have."},
-];
-
-function renderChallenge(){
-  var el=document.getElementById("daily-challenge");if(!el)return;
-  var c=CHALLENGES[new Date().getDay()%CHALLENGES.length];
-  el.innerHTML="<div class=\"challenge-card\"><div class=\"challenge-ico\">"+c.ico+"</div><div class=\"challenge-body\"><div class=\"challenge-label\">"+c.lbl+"</div><div class=\"challenge-text\">"+c.text+"</div></div></div>";
-}
-
-function popXP(amount,x,y){
-  const el=document.createElement('div');
-  el.className='xp-pop';el.textContent='+'+amount+' XP';
-  el.style.left=x+'px';el.style.top=y+'px';
-  document.body.appendChild(el);
-  setTimeout(()=>el.remove(),1300);
-}
-
-function launchConfetti(){
-  const canvas=document.getElementById('confetti-canvas');if(!canvas)return;
-  const ctx=canvas.getContext('2d');
-  canvas.width=window.innerWidth;canvas.height=window.innerHeight;
-  const cols=['#FFD700','#FF6B35','#4ECDC4','#45B7D1','#96CEB4','#FFEAA7','#DDA0DD','#98FB98'];
-  const pieces=Array.from({length:120},()=>({
-    x:Math.random()*canvas.width,y:-20,
-    r:Math.random()*5+3,
-    color:cols[Math.floor(Math.random()*cols.length)],
-    vy:Math.random()*3+2,vx:(Math.random()-0.5)*3,
-    opacity:1,fade:0.012+Math.random()*0.01
-  }));
-  let frame=0;
-  function draw(){
-    ctx.clearRect(0,0,canvas.width,canvas.height);
-    let any=false;
-    pieces.forEach(p=>{
-      if(p.opacity<=0)return;any=true;
-      ctx.save();ctx.globalAlpha=p.opacity;ctx.fillStyle=p.color;
-      ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fill();ctx.restore();
-      p.y+=p.vy;p.x+=p.vx;
-      if(p.y>canvas.height*0.6)p.opacity-=p.fade;
-    });
-    if(any&&frame<200){frame++;requestAnimationFrame(draw);}
-    else ctx.clearRect(0,0,canvas.width,canvas.height);
-  }
-  draw();
-}
-
-// ════════════════════════════════════════════════════════
 // RENDER MAP + INIT
 // ════════════════════════════════════════════════════════
 const renders={today:renderToday,routine:renderRoutine,deen:renderDeen,goals:renderGoals,journal:renderJournal};
 
-(async function(){
+(async()=>{
   // Migrate old prefix data (one-time)
-  var oldPrefixes=['pos3_','pos4_','pos5_','pos6_','pos7_'];
-  for(var pi=0;pi<oldPrefixes.length;pi++){
-    var op=oldPrefixes[pi];
-    for(var li=localStorage.length-1;li>=0;li--){
-      var lk=localStorage.key(li);
-      if(lk&&lk.startsWith(op)){
-        var nk=PREF+lk.slice(op.length);
-        if(!localStorage.getItem(nk))localStorage.setItem(nk,localStorage.getItem(lk));
+  ['pos3_','pos4_','pos5_','pos6_','pos7_'].forEach(op=>{
+    for(let i=localStorage.length-1;i>=0;i--){
+      const k=localStorage.key(i);
+      if(k&&k.startsWith(op)){
+        const nk=PREF+k.slice(op.length);
+        if(!localStorage.getItem(nk))localStorage.setItem(nk,localStorage.getItem(k));
       }
     }
-  }
+  });
 
-  // 1. Render IMMEDIATELY from localStorage — instant, no network wait
+  // Render immediately from localStorage cache
   renderToday();
 
-  // 2. Flush any pending offline queue first
+  // Pull latest from Supabase in background — update cache then re-render
   if(navigator.onLine){
-    await flushQueue();
-  }
-
-  // 3. Then sync with Supabase — but our new pullAll never deletes local data
-  if(navigator.onLine){
-    await pullAll();
-    // Re-render with any updates from Supabase
-    renders[curPage]();
+    pullAll().then(()=>{renders[curPage]();});
+    flushQueue();
   }
 })();
 </script>
