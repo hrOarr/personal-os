@@ -260,9 +260,83 @@ textarea{resize:none;min-height:64px;line-height:1.5;}
 .qai{font-size:24px;display:block;margin-bottom:6px;}
 .qal{font-size:13px;font-weight:700;}
 .qas{font-size:11px;color:var(--t2);margin-top:2px;}
+
+/* ENGAGEMENT */
+.xp-pop{position:fixed;pointer-events:none;font-weight:900;font-size:15px;color:#F5C542;text-shadow:0 2px 8px rgba(0,0,0,0.4);z-index:9990;animation:xpfloat 1.2s ease forwards;}
+@keyframes xpfloat{0%{opacity:1;transform:translateY(0) scale(1)}100%{opacity:0;transform:translateY(-60px) scale(0.7)}}
+#confetti-canvas{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:8888;}
+.streak-fire{text-align:center;flex-shrink:0;}
+.streak-num{font-size:42px;font-weight:900;letter-spacing:-2px;line-height:1;color:var(--go-t);}
+.streak-num.hot{text-shadow:0 0 20px rgba(240,176,56,0.6);animation:pulse-glow 2s ease-in-out infinite;}
+@keyframes pulse-glow{0%,100%{text-shadow:0 0 12px rgba(240,176,56,0.4)}50%{text-shadow:0 0 28px rgba(240,176,56,0.9)}}
+.streak-lbl{font-size:11px;font-weight:700;color:var(--t2);text-transform:uppercase;letter-spacing:0.5px;margin-top:2px;}
+.insight-card{border-radius:var(--r);padding:14px 16px;background:linear-gradient(135deg,#1A3070,#0C2050);position:relative;overflow:hidden;}
+.insight-label{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:0.7px;color:rgba(255,255,255,0.4);margin-bottom:5px;}
+.insight-text{font-size:13px;font-weight:600;color:rgba(255,255,255,0.9);line-height:1.6;font-style:italic;}
+.insight-src{font-size:11px;color:rgba(255,255,255,0.4);margin-top:5px;}
+.challenge-card{border-radius:var(--r);padding:13px 15px;background:var(--go-bg);border:0.5px solid rgba(168,104,0,0.2);display:flex;align-items:center;gap:12px;}
+.challenge-ico{font-size:26px;flex-shrink:0;}
+.challenge-label{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:0.6px;color:var(--go-t);margin-bottom:3px;}
+.challenge-text{font-size:13px;font-weight:600;color:var(--t0);line-height:1.4;}
+.nudge{border-radius:var(--rm);padding:11px 14px;font-size:13px;font-weight:600;line-height:1.5;display:flex;align-items:center;gap:10px;}
+.nudge-re{background:var(--re-bg);color:var(--re-t);}
+.nudge-am{background:var(--am-bg);color:var(--am-t);}
+.nudge-gr{background:var(--gr-bg);color:var(--gr-t);}
+.next-pray{display:inline-flex;align-items:center;gap:6px;background:rgba(255,215,0,0.18);border:1px solid rgba(255,215,0,0.3);border-radius:100px;padding:5px 12px;font-size:12px;font-weight:700;color:rgba(255,255,255,0.95);margin-bottom:10px;}
+.xp-badge{display:inline-flex;align-items:center;gap:5px;background:rgba(255,255,255,0.15);border-radius:100px;padding:3px 10px;font-size:12px;font-weight:800;color:#fff;margin-top:6px;}
+.xp-bar-wrap{background:rgba(255,255,255,0.15);border-radius:100px;height:4px;overflow:hidden;margin-top:4px;width:100%;}
+.xp-bar-fill{height:100%;border-radius:100px;background:rgba(255,255,255,0.85);transition:width 0.8s ease;}
+
+
+/* ── MISSIONS ── */
+.missions-wrap{margin:0 14px 10px;background:var(--c0);border-radius:var(--r);padding:14px 16px;border:0.5px solid var(--e0);}
+.missions-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+.missions-title{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:0.6px;color:var(--t1);}
+.missions-xp{font-size:11px;font-weight:700;color:var(--go-t);}
+.mission-row{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:0.5px solid var(--e0);}
+.mission-row:last-child{border-bottom:none;}
+.mission-ico{font-size:20px;width:28px;text-align:center;flex-shrink:0;}
+.mission-body{flex:1;min-width:0;}
+.mission-name{font-size:13px;font-weight:600;color:var(--t0);margin-bottom:3px;}
+.mission-prog-wrap{background:var(--e0);border-radius:100px;height:5px;overflow:hidden;}
+.mission-prog-fill{height:100%;border-radius:100px;transition:width 0.5s cubic-bezier(0.34,1.1,0.64,1);}
+.mission-val{font-size:11px;font-weight:700;color:var(--t2);flex-shrink:0;min-width:36px;text-align:right;}
+.mission-done-badge{font-size:11px;font-weight:800;color:var(--gr-t);background:var(--gr-bg);padding:2px 8px;border-radius:100px;flex-shrink:0;}
+.missions-total-bar-wrap{margin-top:11px;background:var(--e0);border-radius:100px;height:7px;overflow:hidden;}
+.missions-total-bar{height:100%;border-radius:100px;background:linear-gradient(90deg,var(--go-t),var(--gr-t));transition:width 0.7s cubic-bezier(0.34,1.1,0.64,1);}
+/* ── STREAKS ── */
+.streaks-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;}
+.streak-item{background:var(--c0);border:0.5px solid var(--e0);border-radius:var(--rm);padding:10px 6px;text-align:center;transition:all 0.2s;}
+.streak-item.active{border-color:var(--go-t);background:var(--go-bg);}
+.streak-item.done-today{border-color:var(--gr-t);background:var(--gr-bg);}
+.streak-ico{font-size:20px;display:block;margin-bottom:4px;}
+.streak-count{font-size:20px;font-weight:900;letter-spacing:-0.5px;line-height:1;color:var(--t0);}
+.streak-item.active .streak-count{color:var(--go-t);}
+.streak-item.done-today .streak-count{color:var(--gr-t);}
+.streak-count.fire{text-shadow:0 0 12px rgba(240,176,56,0.6);animation:streakPulse 2s ease-in-out infinite;}
+@keyframes streakPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
+.streak-name{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.4px;color:var(--t2);margin-top:3px;}
+.streak-days-row{display:flex;justify-content:center;gap:2px;margin-top:5px;}
+.streak-day-dot{width:5px;height:5px;border-radius:50%;background:var(--e1);}
+.streak-day-dot.on{background:var(--go-t);}
+.streak-day-dot.green{background:var(--gr-t);}
+/* ── XP LEVEL ── */
+.xp-level-wrap{margin:0 14px 10px;background:var(--c0);border-radius:var(--rm);padding:12px 14px;border:0.5px solid var(--e0);}
+.xp-level-row{display:flex;align-items:center;gap:10px;}
+.xp-level-badge{background:linear-gradient(135deg,#FFD700,#FFA500);border-radius:50%;width:36px;height:36px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900;color:#000;flex-shrink:0;box-shadow:0 2px 8px rgba(255,180,0,0.4);}
+.xp-level-info{flex:1;min-width:0;}
+.xp-level-label{display:flex;justify-content:space-between;margin-bottom:4px;}
+.xp-level-name{font-size:12px;font-weight:700;color:var(--t0);}
+.xp-level-pts{font-size:11px;font-weight:700;color:var(--go-t);}
+.xp-bar-track{background:var(--e0);border-radius:100px;height:8px;overflow:hidden;}
+.xp-bar-prog{height:100%;border-radius:100px;background:linear-gradient(90deg,#FFD700,#FFA500);transition:width 0.8s ease;}
+.xp-today-row{display:flex;justify-content:space-between;margin-top:5px;font-size:10px;color:var(--t2);}
+.xp-goal-done{color:var(--gr-t);font-weight:700;}
+
 </style>
 </head>
 <body>
+<canvas id="confetti-canvas"></canvas>
 <div id="sline"></div>
 <div id="toast"><span id="t-msg"></span><button id="t-undo" style="display:none" onclick="doUndo()">Undo</button></div>
 <div id="app">
@@ -275,6 +349,7 @@ textarea{resize:none;min-height:64px;line-height:1.5;}
   <div class="hero">
     <div class="hero-date" id="h-date"></div>
     <div class="hero-greet" id="h-greet"></div>
+    <div id="next-pray-wrap"></div>
     <div class="ring-row">
       <div class="ring">
         <svg width="84" height="84" viewBox="0 0 84 84">
@@ -298,6 +373,16 @@ textarea{resize:none;min-height:64px;line-height:1.5;}
     <div class="sc sc-bl"><div class="sl_">Quran</div><div class="sv" id="h-q">0p</div></div>
     <div class="sc sc-pu"><div class="sl_">German</div><div class="sv" id="h-g">0m</div></div>
   </div>
+  <!-- MISSIONS BAR -->
+  <div id="missions-bar"></div>
+  <!-- STREAKS ROW -->
+  <div id="streaks-row" style="margin:0 14px 10px;"></div>
+  <!-- LEVEL + XP BAR -->
+  <div id="xp-level-bar"></div>
+  <!-- Nudge + Insight + Challenge -->
+  <div id="today-nudge" style="margin:0 14px 6px;"></div>
+  <div id="today-insight" style="margin:0 14px 10px;"></div>
+  <div id="today-challenge" style="margin:0 14px 10px;"></div>
   <!-- Prayers -->
   <div class="sec">Salah — today</div>
   <div class="card"><div class="pgrid" id="t-pgrid"></div></div>
@@ -694,10 +779,12 @@ const DEF_HABITS=[
   {id:'5p',name:'5 prayers complete',icon:'🕌'},
   {id:'quran',name:'Quran reading',icon:'📖'},
   {id:'german',name:'German study',icon:'🇩🇪'},
+  {id:'leetcode',name:'LeetCode problem',icon:'⌥'},
+  {id:'sysdesign',name:'System design study',icon:'◈'},
+  {id:'aws',name:'AWS / IELTS study',icon:'☁️'},
+  {id:'chess',name:'Chess puzzles',icon:'♟'},
   {id:'walk',name:'Evening walk',icon:'🚶'},
   {id:'nophone',name:'No phone on waking',icon:'📵'},
-  {id:'aws',name:'AWS study',icon:'☁️'},
-  {id:'chess',name:'Chess puzzles',icon:'♟'},
   {id:'journal',name:'Morning journal',icon:'✍️'},
 ];
 
@@ -715,43 +802,47 @@ const DEF_MS=[
 // ROUTINE — weekday vs weekend, job 12pm–8pm
 // isWeekend: Sat(6) + Sun(0)
 const ROUTINE_WEEKDAY=[
-  {time:'6:00',name:'Wake up',icon:'⏰',dur:'Fajr + morning routine',id:'rt-wake'},
+  {time:'6:00',name:'Wake up',icon:'⏰',dur:'Fajr + no phone',id:'rt-wake'},
   {time:'6:10',name:'Fajr prayer',icon:'🕌',dur:'15 min',id:'rt-fajr'},
-  {time:'6:30',name:'Morning journal',icon:'✍️',dur:'10 min — reflection + plan',id:'rt-journal'},
+  {time:'6:30',name:'Morning journal',icon:'✍️',dur:'10 min — plan the day',id:'rt-journal'},
   {time:'6:45',name:'German study',icon:'🇩🇪',dur:'45 min — Anki + DW Nicos Weg',id:'rt-german'},
-  {time:'7:30',name:'AWS / IELTS study',icon:'📚',dur:'60 min — alternate daily',id:'rt-study'},
+  {time:'7:30',name:'LeetCode problem',icon:'⌥',dur:'30–40 min — one focused problem',id:'rt-leet'},
+  {time:'8:10',name:'System design review',icon:'◈',dur:'20 min — one concept or topic',id:'rt-sd'},
   {time:'8:30',name:'Breakfast + no phone',icon:'🍳',dur:'30 min',id:'rt-breakfast'},
   {time:'9:00',name:'Quran reading',icon:'📖',dur:'20–30 min',id:'rt-quran'},
-  {time:'9:30',name:'Chess puzzles',icon:'♟',dur:'15–20 min',id:'rt-chess'},
-  {time:'10:00',name:'Free / deep work',icon:'💻',dur:'Until 12pm',id:'rt-free1'},
-  {sep:'Job time'},
-  {time:'12:00',name:'Dhuhr prayer + job start',icon:'🕌',dur:'Job: 12pm–8pm',id:'rt-dhuhr'},
-  {time:'15:30',name:'Asr prayer',icon:'🕌',dur:'During break',id:'rt-asr'},
+  {time:'9:30',name:'AWS / IELTS study',icon:'☁️',dur:'60 min — alternate daily',id:'rt-study'},
+  {time:'10:30',name:'Chess puzzles',icon:'♟',dur:'15 min — tactics only',id:'rt-chess'},
+  {time:'10:45',name:'Free / deep work',icon:'💻',dur:'Until 12pm',id:'rt-free1'},
+  {sep:'Job time (12pm–8pm)'},
+  {time:'12:00',name:'Dhuhr prayer + job start',icon:'🕌',dur:'',id:'rt-dhuhr'},
+  {time:'15:30',name:'Asr prayer',icon:'🕌',dur:'During break — 5 min',id:'rt-asr'},
   {sep:'After job'},
   {time:'20:00',name:'Maghrib prayer + dinner',icon:'🕌',dur:'After job ends',id:'rt-maghrib'},
-  {time:'20:30',name:'Evening walk',icon:'🚶',dur:'30 min — debrief day',id:'rt-walk'},
-  {time:'21:00',name:'Light review',icon:'📝',dur:'30 min — Anki or reading',id:'rt-review'},
-  {time:'21:30',name:'Isha prayer',icon:'🕌',dur:'Then wind down',id:'rt-isha'},
-  {time:'22:00',name:'Wind down — no screens',icon:'🌙',dur:'Prepare for sleep',id:'rt-wind'},
-  {time:'22:30',name:'Sleep',icon:'😴',dur:'Target 7h — wake 6am',id:'rt-sleep'},
+  {time:'20:30',name:'Evening walk',icon:'🚶',dur:'30 min — decompress',id:'rt-walk'},
+  {time:'21:00',name:'Anki review',icon:'📝',dur:'20 min — German + any cards',id:'rt-review'},
+  {time:'21:30',name:'Isha prayer',icon:'🕌',dur:'',id:'rt-isha'},
+  {time:'21:45',name:'Wind down',icon:'🌙',dur:'No screens — read or reflect',id:'rt-wind'},
+  {time:'22:30',name:'Sleep',icon:'😴',dur:'Target 7.5h',id:'rt-sleep'},
 ];
 const ROUTINE_WEEKEND=[
-  {time:'7:00',name:'Wake up',icon:'⏰',dur:'Fajr + morning routine',id:'rt-wake'},
+  {time:'7:00',name:'Wake up',icon:'⏰',dur:'Fajr + no phone',id:'rt-wake'},
   {time:'7:10',name:'Fajr prayer',icon:'🕌',dur:'15 min',id:'rt-fajr'},
-  {time:'7:30',name:'Morning journal',icon:'✍️',dur:'15 min',id:'rt-journal'},
-  {time:'7:45',name:'German study (extended)',icon:'🇩🇪',dur:'90 min — speaking + grammar',id:'rt-german'},
-  {time:'9:15',name:'AWS / IELTS deep work',icon:'📚',dur:'90 min — practice exams',id:'rt-study'},
-  {time:'10:45',name:'Breakfast + Quran',icon:'📖',dur:'45 min',id:'rt-quran'},
-  {time:'11:30',name:'Personal project / coding',icon:'💻',dur:'2–3 hrs',id:'rt-project'},
+  {time:'7:30',name:'Morning journal + week plan',icon:'✍️',dur:'20 min',id:'rt-journal'},
+  {time:'7:50',name:'German study (extended)',icon:'🇩🇪',dur:'90 min — speaking + grammar deep dive',id:'rt-german'},
+  {time:'9:20',name:'LeetCode — 2 problems',icon:'⌥',dur:'60–75 min — attempt both before hints',id:'rt-leet'},
+  {time:'10:30',name:'System design deep dive',icon:'◈',dur:'45 min — one full topic with notes',id:'rt-sd'},
+  {time:'11:15',name:'Breakfast + Quran',icon:'📖',dur:'45 min',id:'rt-quran'},
   {time:'12:00',name:'Dhuhr prayer',icon:'🕌',dur:'',id:'rt-dhuhr'},
-  {time:'14:00',name:'Chess study + games',icon:'♟',dur:'45 min',id:'rt-chess'},
+  {time:'12:15',name:'AWS / IELTS practice',icon:'☁️',dur:'90 min — practice exam or writing task',id:'rt-study'},
+  {time:'13:45',name:'Personal project / coding',icon:'💻',dur:'90 min — build something',id:'rt-project'},
   {time:'15:30',name:'Asr prayer',icon:'🕌',dur:'',id:'rt-asr'},
-  {time:'16:00',name:'Free time / rest',icon:'☕',dur:'Recharge',id:'rt-free'},
-  {time:'18:30',name:'Evening walk',icon:'🚶',dur:'45 min',id:'rt-walk'},
+  {time:'15:45',name:'Chess study + 2 games',icon:'♟',dur:'45 min',id:'rt-chess'},
+  {time:'16:30',name:'Free time / rest',icon:'☕',dur:'Recharge — walk, nap, relax',id:'rt-free'},
+  {time:'18:30',name:'Evening walk',icon:'🚶',dur:'45 min — decompress',id:'rt-walk'},
   {time:'19:30',name:'Maghrib prayer + dinner',icon:'🕌',dur:'',id:'rt-maghrib'},
-  {time:'20:30',name:'Weekly review',icon:'📊',dur:'30 min — plan next week',id:'rt-wkrev'},
-  {time:'21:30',name:'Isha prayer',icon:'🕌',dur:'Then wind down',id:'rt-isha'},
-  {time:'22:00',name:'Read / light activity',icon:'📚',dur:'',id:'rt-read'},
+  {time:'20:30',name:'Weekly review + next week plan',icon:'📊',dur:'30 min',id:'rt-wkrev'},
+  {time:'21:30',name:'Isha prayer',icon:'🕌',dur:'',id:'rt-isha'},
+  {time:'21:45',name:'Read / reflect',icon:'📚',dur:'No screens — book or Quran',id:'rt-read'},
   {time:'23:00',name:'Sleep',icon:'😴',dur:'Weekend allowance',id:'rt-sleep'},
 ];
 
@@ -962,7 +1053,7 @@ function renderToday(){
 
   // Prayer grid
   document.getElementById('t-pgrid').innerHTML=PRAYERS.map(p=>`
-    <div class="pcard ${tp[p]?'done':''}" onclick="tPray('${p}','today')">
+    <div class="pcard ${tp[p]?'done':''}" onclick="tPray('${p}','today',event)">
       <span class="pico">${tp[p]?'✅':'🕌'}</span><div class="pnm">${p}</div>
     </div>`).join('');
 
@@ -971,7 +1062,7 @@ function renderToday(){
   document.getElementById('h-list').innerHTML=habits.length?habits.map(h=>{
     const done=!!th[h.id];
     const streak=calcStreak(k=>!!(hData[k]&&hData[k][h.id]));
-    return`<div class="hrow" onclick="tHabit('${h.id}')">
+    return`<div class="hrow" onclick="tHabit('${h.id}',event)">
       <div class="hck ${done?'done':''}"><span class="hico">${h.icon||'•'}</span></div>
       <div style="flex:1;min-width:0;"><div class="hn">${h.name}</div><div class="hst">${streak>0?'🔥 '+streak+' day streak':'Start today'}</div></div>
       <div class="hds">${days7.map(d=>`<div class="hd ${hData[d]&&hData[d][h.id]?'on':''}"></div>`).join('')}</div>
@@ -991,21 +1082,47 @@ function renderToday(){
     const cls=pct>=0.85?'full':pct>=0.4?'part':'';
     return`<div class="wkday"><div class="wkl">${WDAYS[new Date(d+'T12:00').getDay()]}</div><div class="wkd ${cls}${d===today()?' today':''}">${Math.round(pct*100)}</div></div>`;
   }).join('');
+
+  // Engagement panels — always render at end of today
+  renderMissions();
+  renderStreaksRow();
+  renderXPBar();
+  renderTodayWidgets(pDone,hDone,habits,qPg,gMins,score);
 }
 
-async function tPray(name,src){
+async function tPray(name,src,ev){
   const pData=dbGet('prayers',{});
   if(!pData[today()])pData[today()]={};
-  pData[today()][name]=!pData[today()][name];
+  const wasOn=!!pData[today()][name];
+  pData[today()][name]=!wasOn;
   await dbSet('prayers',pData);
-  toast(pData[today()][name]?name+' ✓':name+' unmarked');
+  if(!wasOn){
+    addXP(XP_SOURCES.prayer,ev);
+    toast('🕌 '+name+' ✓',null,1500);
+    if(PRAYERS.every(p=>pData[today()][p])){
+      addXP(XP_SOURCES.allPrayers-XP_SOURCES.prayer,null);
+      setTimeout(()=>toast('🏆 All 5 prayers! Bonus XP!',null,2500),400);
+    }
+  } else {toast(name+' unmarked');}
   if(src==='deen'){renderDeen();}else{renderToday();}
 }
-async function tHabit(hid){
+async function tHabit(hid,ev){
   const hData=dbGet('hdata',{});
   if(!hData[today()])hData[today()]={};
-  hData[today()][hid]=!hData[today()][hid];
-  await dbSet('hdata',hData);renderToday();
+  const wasOn=!!hData[today()][hid];
+  hData[today()][hid]=!wasOn;
+  await dbSet('hdata',hData);
+  if(!wasOn){
+    const xpAmt=hid==='leetcode'?XP_SOURCES.leetcode:hid==='sysdesign'?XP_SOURCES.sysdesign:XP_SOURCES.habit;
+    addXP(xpAmt,ev);
+    const habits=dbGet('habits',DEF_HABITS);
+    const hd=hData[today()]||{};
+    if(habits.every(h=>hd[h.id])){
+      addXP(XP_SOURCES.allHabits,null);
+      setTimeout(()=>toast('✅ All habits done! Bonus XP!',null,2500),400);
+    }
+  }
+  renderToday();
 }
 function renderHEdit(){
   const habits=dbGet('habits',DEF_HABITS);
@@ -1229,7 +1346,7 @@ function renderDeen(){
 
   // Prayer grid
   document.getElementById('d-pgrid').innerHTML=PRAYERS.map(p=>`
-    <div class="pcard ${tp[p]?'done':''}" onclick="tPray('${p}','deen')">
+    <div class="pcard ${tp[p]?'done':''}" onclick="tPray('${p}','deen',event)">
       <span class="pico">${tp[p]?'✅':'🕌'}</span><div class="pnm">${p}</div>
     </div>`).join('');
 
@@ -1513,6 +1630,338 @@ async function saveJ(){
   ['j1','j2','j3','j4'].forEach(id=>document.getElementById(id).value='');
   const btn=document.getElementById('jbtn');btn.textContent='Saved ✓';setTimeout(()=>btn.textContent='Save entry',1800);
   renderJournal();
+}
+
+
+// ════════════════════════════════════════════════════════
+// XP SYSTEM
+// ════════════════════════════════════════════════════════
+const XP_PER_LEVEL = 200;
+const XP_SOURCES = {
+  prayer:8, allPrayers:32, habit:5, leetcode:20, sysdesign:15,
+  german:8, quran:10, checkin:10, allHabits:25, perfectDay:50,
+};
+const DAILY_XP_GOAL = 100;
+
+function getXP(){return dbGet('xp-total',0);}
+function getTodayXP(){
+  var d=dbGet('xp-today',{date:'',xp:0});
+  return d.date===today()?d.xp:0;
+}
+function addXP(amount,ev){
+  var total=(dbGet('xp-total',0))+amount;
+  dbSet('xp-total',total);
+  var td=dbGet('xp-today',{date:today(),xp:0});
+  if(td.date!==today())td={date:today(),xp:0};
+  td.xp+=amount;
+  dbSet('xp-today',td);
+  if(ev){
+    var el=document.createElement('div');
+    el.className='xp-pop';el.textContent='+'+amount+' XP';
+    el.style.left=ev.clientX+'px';el.style.top=ev.clientY+'px';
+    document.body.appendChild(el);setTimeout(function(){el.remove();},1200);
+  }
+  var oldLv=Math.floor((total-amount)/XP_PER_LEVEL)+1;
+  var newLv=Math.floor(total/XP_PER_LEVEL)+1;
+  if(newLv>oldLv){setTimeout(function(){toast('🎉 Level '+newLv+'! You levelled up!',null,4000);launchConfetti();},300);}
+}
+
+// ════════════════════════════════════════════════════════
+// PURPOSEFUL STREAKS — each tracks a specific meaningful habit
+// Streak = consecutive days you did that specific thing
+// ════════════════════════════════════════════════════════
+var STREAK_DEFS = [
+  {id:'prayer',  icon:'🕌', name:'Prayer',    color:'var(--go-t)', bg:'var(--go-bg)',
+   check: function(d,pData,hData,qLogs,gLogs){
+     var tp=pData[d]||{};
+     return PRAYERS.every(function(p){return tp[p];});
+   }},
+  {id:'leetcode',icon:'⌥',  name:'LeetCode',  color:'var(--bl-t)', bg:'var(--bl-bg)',
+   check: function(d,pData,hData,qLogs,gLogs){
+     var h=hData[d]||{};return !!h['leetcode'];
+   }},
+  {id:'german',  icon:'🇩🇪', name:'German',    color:'var(--pu-t)', bg:'var(--pu-bg)',
+   check: function(d,pData,hData,qLogs,gLogs){
+     return gLogs.some(function(l){return l.date===d&&(l.mins||0)>=15;});
+   }},
+  {id:'sysdesign',icon:'◈', name:'SysDesign', color:'var(--te-t)', bg:'var(--te-bg)',
+   check: function(d,pData,hData,qLogs,gLogs){
+     var h=hData[d]||{};return !!h['sysdesign'];
+   }},
+  {id:'quran',   icon:'📖', name:'Quran',     color:'var(--am-t)', bg:'var(--am-bg)',
+   check: function(d,pData,hData,qLogs,gLogs){
+     return qLogs.some(function(l){return l.date===d&&(l.pages||0)>=1;});
+   }},
+];
+
+function calcStreakFor(def){
+  var pData=dbGet('prayers',{});
+  var hData=dbGet('hdata',{});
+  var qLogs=dbGet('qlog',[]);
+  var gLogs=dbGet('german-log',[]);
+  var count=0;
+  // Check each of the last 90 days going backwards
+  for(var i=1;i<=90;i++){
+    var d=new Date();d.setDate(d.getDate()-i);
+    var ds=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+    if(def.check(ds,pData,hData,qLogs,gLogs)){count++;}
+    else{break;}
+  }
+  return count;
+}
+
+function isDoneToday(def){
+  var pData=dbGet('prayers',{});
+  var hData=dbGet('hdata',{});
+  var qLogs=dbGet('qlog',[]);
+  var gLogs=dbGet('german-log',[]);
+  return def.check(today(),pData,hData,qLogs,gLogs);
+}
+
+function getLast7(def){
+  var pData=dbGet('prayers',{});
+  var hData=dbGet('hdata',{});
+  var qLogs=dbGet('qlog',[]);
+  var gLogs=dbGet('german-log',[]);
+  var dots=[];
+  for(var i=6;i>=0;i--){
+    var d=new Date();d.setDate(d.getDate()-i);
+    var ds=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+    dots.push(def.check(ds,pData,hData,qLogs,gLogs));
+  }
+  return dots;
+}
+
+// ════════════════════════════════════════════════════════
+// MISSIONS — Duolingo-style daily quests
+// ════════════════════════════════════════════════════════
+function getMissions(){
+  var pData=dbGet('prayers',{});
+  var hData=dbGet('hdata',{});
+  var qLogs=dbGet('qlog',[]);
+  var gLogs=dbGet('german-log',[]);
+  var tp=pData[today()]||{};
+  var th=hData[today()]||{};
+  var pDone=PRAYERS.filter(function(p){return tp[p];}).length;
+  var qPg=qLogs.filter(function(l){return l.date===today();}).reduce(function(s,l){return s+(l.pages||0);},0);
+  var gMins=gLogs.filter(function(l){return l.date===today();}).reduce(function(s,l){return s+(l.mins||0);},0);
+  return [
+    {id:'m-prayers', icon:'🕌', name:'Complete all 5 prayers',
+     cur:pDone, target:5, xp:40,
+     done:pDone>=5, color:'#F0B838'},
+    {id:'m-leet', icon:'⌥', name:'Solve a LeetCode problem',
+     cur:th['leetcode']?1:0, target:1, xp:20,
+     done:!!th['leetcode'], color:'#60A5FA'},
+    {id:'m-german', icon:'🇩🇪', name:'Study German for 30 min',
+     cur:Math.min(gMins,30), target:30, xp:15,
+     done:gMins>=30, color:'#A78BFA'},
+    {id:'m-sd', icon:'◈', name:'Study one system design topic',
+     cur:th['sysdesign']?1:0, target:1, xp:15,
+     done:!!th['sysdesign'], color:'#0A6860'},
+    {id:'m-quran', icon:'📖', name:'Read Quran (min. 1 page)',
+     cur:Math.min(qPg,1), target:1, xp:10,
+     done:qPg>=1, color:'#966000'},
+  ];
+}
+
+// ════════════════════════════════════════════════════════
+// RENDER — MISSIONS BAR
+// ════════════════════════════════════════════════════════
+function renderMissions(){
+  var el=document.getElementById('missions-bar');if(!el)return;
+  var missions=getMissions();
+  var doneCount=missions.filter(function(m){return m.done;}).length;
+  var totalXP=missions.reduce(function(s,m){return s+(m.done?m.xp:0);},0);
+  var maxXP=missions.reduce(function(s,m){return s+m.xp;},0);
+  var pct=Math.round(doneCount/missions.length*100);
+
+  var rows=missions.map(function(m){
+    var prog=m.done?100:Math.round(m.cur/m.target*100);
+    return '<div class="mission-row">'+
+      '<div class="mission-ico">'+m.icon+'</div>'+
+      '<div class="mission-body">'+
+        '<div class="mission-name"'+( m.done?' style="text-decoration:line-through;color:var(--t2);"':'')+'>'+m.name+'</div>'+
+        '<div class="mission-prog-wrap">'+
+          '<div class="mission-prog-fill" style="width:'+prog+'%;background:'+m.color+';"></div>'+
+        '</div>'+
+      '</div>'+
+      (m.done
+        ? '<span class="mission-done-badge">+'+m.xp+' XP</span>'
+        : '<span class="mission-val">'+m.cur+'/'+m.target+'</span>')+
+    '</div>';
+  }).join('');
+
+  el.innerHTML='<div class="missions-wrap">'+
+    '<div class="missions-head">'+
+      '<span class="missions-title">Daily missions</span>'+
+      '<span class="missions-xp">'+totalXP+' / '+maxXP+' XP earned</span>'+
+    '</div>'+
+    rows+
+    '<div class="missions-total-bar-wrap" style="margin-top:11px;">'+
+      '<div class="missions-total-bar" style="width:'+pct+'%;"></div>'+
+    '</div>'+
+    (doneCount===missions.length?'<div style="text-align:center;margin-top:8px;font-size:12px;font-weight:700;color:var(--gr-t);">🏆 All missions complete!</div>':'')+
+  '</div>';
+}
+
+// ════════════════════════════════════════════════════════
+// RENDER — STREAKS ROW
+// ════════════════════════════════════════════════════════
+function renderStreaksRow(){
+  var el=document.getElementById('streaks-row');if(!el)return;
+  var items=STREAK_DEFS.map(function(def){
+    var count=calcStreakFor(def);
+    var doneToday=isDoneToday(def);
+    var last7=getLast7(def);
+    var isHot=count>=7;
+    var cls=doneToday?'streak-item done-today':count>0?'streak-item active':'streak-item';
+    var dots=last7.map(function(on,i){
+      var dotCls=on?(i===6&&doneToday?'streak-day-dot green':'streak-day-dot on'):'streak-day-dot';
+      return '<div class="'+dotCls+'"></div>';
+    }).join('');
+    return '<div class="'+cls+'">'+
+      '<span class="streak-ico">'+def.icon+'</span>'+
+      '<div class="streak-count'+(isHot&&doneToday?' fire':'')+'">'+(doneToday?'✓':count===0?'—':count)+'</div>'+
+      (count>0&&!doneToday?'<div style="font-size:9px;color:var(--go-t);font-weight:700;">'+count+'d</div>':'')+ 
+      '<div class="streak-name">'+def.name+'</div>'+
+      '<div class="streak-days-row">'+dots+'</div>'+
+    '</div>';
+  }).join('');
+  el.innerHTML='<div class="streaks-grid">'+items+'</div>';
+}
+
+// ════════════════════════════════════════════════════════
+// RENDER — XP LEVEL BAR
+// ════════════════════════════════════════════════════════
+function renderXPBar(){
+  var el=document.getElementById('xp-level-bar');if(!el)return;
+  var total=getXP();
+  var level=Math.floor(total/XP_PER_LEVEL)+1;
+  var progress=total%XP_PER_LEVEL;
+  var pct=Math.round(progress/XP_PER_LEVEL*100);
+  var todayXP=getTodayXP();
+  var goalDone=todayXP>=DAILY_XP_GOAL;
+  var levelNames=['','Beginner','Learner','Practitioner','Builder','Achiever',
+    'Expert','Master','Champion','Legend','Grandmaster'];
+  var lname=levelNames[Math.min(level,levelNames.length-1)]||'Level '+level;
+  el.innerHTML='<div class="xp-level-wrap">'+
+    '<div class="xp-level-row">'+
+      '<div class="xp-level-badge">'+level+'</div>'+
+      '<div class="xp-level-info">'+
+        '<div class="xp-level-label">'+
+          '<span class="xp-level-name">'+lname+'</span>'+
+          '<span class="xp-level-pts">'+progress+' / '+XP_PER_LEVEL+' XP</span>'+
+        '</div>'+
+        '<div class="xp-bar-track"><div class="xp-bar-prog" style="width:'+pct+'%;"></div></div>'+
+        '<div class="xp-today-row">'+
+          '<span>Today: '+todayXP+' XP earned</span>'+
+          '<span class="'+(goalDone?'xp-goal-done':'')+'">Daily goal: '+DAILY_XP_GOAL+' XP'+(goalDone?' ✓':'')+'</span>'+
+        '</div>'+
+      '</div>'+
+    '</div>'+
+  '</div>';
+}
+
+// ════════════════════════════════════════════════════════
+// CONFETTI
+// ════════════════════════════════════════════════════════
+function launchConfetti(){
+  var canvas=document.getElementById('confetti-canvas');if(!canvas)return;
+  var ctx=canvas.getContext('2d');
+  canvas.width=window.innerWidth;canvas.height=window.innerHeight;
+  var cols=['#FFD700','#00E5A0','#F87171','#60A5FA','#A78BFA','#FB923C','#4ADE80'];
+  var pieces=[];
+  for(var i=0;i<100;i++){pieces.push({x:Math.random()*canvas.width,y:-20,r:Math.random()*5+3,color:cols[Math.floor(Math.random()*cols.length)],vy:Math.random()*4+2,vx:(Math.random()-0.5)*3,opacity:1,fade:0.013+Math.random()*0.01});}
+  var frame=0;
+  function draw(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);var any=false;
+    pieces.forEach(function(p){
+      if(p.opacity<=0)return;any=true;
+      ctx.save();ctx.globalAlpha=p.opacity;ctx.fillStyle=p.color;
+      ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fill();ctx.restore();
+      p.y+=p.vy;p.x+=p.vx;if(p.y>canvas.height*0.65)p.opacity-=p.fade;
+    });
+    if(any&&frame<200){frame++;requestAnimationFrame(draw);}
+    else ctx.clearRect(0,0,canvas.width,canvas.height);
+  }
+  draw();
+}
+
+// ════════════════════════════════════════════════════════
+// DAILY INSIGHT + CHALLENGE + NUDGE (kept from before)
+// ════════════════════════════════════════════════════════
+const INSIGHTS=[
+  {q:'The strong man is not the one who overpowers others. He controls himself when angry.',s:'Prophet Muhammad ☯'},
+  {q:'Verily, with hardship comes ease.',s:'Quran 94:5'},
+  {q:'An investment in knowledge pays the best interest.',s:'Benjamin Franklin'},
+  {q:'The secret of getting ahead is getting started.',s:'Mark Twain'},
+  {q:'Allah will not change the condition of a people until they change what is in themselves.',s:'Quran 13:11'},
+  {q:'Whoever treads a path seeking knowledge, Allah will make easy for him a path to paradise.',s:'Sahih Muslim'},
+  {q:'Improve by 1% every day. In 70 days you will be twice as good.',s:'Kaizen principle'},
+  {q:'Your time is limited. Do not waste it living someone else life.',s:'Steve Jobs'},
+  {q:'Seek knowledge from the cradle to the grave.',s:'Islamic tradition'},
+  {q:'Success is the sum of small efforts, repeated day in and day out.',s:'Robert Collier'},
+  {q:'Discipline is doing what needs to be done even when you feel like avoiding it.',s:'Unknown'},
+  {q:'The best time to plant a tree was 20 years ago. The second best time is now.',s:'Chinese proverb'},
+  {q:'What you do today can improve all your tomorrows.',s:'Ralph Marston'},
+  {q:'Do not be people without minds of your own.',s:'Prophet Muhammad ☯'},
+];
+const CHALLENGES=[
+  {ico:'⌥',lbl:'LeetCode challenge',text:'Solve a Medium problem without hints. Brute force first, then optimise.'},
+  {ico:'◈',lbl:'System design challenge',text:'Study one topic end to end. Explain it aloud as if you are in an interview.'},
+  {ico:'🇩🇪',lbl:'German challenge',text:'45 uninterrupted minutes today. Use DW Nicos Weg for speaking practice.'},
+  {ico:'♟',lbl:'Chess challenge',text:'Solve 15 puzzles without hints. Identify the pattern before looking for the move.'},
+  {ico:'📖',lbl:'Quran challenge',text:'Read 5 pages slowly. Write one ayah that speaks to you today.'},
+  {ico:'☁️',lbl:'AWS challenge',text:'Complete one practice exam section. Review every wrong answer.'},
+  {ico:'🚶',lbl:'Walk challenge',text:'30-minute walk with no phone. Your best thinking happens here.'},
+];
+const PRAYER_TIMES={Fajr:'05:05',Dhuhr:'12:10',Asr:'15:30',Maghrib:'18:20',Isha:'19:35'};
+
+function getInsight(){var i=(new Date().getDate()+new Date().getMonth())%INSIGHTS.length;return INSIGHTS[i];}
+function getChallenge(){return CHALLENGES[new Date().getDay()%CHALLENGES.length];}
+function getNextPrayer(){
+  var pData=dbGet('prayers',{});var tp=pData[today()]||{};
+  var now=new Date();var nowM=now.getHours()*60+now.getMinutes();
+  var toM=function(t){var a=t.split(':').map(Number);return a[0]*60+a[1];};
+  var next=null,nextM=9999;
+  PRAYERS.forEach(function(p){
+    if(tp[p])return;
+    var pm=toM(PRAYER_TIMES[p]||'23:59');var diff=pm-nowM;if(diff<0)diff+=1440;
+    if(diff<nextM){nextM=diff;next=p;}
+  });
+  if(!next||PRAYERS.every(function(p){return tp[p];}))return null;
+  var hh=Math.floor(nextM/60),mm=nextM%60;
+  return {name:next,time:(hh>0?hh+'h ':'')+mm+'m'};
+}
+
+function renderTodayWidgets(pDone,hDone,habits,qPg,gMins,score){
+  // Next prayer
+  var np=getNextPrayer();
+  var npEl=document.getElementById('next-pray-wrap');
+  if(npEl)npEl.innerHTML=np?'<div class="next-pray">🕌 '+np.name+' in '+np.time+'</div>':'';
+  // Nudge
+  var h=new Date().getHours();
+  var nudgeEl=document.getElementById('today-nudge');
+  var msg='',cls='nudge-am',ico='💡';
+  var pLeft=5-pDone;
+  var hd=dbGet('hdata',{})[today()]||{};
+  var leetDone=!!hd['leetcode'],sdDone=!!hd['sysdesign'];
+  if(score>=100){msg='Perfect day! You completed everything.';cls='nudge-gr';ico='🏆';}
+  else if(pLeft>0&&h>=18){msg=pLeft+' prayer'+(pLeft>1?'s':'')+' remaining. Do not end the day without them.';cls='nudge-re';ico='🕌';}
+  else if(!leetDone&&h>=8&&h<22){msg='No LeetCode today yet. One problem keeps your interview skills sharp.';cls='nudge-am';ico='⌥';}
+  else if(!sdDone&&h>=9&&h<22){msg='No system design today. Even 20 min compounds into interview readiness.';cls='nudge-am';ico='◈';}
+  else if(gMins===0&&h>=9&&h<22){msg='No German today. 15 min of Anki moves you forward.';cls='nudge-am';ico='🇩🇪';}
+  else if(qPg===0&&h>=8&&h<21){msg='No Quran today. Start with one page.';cls='nudge-am';ico='📖';}
+  else{msg='';} 
+  if(nudgeEl)nudgeEl.innerHTML=msg?'<div class="nudge '+cls+'">'+ico+' '+msg+'</div>':'';
+  // Insight
+  var ins=getInsight();
+  var insEl=document.getElementById('today-insight');
+  if(insEl)insEl.innerHTML='<div class="insight-card"><div class="insight-label">Today thought</div><div class="insight-text">&ldquo;'+ins.q+'&rdquo;</div><div class="insight-src">&mdash; '+ins.s+'</div></div>';
+  // Challenge
+  var ch=getChallenge();
+  var chEl=document.getElementById('today-challenge');
+  if(chEl)chEl.innerHTML='<div class="challenge-card"><div class="challenge-ico">'+ch.ico+'</div><div class="challenge-body"><div class="challenge-label">'+ch.lbl+'</div><div class="challenge-text">'+ch.text+'</div></div></div>';
 }
 
 // ════════════════════════════════════════════════════════
